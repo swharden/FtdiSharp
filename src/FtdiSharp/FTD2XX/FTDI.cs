@@ -369,10 +369,7 @@ public class FTDI
     #endregion
 
     #region METHOD_DEFINITIONS
-    //**************************************************************************
-    // GetNumberOfDevices
-    //**************************************************************************
-    // Intellisense comments
+
     /// <summary>
     /// Gets the number of FTDI devices available.  
     /// </summary>
@@ -398,19 +395,11 @@ public class FTDI
         else
         {
             Console.WriteLine("Failed to load function FT_CreateDeviceInfoList.");
-#if DEBUG
-            MessageBox.Show("Failed to load function FT_CreateDeviceInfoList.");
-#endif
         }
         return ftStatus;
 
     }
 
-
-    //**************************************************************************
-    // GetDeviceList
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets information on all of the FTDI devices available.  
     /// </summary>
@@ -452,7 +441,7 @@ public class FTDI
                     // Buffer not big enough
                     ftErrorCondition = FT_ERROR.FT_BUFFER_SIZE;
                     // Throw exception
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Instantiate the array elements as FT_DEVICE_INFO_NODE
@@ -1590,13 +1579,13 @@ public class FTDI
                 {
                     // Throw an exception
                     ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
                 else if (DeviceType == FT_DEVICE.FT_DEVICE_100AX)
                 {
                     // Throw an exception
                     ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
                 else if ((DeviceType == FT_DEVICE.FT_DEVICE_BM) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
                 {
@@ -1604,7 +1593,7 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
                 else if ((DeviceType == FT_DEVICE.FT_DEVICE_2232) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
@@ -1613,14 +1602,14 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                     if ((BitMode == FT_BIT_MODES.FT_BIT_MODE_MPSSE) & (InterfaceIdentifier != "A"))
                     {
                         // MPSSE mode is only available on channel A
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
                 else if ((DeviceType == FT_DEVICE.FT_DEVICE_232R) && (BitMode != FT_BIT_MODES.FT_BIT_MODE_RESET))
@@ -1629,7 +1618,7 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
                 else if (((DeviceType == FT_DEVICE.FT_DEVICE_2232H)
@@ -1642,14 +1631,14 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                     if (((BitMode == FT_BIT_MODES.FT_BIT_MODE_MCU_HOST) | (BitMode == FT_BIT_MODES.FT_BIT_MODE_SYNC_FIFO)) & (InterfaceIdentifier != "A"))
                     {
                         // MCU Host Emulation and Single channel synchronous 245 FIFO mode is only available on channel A
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
                 else if (((DeviceType == FT_DEVICE.FT_DEVICE_4232H)
@@ -1662,14 +1651,14 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                     if ((BitMode == FT_BIT_MODES.FT_BIT_MODE_MPSSE) & ((InterfaceIdentifier != "A") & (InterfaceIdentifier != "B")))
                     {
                         // MPSSE mode is only available on channel A and B
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
                 else if (((DeviceType == FT_DEVICE.FT_DEVICE_232H)
@@ -1682,7 +1671,7 @@ public class FTDI
                     {
                         // Throw an exception
                         ftErrorCondition = FT_ERROR.FT_INVALID_BITMODE;
-                        ErrorHandler(ftStatus, ftErrorCondition);
+                        ThrowIfNotOK(ftStatus, ftErrorCondition);
                     }
                 }
 
@@ -1866,7 +1855,7 @@ public class FTDI
                 {
                     // If it is a device with an internal EEPROM, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Call FT_EraseEE
@@ -1920,7 +1909,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2012,7 +2001,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2114,7 +2103,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2221,7 +2210,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2332,7 +2321,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2444,7 +2433,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
@@ -2559,7 +2548,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 FT_XSERIES_DATA eeData = new FT_XSERIES_DATA();
@@ -2696,7 +2685,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -2809,7 +2798,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -2932,7 +2921,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -3063,7 +3052,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -3194,7 +3183,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -3324,7 +3313,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -3461,7 +3450,7 @@ public class FTDI
                 {
                     // If it is not, throw an exception
                     ftErrorCondition = FT_ERROR.FT_INCORRECT_DEVICE;
-                    ErrorHandler(ftStatus, ftErrorCondition);
+                    ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
                 // Check for VID and PID of 0x0000
@@ -4988,11 +4977,6 @@ public class FTDI
     }
     #endregion
 
-    #region PROPERTY_DEFINITIONS
-    //**************************************************************************
-    // IsOpen
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the open status of the device.
     /// </summary>
@@ -5007,10 +4991,6 @@ public class FTDI
         }
     }
 
-    //**************************************************************************
-    // InterfaceIdentifier
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the interface identifier.
     /// </summary>
@@ -5043,119 +5023,13 @@ public class FTDI
             return Identifier;
         }
     }
-    #endregion
 
-    #region HELPER_METHODS
-    //**************************************************************************
-    // ErrorHandler
-    //**************************************************************************
     /// <summary>
     /// Method to check ftStatus and ftErrorCondition values for error conditions and throw exceptions accordingly.
     /// </summary>
-    private void ErrorHandler(FT_STATUS ftStatus, FT_ERROR ftErrorCondition)
+    private void ThrowIfNotOK(FT_STATUS ftStatus, FT_ERROR ftErrorCondition)
     {
-        if (ftStatus != FT_STATUS.FT_OK)
-        {
-            // Check FT_STATUS values returned from FTD2XX DLL calls
-            switch (ftStatus)
-            {
-                case FT_STATUS.FT_DEVICE_NOT_FOUND:
-                    {
-                        throw new FT_EXCEPTION("FTDI device not found.");
-                    }
-                case FT_STATUS.FT_DEVICE_NOT_OPENED:
-                    {
-                        throw new FT_EXCEPTION("FTDI device not opened.");
-                    }
-                case FT_STATUS.FT_DEVICE_NOT_OPENED_FOR_ERASE:
-                    {
-                        throw new FT_EXCEPTION("FTDI device not opened for erase.");
-                    }
-                case FT_STATUS.FT_DEVICE_NOT_OPENED_FOR_WRITE:
-                    {
-                        throw new FT_EXCEPTION("FTDI device not opened for write.");
-                    }
-                case FT_STATUS.FT_EEPROM_ERASE_FAILED:
-                    {
-                        throw new FT_EXCEPTION("Failed to erase FTDI device EEPROM.");
-                    }
-                case FT_STATUS.FT_EEPROM_NOT_PRESENT:
-                    {
-                        throw new FT_EXCEPTION("No EEPROM fitted to FTDI device.");
-                    }
-                case FT_STATUS.FT_EEPROM_NOT_PROGRAMMED:
-                    {
-                        throw new FT_EXCEPTION("FTDI device EEPROM not programmed.");
-                    }
-                case FT_STATUS.FT_EEPROM_READ_FAILED:
-                    {
-                        throw new FT_EXCEPTION("Failed to read FTDI device EEPROM.");
-                    }
-                case FT_STATUS.FT_EEPROM_WRITE_FAILED:
-                    {
-                        throw new FT_EXCEPTION("Failed to write FTDI device EEPROM.");
-                    }
-                case FT_STATUS.FT_FAILED_TO_WRITE_DEVICE:
-                    {
-                        throw new FT_EXCEPTION("Failed to write to FTDI device.");
-                    }
-                case FT_STATUS.FT_INSUFFICIENT_RESOURCES:
-                    {
-                        throw new FT_EXCEPTION("Insufficient resources.");
-                    }
-                case FT_STATUS.FT_INVALID_ARGS:
-                    {
-                        throw new FT_EXCEPTION("Invalid arguments for FTD2XX function call.");
-                    }
-                case FT_STATUS.FT_INVALID_BAUD_RATE:
-                    {
-                        throw new FT_EXCEPTION("Invalid Baud rate for FTDI device.");
-                    }
-                case FT_STATUS.FT_INVALID_HANDLE:
-                    {
-                        throw new FT_EXCEPTION("Invalid handle for FTDI device.");
-                    }
-                case FT_STATUS.FT_INVALID_PARAMETER:
-                    {
-                        throw new FT_EXCEPTION("Invalid parameter for FTD2XX function call.");
-                    }
-                case FT_STATUS.FT_IO_ERROR:
-                    {
-                        throw new FT_EXCEPTION("FTDI device IO error.");
-                    }
-                case FT_STATUS.FT_OTHER_ERROR:
-                    {
-                        throw new FT_EXCEPTION("An unexpected error has occurred when trying to communicate with the FTDI device.");
-                    }
-                default:
-                    break;
-            }
-        }
-        if (ftErrorCondition != FT_ERROR.FT_NO_ERROR)
-        {
-            // Check for other error conditions not handled by FTD2XX DLL
-            switch (ftErrorCondition)
-            {
-                case FT_ERROR.FT_INCORRECT_DEVICE:
-                    {
-                        throw new FT_EXCEPTION("The current device type does not match the EEPROM structure.");
-                    }
-                case FT_ERROR.FT_INVALID_BITMODE:
-                    {
-                        throw new FT_EXCEPTION("The requested bit mode is not valid for the current device.");
-                    }
-                case FT_ERROR.FT_BUFFER_SIZE:
-                    {
-                        throw new FT_EXCEPTION("The supplied buffer is not big enough.");
-                    }
-
-                default:
-                    break;
-            }
-
-        }
-
-        return;
+        ftStatus.ThrowIfNotOK();
+        ftErrorCondition.ThrowIfNotOK();
     }
-    #endregion
 }

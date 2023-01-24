@@ -10,6 +10,8 @@
  * https://github.com/swharden/FtdiSharp
  */
 
+using FtdiSharp.FTD2XX.EEPROM_STRUCTURES;
+
 namespace FtdiSharp.FTD2XX;
 
 public class FTDI
@@ -2533,7 +2535,7 @@ public class FTDI
     /// <returns>FT_STATUS value from FT_EEPROM_Read in FTD2XX DLL</returns>
     /// <param name="eeX">An FT_XSERIES_EEPROM_STRUCTURE which contains only the relevant information for an X-Series device.</param>
     /// <exception cref="FT_EXCEPTION">Thrown when the current device does not match the type required by this method.</exception>
-    public FT_STATUS ReadXSeriesEEPROM(FT_XSERIES_EEPROM_STRUCTURE eeX)
+    public FT_STATUS ReadXSeriesEEPROM(FTX_EEPROM_STRUCTURE eeX)
     {
         // Initialise ftStatus to something other than FT_OK
         FT_STATUS ftStatus = FT_STATUS.FT_OTHER_ERROR;
@@ -3433,7 +3435,7 @@ public class FTDI
     /// <param name="eeX">The EEPROM settings to be written to the device</param>
     /// <remarks>If the strings are too long, they will be truncated to their maximum permitted lengths</remarks>
     /// <exception cref="FT_EXCEPTION">Thrown when the current device does not match the type required by this method.</exception>
-    public FT_STATUS WriteXSeriesEEPROM(FT_XSERIES_EEPROM_STRUCTURE eeX)
+    public FT_STATUS WriteXSeriesEEPROM(FTX_EEPROM_STRUCTURE eeX)
     {
         // Initialise ftStatus to something other than FT_OK
         FT_STATUS ftStatus = FT_STATUS.FT_OTHER_ERROR;

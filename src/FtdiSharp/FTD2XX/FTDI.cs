@@ -1938,10 +1938,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee232b.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee232b.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee232b.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee232b.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee232b.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee232b.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee232b.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee232b.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2030,10 +2030,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee2232.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee2232.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee2232.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee2232.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee2232.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee2232.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee2232.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee2232.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2132,10 +2132,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee232r.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee232r.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee232r.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee232r.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee232r.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee232r.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee232r.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee232r.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2239,10 +2239,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee2232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee2232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee2232h.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee2232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee2232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee2232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee2232h.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee2232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2350,10 +2350,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee4232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee4232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee4232h.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee4232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee4232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee4232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee4232h.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee4232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2462,10 +2462,10 @@ public class FTDI
                 ftStatus = FT_EE_Read(ftHandle, eedata);
 
                 // Retrieve string values
-                ee232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer);
-                ee232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID);
-                ee232h.Description = Marshal.PtrToStringAnsi(eedata.Description);
-                ee232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber);
+                ee232h.Manufacturer = Marshal.PtrToStringAnsi(eedata.Manufacturer)!;
+                ee232h.ManufacturerID = Marshal.PtrToStringAnsi(eedata.ManufacturerID)!;
+                ee232h.Description = Marshal.PtrToStringAnsi(eedata.Description)!;
+                ee232h.SerialNumber = Marshal.PtrToStringAnsi(eedata.SerialNumber)!;
 
                 // Free unmanaged buffers
                 Marshal.FreeHGlobal(eedata.Manufacturer);
@@ -2584,7 +2584,7 @@ public class FTDI
                 if (ftStatus == FT_STATUS.FT_OK)
                 {
                     // Get the data back from the pointer...
-                    eeData = (FT_XSERIES_DATA)Marshal.PtrToStructure(eeDataMarshal, typeof(FT_XSERIES_DATA));
+                    eeData = (FT_XSERIES_DATA)Marshal.PtrToStructure(eeDataMarshal, typeof(FT_XSERIES_DATA))!;
 
                     // Retrieve string values
                     System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();

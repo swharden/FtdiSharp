@@ -4,11 +4,12 @@
  * Original Version: 1.1.2 (https://github.com/swharden/FtdiSharp/blob/main/dev/FTD2XX_NET/FTD2XX_NET.cs)
  * Original License: MIT
  * 
- * FtdiSharp: Scott Harden modified the original code 
- * (and spread it across several smaller files) to make it
- * more idiomatic C# and make it easier to learn from.
+ * Scott Harden modified the original code to spread it across several files,
+ * use more idiomatic C# and modern language features, and overall make it easier to learn from.
  * https://github.com/swharden/FtdiSharp
  */
+
+// TODO: replace Console.WriteLine with something users can inject
 
 using FtdiSharp.FTD2XX.EEPROM_STRUCTURES;
 
@@ -33,9 +34,6 @@ public class FTDI
                 // Failed to load our FTD2XX.DLL library from System32 or the application directory
                 // Try the same directory that this FTD2XX_NET DLL is in
                 Console.WriteLine("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
-#if DEBUG
-                MessageBox.Show("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
-#endif
                 hFTD2XXDLL = LoadLibrary(@Path.GetDirectoryName(GetType().Assembly.Location) + "\\FTD2XX.DLL");
             }
         }
@@ -49,9 +47,6 @@ public class FTDI
         {
             // Failed to load our DLL - alert the user
             Console.WriteLine("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
-#if DEBUG
-            MessageBox.Show("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
-#endif
         }
     }
 
@@ -73,9 +68,6 @@ public class FTDI
                 // Failed to load our PathToDll library
                 // Give up :(
                 Console.WriteLine("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
-#if DEBUG
-                MessageBox.Show("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
-#endif
             }
         }
 
@@ -87,9 +79,6 @@ public class FTDI
         else
         {
             Console.WriteLine("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
-#if DEBUG
-            MessageBox.Show("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
-#endif
         }
     }
 
@@ -368,8 +357,6 @@ public class FTDI
     IntPtr pFT_VendorCmdSetX = IntPtr.Zero;
     #endregion
 
-    #region METHOD_DEFINITIONS
-
     /// <summary>
     /// Gets the number of FTDI devices available.  
     /// </summary>
@@ -468,26 +455,15 @@ public class FTDI
             if (pFT_CreateDeviceInfoList == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_CreateDeviceInfoList.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_CreateDeviceInfoList.");
-#endif
             }
             if (pFT_GetDeviceInfoDetail == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDeviceInfoListDetail.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDeviceInfoListDetail.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // OpenByIndex
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Opens the FTDI device with the specified index.  
     /// </summary>
@@ -526,11 +502,13 @@ public class FTDI
                 byte StopBits = FT_STOP_BITS.FT_STOP_BITS_1;
                 byte Parity = FT_PARITY.FT_PARITY_NONE;
                 ftStatus = FT_SetDataCharacteristics(ftHandle, WordLength, StopBits, Parity);
+
                 // Initialise to no flow control
                 UInt16 FlowControl = FT_FLOW_CONTROL.FT_FLOW_NONE;
                 byte Xon = 0x11;
                 byte Xoff = 0x13;
                 ftStatus = FT_SetFlowControl(ftHandle, FlowControl, Xon, Xoff);
+
                 // Initialise Baud rate
                 UInt32 BaudRate = 9600;
                 ftStatus = FT_SetBaudRate(ftHandle, BaudRate);
@@ -541,40 +519,23 @@ public class FTDI
             if (pFT_Open == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Open.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Open.");
-#endif
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDataCharacteristics.");
-#endif
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetFlowControl.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetFlowControl.");
-#endif
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBaudRate.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBaudRate.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // OpenBySerialNumber
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Opens the FTDI device with the specified serial number.  
     /// </summary>
@@ -612,11 +573,13 @@ public class FTDI
                 byte StopBits = FT_STOP_BITS.FT_STOP_BITS_1;
                 byte Parity = FT_PARITY.FT_PARITY_NONE;
                 ftStatus = FT_SetDataCharacteristics(ftHandle, WordLength, StopBits, Parity);
+
                 // Initialise to no flow control
                 UInt16 FlowControl = FT_FLOW_CONTROL.FT_FLOW_NONE;
                 byte Xon = 0x11;
                 byte Xoff = 0x13;
                 ftStatus = FT_SetFlowControl(ftHandle, FlowControl, Xon, Xoff);
+
                 // Initialise Baud rate
                 UInt32 BaudRate = 9600;
                 ftStatus = FT_SetBaudRate(ftHandle, BaudRate);
@@ -627,40 +590,23 @@ public class FTDI
             if (pFT_OpenEx == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_OpenEx.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_OpenEx.");
-#endif
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDataCharacteristics.");
-#endif
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetFlowControl.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetFlowControl.");
-#endif
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBaudRate.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBaudRate.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // OpenByDescription
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Opens the FTDI device with the specified description.  
     /// </summary>
@@ -713,40 +659,23 @@ public class FTDI
             if (pFT_OpenEx == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_OpenEx.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_OpenEx.");
-#endif
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDataCharacteristics.");
-#endif
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetFlowControl.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetFlowControl.");
-#endif
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBaudRate.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBaudRate.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // OpenByLocation
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Opens the FTDI device at the specified physical location.  
     /// </summary>
@@ -784,11 +713,13 @@ public class FTDI
                 byte StopBits = FT_STOP_BITS.FT_STOP_BITS_1;
                 byte Parity = FT_PARITY.FT_PARITY_NONE;
                 FT_SetDataCharacteristics(ftHandle, WordLength, StopBits, Parity);
+
                 // Initialise to no flow control
                 UInt16 FlowControl = FT_FLOW_CONTROL.FT_FLOW_NONE;
                 byte Xon = 0x11;
                 byte Xoff = 0x13;
                 FT_SetFlowControl(ftHandle, FlowControl, Xon, Xoff);
+
                 // Initialise Baud rate
                 UInt32 BaudRate = 9600;
                 FT_SetBaudRate(ftHandle, BaudRate);
@@ -799,40 +730,23 @@ public class FTDI
             if (pFT_OpenEx == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_OpenEx.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_OpenEx.");
-#endif
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDataCharacteristics.");
-#endif
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetFlowControl.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetFlowControl.");
-#endif
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBaudRate.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBaudRate.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // Close
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Closes the handle to an open FTDI device.  
     /// </summary>
@@ -864,19 +778,12 @@ public class FTDI
             if (pFT_Close == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Close.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Close.");
-#endif
             }
         }
+
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // Read
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Read data from an open FTDI device.
     /// </summary>
@@ -916,15 +823,11 @@ public class FTDI
             if (pFT_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    // Intellisense comments
     /// <summary>
     /// Read data from an open FTDI device.
     /// </summary>
@@ -967,18 +870,11 @@ public class FTDI
             if (pFT_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // Write
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Write data to an open FTDI device.
     /// </summary>
@@ -1011,15 +907,11 @@ public class FTDI
             if (pFT_Write == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Write.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Write.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    // Intellisense comments
     /// <summary>
     /// Write data to an open FTDI device.
     /// </summary>
@@ -1052,15 +944,11 @@ public class FTDI
             if (pFT_Write == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Write.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Write.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    // Intellisense comments
     /// <summary>
     /// Write data to an open FTDI device.
     /// </summary>
@@ -1096,15 +984,11 @@ public class FTDI
             if (pFT_Write == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Write.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Write.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    // Intellisense comments
     /// <summary>
     /// Write data to an open FTDI device.
     /// </summary>
@@ -1140,18 +1024,11 @@ public class FTDI
             if (pFT_Write == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Write.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Write.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ResetDevice
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reset an open FTDI device.
     /// </summary>
@@ -1181,18 +1058,11 @@ public class FTDI
             if (pFT_ResetDevice == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_ResetDevice.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_ResetDevice.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // Purge
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Purge data from the devices transmit and/or receive buffers.
     /// </summary>
@@ -1223,18 +1093,11 @@ public class FTDI
             if (pFT_Purge == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Purge.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Purge.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetEventNotification
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Register for event notification.
     /// </summary>
@@ -1267,18 +1130,11 @@ public class FTDI
             if (pFT_SetEventNotification == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetEventNotification.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetEventNotification.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // StopInTask
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Stops the driver issuing USB in requests.
     /// </summary>
@@ -1308,18 +1164,11 @@ public class FTDI
             if (pFT_StopInTask == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_StopInTask.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_StopInTask.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // RestartInTask
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Resumes the driver issuing USB in requests.
     /// </summary>
@@ -1349,18 +1198,11 @@ public class FTDI
             if (pFT_RestartInTask == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_RestartInTask.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_RestartInTask.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ResetPort
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Resets the device port.
     /// </summary>
@@ -1390,18 +1232,11 @@ public class FTDI
             if (pFT_ResetPort == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_ResetPort.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_ResetPort.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // CyclePort
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Causes the device to be re-enumerated on the USB bus.  This is equivalent to unplugging and replugging the device.
     /// Also calls FT_Close if FT_CyclePort is successful, so no need to call this separately in the application.
@@ -1442,25 +1277,15 @@ public class FTDI
             if (pFT_CyclePort == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_CyclePort.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_CyclePort.");
-#endif
             }
             if (pFT_Close == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Close.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Close.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // Rescan
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Causes the system to check for USB hardware changes.  This is equivalent to clicking on the "Scan for hardware changes" button in the Device Manager.
     /// </summary>
@@ -1487,18 +1312,11 @@ public class FTDI
             if (pFT_Rescan == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Rescan.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Rescan.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // Reload
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Forces a reload of the driver for devices with a specific VID and PID combination.
     /// </summary>
@@ -1528,18 +1346,11 @@ public class FTDI
             if (pFT_Reload == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_Reload.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_Reload.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetBitMode
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Puts the device in a mode other than the default UART or FIFO mode.
     /// </summary>
@@ -1686,18 +1497,11 @@ public class FTDI
             if (pFT_SetBitMode == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBitMode.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBitMode.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetPinStates
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the instantaneous state of the device IO pins.
     /// </summary>
@@ -1728,18 +1532,11 @@ public class FTDI
             if (pFT_GetBitMode == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetBitMode.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetBitMode.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadEEPROMLocation
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads an individual word value from a specified location in the device's EEPROM.
     /// </summary>
@@ -1771,18 +1568,11 @@ public class FTDI
             if (pFT_ReadEE == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_ReadEE.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_ReadEE.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteEEPROMLocation
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes an individual word value to a specified location in the device's EEPROM.
     /// </summary>
@@ -1814,18 +1604,11 @@ public class FTDI
             if (pFT_WriteEE == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_WriteEE.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_WriteEE.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // EraseEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Erases the device EEPROM.
     /// </summary>
@@ -1867,18 +1650,11 @@ public class FTDI
             if (pFT_EraseEE == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EraseEE.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EraseEE.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT232BEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT232B or FT245B device.
     /// </summary>
@@ -1912,18 +1688,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -1959,18 +1736,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT2232EEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT2232 device.
     /// </summary>
@@ -2004,18 +1774,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -2061,18 +1832,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT232REEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT232R or FT245R device.
     /// Calls FT_EE_Read in FTD2XX DLL
@@ -2106,18 +1870,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -2168,18 +1933,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT2232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT2232H device.
     /// </summary>
@@ -2213,18 +1971,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 3,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 3;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -2279,18 +2038,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT4232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT4232H device.
     /// </summary>
@@ -2324,18 +2076,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 4,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 4;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -2389,18 +2142,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadFT232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an FT232H device.
     /// </summary>
@@ -2436,18 +2182,19 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 5,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 5;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Call FT_EE_Read
                 ftStatus = FT_EE_Read(ftHandle, eedata);
@@ -2506,18 +2253,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // ReadXSeriesEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads the EEPROM contents of an X-Series device.
     /// </summary>
@@ -2551,8 +2291,8 @@ public class FTDI
                     ThrowIfNotOK(ftStatus, ftErrorCondition);
                 }
 
-                FT_XSERIES_DATA eeData = new FT_XSERIES_DATA();
-                FT_EEPROM_HEADER eeHeader = new FT_EEPROM_HEADER();
+                FT_XSERIES_DATA eeData = new();
+                FT_EEPROM_HEADER eeHeader = new();
 
                 byte[] manufacturer = new byte[32];
                 byte[] manufacturerID = new byte[16];
@@ -2578,7 +2318,7 @@ public class FTDI
                     eeData = (FT_XSERIES_DATA)Marshal.PtrToStructure(eeDataMarshal, typeof(FT_XSERIES_DATA))!;
 
                     // Retrieve string values
-                    System.Text.UTF8Encoding enc = new System.Text.UTF8Encoding();
+                    System.Text.UTF8Encoding enc = new();
                     eeX.Manufacturer = enc.GetString(manufacturer);
                     eeX.ManufacturerID = enc.GetString(manufacturerID);
                     eeX.Description = enc.GetString(description);
@@ -2642,18 +2382,11 @@ public class FTDI
             if (pFT_EE_Read == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Read.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Read.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT232BEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT232B or FT245B device.
     /// </summary>
@@ -2695,18 +2428,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -2754,18 +2488,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT2232EEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT2232 device.
     /// Calls FT_EE_Program in FTD2XX DLL
@@ -2808,18 +2535,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -2877,18 +2605,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT232REEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT232R or FT245R device.
     /// Calls FT_EE_Program in FTD2XX DLL
@@ -2931,18 +2652,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 2,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 2;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -3008,18 +2730,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT2232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT2232H device.
     /// Calls FT_EE_Program in FTD2XX DLL
@@ -3062,18 +2777,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 3,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 3;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -3139,18 +2855,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT4232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT4232H device.
     /// Calls FT_EE_Program in FTD2XX DLL
@@ -3193,18 +2902,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 4,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 4;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -3269,18 +2979,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteFT232HEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an FT232H device.
     /// Calls FT_EE_Program in FTD2XX DLL
@@ -3323,18 +3026,19 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_PROGRAM_DATA eedata = new FT_PROGRAM_DATA();
+                FT_PROGRAM_DATA eedata = new()
+                {
+                    // Set up structure headers
+                    Signature1 = 0x00000000,
+                    Signature2 = 0xFFFFFFFF,
+                    Version = 5,
 
-                // Set up structure headers
-                eedata.Signature1 = 0x00000000;
-                eedata.Signature2 = 0xFFFFFFFF;
-                eedata.Version = 5;
-
-                // Allocate space from unmanaged heap
-                eedata.Manufacturer = Marshal.AllocHGlobal(32);
-                eedata.ManufacturerID = Marshal.AllocHGlobal(16);
-                eedata.Description = Marshal.AllocHGlobal(64);
-                eedata.SerialNumber = Marshal.AllocHGlobal(16);
+                    // Allocate space from unmanaged heap
+                    Manufacturer = Marshal.AllocHGlobal(32),
+                    ManufacturerID = Marshal.AllocHGlobal(16),
+                    Description = Marshal.AllocHGlobal(64),
+                    SerialNumber = Marshal.AllocHGlobal(16)
+                };
 
                 // Check lengths of strings to make sure that they are within our limits
                 // If not, trim them to make them our maximum length
@@ -3404,18 +3108,11 @@ public class FTDI
             if (pFT_EE_Program == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_Program.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_Program.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // WriteXSeriesEEPROM
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes the specified values to the EEPROM of an X-Series device.
     /// Calls FT_EEPROM_Program in FTD2XX DLL
@@ -3460,7 +3157,7 @@ public class FTDI
                     return FT_STATUS.FT_INVALID_PARAMETER;
                 }
 
-                FT_XSERIES_DATA eeData = new FT_XSERIES_DATA();
+                FT_XSERIES_DATA eeData = new();
 
                 // String manipulation...
                 // Allocate space from unmanaged heap
@@ -3481,7 +3178,7 @@ public class FTDI
                     eeX.SerialNumber = eeX.SerialNumber.Substring(0, 16);
 
                 // Set string values
-                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                System.Text.UTF8Encoding encoding = new();
                 manufacturer = encoding.GetBytes(eeX.Manufacturer);
                 manufacturerID = encoding.GetBytes(eeX.ManufacturerID);
                 description = encoding.GetBytes(eeX.Description);
@@ -3553,10 +3250,6 @@ public class FTDI
         return ftStatus;
     }
 
-    //**************************************************************************
-    // EEReadUserArea
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Reads data from the user area of the device EEPROM.
     /// </summary>
@@ -3598,25 +3291,15 @@ public class FTDI
             if (pFT_EE_UASize == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_UASize.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_UASize.");
-#endif
             }
             if (pFT_EE_UARead == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_UARead.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_UARead.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // EEWriteUserArea
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Writes data to the user area of the device EEPROM.
     /// </summary>
@@ -3657,25 +3340,15 @@ public class FTDI
             if (pFT_EE_UASize == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_UASize.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_UASize.");
-#endif
             }
             if (pFT_EE_UAWrite == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_UAWrite.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_UAWrite.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetDeviceType
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the chip type of the current device.
     /// </summary>
@@ -3712,18 +3385,11 @@ public class FTDI
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDeviceInfo.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetDeviceID
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the Vendor ID and Product ID of the current device.
     /// </summary>
@@ -3758,18 +3424,11 @@ public class FTDI
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDeviceInfo.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetDescription
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the description of the current device.
     /// </summary>
@@ -3810,18 +3469,11 @@ public class FTDI
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDeviceInfo.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetSerialNumber
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the serial number of the current device.
     /// </summary>
@@ -3862,18 +3514,11 @@ public class FTDI
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDeviceInfo.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetRxBytesAvailable
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the number of bytes available in the receive buffer.
     /// </summary>
@@ -3904,18 +3549,11 @@ public class FTDI
             if (pFT_GetQueueStatus == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetQueueStatus.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetQueueStatus.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetTxBytesWaiting
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the number of bytes waiting in the transmit buffer.
     /// </summary>
@@ -3949,18 +3587,11 @@ public class FTDI
             if (pFT_GetStatus == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetStatus.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetStatus.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetEventType
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the event type after an event has fired.  Can be used to distinguish which event has been triggered when waiting on multiple event types.
     /// </summary>
@@ -3994,18 +3625,11 @@ public class FTDI
             if (pFT_GetStatus == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetStatus.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetStatus.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetModemStatus
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the current modem status.
     /// </summary>
@@ -4040,18 +3664,11 @@ public class FTDI
             if (pFT_GetModemStatus == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetModemStatus.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetModemStatus.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetLineStatus
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the current line status.
     /// </summary>
@@ -4085,18 +3702,11 @@ public class FTDI
             if (pFT_GetModemStatus == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetModemStatus.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetModemStatus.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetBaudRate
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the current Baud rate.
     /// </summary>
@@ -4127,18 +3737,11 @@ public class FTDI
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBaudRate.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBaudRate.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetDataCharacteristics
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the data bits, stop bits and parity for the device.
     /// </summary>
@@ -4171,18 +3774,11 @@ public class FTDI
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDataCharacteristics.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetFlowControl
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the flow control type.
     /// </summary>
@@ -4215,18 +3811,11 @@ public class FTDI
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetFlowControl.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetFlowControl.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetRTS
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Asserts or de-asserts the Request To Send (RTS) line.
     /// </summary>
@@ -4266,25 +3855,15 @@ public class FTDI
             if (pFT_SetRts == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetRts.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetRts.");
-#endif
             }
             if (pFT_ClrRts == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_ClrRts.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_ClrRts.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetDTR
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Asserts or de-asserts the Data Terminal Ready (DTR) line.
     /// </summary>
@@ -4324,25 +3903,15 @@ public class FTDI
             if (pFT_SetDtr == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDtr.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDtr.");
-#endif
             }
             if (pFT_ClrDtr == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_ClrDtr.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_ClrDtr.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetTimeouts
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the read and write timeout values.
     /// </summary>
@@ -4374,18 +3943,11 @@ public class FTDI
             if (pFT_SetTimeouts == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetTimeouts.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetTimeouts.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetBreak
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets or clears the break state.
     /// </summary>
@@ -4425,25 +3987,15 @@ public class FTDI
             if (pFT_SetBreakOn == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBreakOn.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBreakOn.");
-#endif
             }
             if (pFT_SetBreakOff == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetBreakOff.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetBreakOff.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetResetPipeRetryCount
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets or sets the reset pipe retry count.  Default value is 50.
     /// </summary>
@@ -4475,18 +4027,11 @@ public class FTDI
             if (pFT_SetResetPipeRetryCount == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetResetPipeRetryCount.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetResetPipeRetryCount.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetDriverVersion
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the current FTDIBUS.SYS driver version number.
     /// </summary>
@@ -4517,18 +4062,11 @@ public class FTDI
             if (pFT_GetDriverVersion == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetDriverVersion.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetDriverVersion.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetLibraryVersion
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the current FTD2XX.DLL driver version number.
     /// </summary>
@@ -4556,18 +4094,11 @@ public class FTDI
             if (pFT_GetLibraryVersion == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetLibraryVersion.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetLibraryVersion.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetDeadmanTimeout
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the USB deadman timeout value.  Default is 5000ms.
     /// </summary>
@@ -4598,18 +4129,11 @@ public class FTDI
             if (pFT_SetDeadmanTimeout == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetDeadmanTimeout.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetDeadmanTimeout.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetLatency
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the value of the latency timer.  Default value is 16ms.
     /// </summary>
@@ -4653,18 +4177,11 @@ public class FTDI
             if (pFT_SetLatencyTimer == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetLatencyTimer.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetLatencyTimer.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetLatency
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the value of the latency timer.  Default value is 16ms.
     /// </summary>
@@ -4695,18 +4212,11 @@ public class FTDI
             if (pFT_GetLatencyTimer == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetLatencyTimer.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetLatencyTimer.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetUSBTransferSizes
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets the USB IN and OUT transfer sizes.
     /// </summary>
@@ -4741,18 +4251,11 @@ public class FTDI
             if (pFT_SetUSBParameters == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetUSBParameters.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetUSBParameters.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // SetCharacters
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Sets an event character, an error character and enables or disables them.
     /// </summary>
@@ -4786,18 +4289,11 @@ public class FTDI
             if (pFT_SetChars == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_SetChars.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_SetChars.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetEEUserAreaSize
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the size of the EEPROM user area.
     /// </summary>
@@ -4827,18 +4323,11 @@ public class FTDI
             if (pFT_EE_UASize == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_EE_UASize.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_EE_UASize.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // GetCOMPort
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Gets the corresponding COM port number for the current device.  If no COM port is exposed, an empty string is returned.
     /// </summary>
@@ -4885,19 +4374,11 @@ public class FTDI
             if (pFT_GetComPortNumber == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_GetComPortNumber.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_GetComPortNumber.");
-#endif
             }
         }
         return ftStatus;
     }
 
-
-    //**************************************************************************
-    // VendorCmdGet
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Get data from the FT4222 using the vendor command interface.
     /// </summary>
@@ -4927,18 +4408,11 @@ public class FTDI
             if (pFT_VendorCmdGet == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_VendorCmdGet.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_VendorCmdGet.");
-#endif
             }
         }
         return ftStatus;
     }
 
-    //**************************************************************************
-    // VendorCmdSet
-    //**************************************************************************
-    // Intellisense comments
     /// <summary>
     /// Set data from the FT4222 using the vendor command interface.
     /// </summary>
@@ -4968,14 +4442,10 @@ public class FTDI
             if (pFT_VendorCmdSet == IntPtr.Zero)
             {
                 Console.WriteLine("Failed to load function FT_VendorCmdSet.");
-#if DEBUG
-                MessageBox.Show("Failed to load function FT_VendorCmdSet.");
-#endif
             }
         }
         return ftStatus;
     }
-    #endregion
 
     /// <summary>
     /// Gets the open status of the device.

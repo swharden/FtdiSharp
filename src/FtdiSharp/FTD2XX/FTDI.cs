@@ -9,8 +9,6 @@
  * https://github.com/swharden/FtdiSharp
  */
 
-// TODO: replace Console.WriteLine with something users can inject
-
 using FtdiSharp.FTD2XX.EEPROM_STRUCTURES;
 
 namespace FtdiSharp.FTD2XX;
@@ -33,7 +31,7 @@ public class FTDI
             {
                 // Failed to load our FTD2XX.DLL library from System32 or the application directory
                 // Try the same directory that this FTD2XX_NET DLL is in
-                Console.WriteLine("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
+                ShowMessage("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
                 hFTD2XXDLL = LoadLibrary(@Path.GetDirectoryName(GetType().Assembly.Location) + "\\FTD2XX.DLL");
             }
         }
@@ -46,7 +44,7 @@ public class FTDI
         else
         {
             // Failed to load our DLL - alert the user
-            Console.WriteLine("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
+            ShowErrorMessage("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
         }
     }
 
@@ -67,7 +65,7 @@ public class FTDI
             {
                 // Failed to load our PathToDll library
                 // Give up :(
-                Console.WriteLine("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
+                ShowMessage("Attempting to load FTD2XX.DLL from:\n" + Path.GetDirectoryName(GetType().Assembly.Location));
             }
         }
 
@@ -78,7 +76,7 @@ public class FTDI
         }
         else
         {
-            Console.WriteLine("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
+            ShowErrorMessage("Failed to load FTD2XX.DLL.  Are the FTDI drivers installed?");
         }
     }
 
@@ -381,7 +379,7 @@ public class FTDI
         }
         else
         {
-            Console.WriteLine("Failed to load function FT_CreateDeviceInfoList.");
+            ShowErrorMessage("Failed to load function FT_CreateDeviceInfoList.");
         }
         return ftStatus;
 
@@ -454,11 +452,11 @@ public class FTDI
         {
             if (pFT_CreateDeviceInfoList == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_CreateDeviceInfoList.");
+                ShowErrorMessage("Failed to load function FT_CreateDeviceInfoList.");
             }
             if (pFT_GetDeviceInfoDetail == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDeviceInfoListDetail.");
+                ShowErrorMessage("Failed to load function FT_GetDeviceInfoListDetail.");
             }
         }
         return ftStatus;
@@ -518,19 +516,19 @@ public class FTDI
         {
             if (pFT_Open == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Open.");
+                ShowErrorMessage("Failed to load function FT_Open.");
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
+                ShowErrorMessage("Failed to load function FT_SetDataCharacteristics.");
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetFlowControl.");
+                ShowErrorMessage("Failed to load function FT_SetFlowControl.");
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBaudRate.");
+                ShowErrorMessage("Failed to load function FT_SetBaudRate.");
             }
         }
         return ftStatus;
@@ -589,19 +587,19 @@ public class FTDI
         {
             if (pFT_OpenEx == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_OpenEx.");
+                ShowErrorMessage("Failed to load function FT_OpenEx.");
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
+                ShowErrorMessage("Failed to load function FT_SetDataCharacteristics.");
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetFlowControl.");
+                ShowErrorMessage("Failed to load function FT_SetFlowControl.");
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBaudRate.");
+                ShowErrorMessage("Failed to load function FT_SetBaudRate.");
             }
         }
         return ftStatus;
@@ -658,19 +656,19 @@ public class FTDI
         {
             if (pFT_OpenEx == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_OpenEx.");
+                ShowErrorMessage("Failed to load function FT_OpenEx.");
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
+                ShowErrorMessage("Failed to load function FT_SetDataCharacteristics.");
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetFlowControl.");
+                ShowErrorMessage("Failed to load function FT_SetFlowControl.");
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBaudRate.");
+                ShowErrorMessage("Failed to load function FT_SetBaudRate.");
             }
         }
         return ftStatus;
@@ -729,19 +727,19 @@ public class FTDI
         {
             if (pFT_OpenEx == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_OpenEx.");
+                ShowErrorMessage("Failed to load function FT_OpenEx.");
             }
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
+                ShowErrorMessage("Failed to load function FT_SetDataCharacteristics.");
             }
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetFlowControl.");
+                ShowErrorMessage("Failed to load function FT_SetFlowControl.");
             }
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBaudRate.");
+                ShowErrorMessage("Failed to load function FT_SetBaudRate.");
             }
         }
         return ftStatus;
@@ -777,7 +775,7 @@ public class FTDI
         {
             if (pFT_Close == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Close.");
+                ShowErrorMessage("Failed to load function FT_Close.");
             }
         }
 
@@ -822,7 +820,7 @@ public class FTDI
         {
             if (pFT_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Read.");
+                ShowErrorMessage("Failed to load function FT_Read.");
             }
         }
         return ftStatus;
@@ -869,7 +867,7 @@ public class FTDI
         {
             if (pFT_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Read.");
+                ShowErrorMessage("Failed to load function FT_Read.");
             }
         }
         return ftStatus;
@@ -906,7 +904,7 @@ public class FTDI
         {
             if (pFT_Write == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Write.");
+                ShowErrorMessage("Failed to load function FT_Write.");
             }
         }
         return ftStatus;
@@ -943,7 +941,7 @@ public class FTDI
         {
             if (pFT_Write == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Write.");
+                ShowErrorMessage("Failed to load function FT_Write.");
             }
         }
         return ftStatus;
@@ -983,7 +981,7 @@ public class FTDI
         {
             if (pFT_Write == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Write.");
+                ShowErrorMessage("Failed to load function FT_Write.");
             }
         }
         return ftStatus;
@@ -1023,7 +1021,7 @@ public class FTDI
         {
             if (pFT_Write == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Write.");
+                ShowErrorMessage("Failed to load function FT_Write.");
             }
         }
         return ftStatus;
@@ -1057,7 +1055,7 @@ public class FTDI
         {
             if (pFT_ResetDevice == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_ResetDevice.");
+                ShowErrorMessage("Failed to load function FT_ResetDevice.");
             }
         }
         return ftStatus;
@@ -1092,7 +1090,7 @@ public class FTDI
         {
             if (pFT_Purge == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Purge.");
+                ShowErrorMessage("Failed to load function FT_Purge.");
             }
         }
         return ftStatus;
@@ -1129,7 +1127,7 @@ public class FTDI
         {
             if (pFT_SetEventNotification == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetEventNotification.");
+                ShowErrorMessage("Failed to load function FT_SetEventNotification.");
             }
         }
         return ftStatus;
@@ -1163,7 +1161,7 @@ public class FTDI
         {
             if (pFT_StopInTask == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_StopInTask.");
+                ShowErrorMessage("Failed to load function FT_StopInTask.");
             }
         }
         return ftStatus;
@@ -1197,7 +1195,7 @@ public class FTDI
         {
             if (pFT_RestartInTask == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_RestartInTask.");
+                ShowErrorMessage("Failed to load function FT_RestartInTask.");
             }
         }
         return ftStatus;
@@ -1231,7 +1229,7 @@ public class FTDI
         {
             if (pFT_ResetPort == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_ResetPort.");
+                ShowErrorMessage("Failed to load function FT_ResetPort.");
             }
         }
         return ftStatus;
@@ -1276,11 +1274,11 @@ public class FTDI
         {
             if (pFT_CyclePort == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_CyclePort.");
+                ShowErrorMessage("Failed to load function FT_CyclePort.");
             }
             if (pFT_Close == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Close.");
+                ShowErrorMessage("Failed to load function FT_Close.");
             }
         }
         return ftStatus;
@@ -1311,7 +1309,7 @@ public class FTDI
         {
             if (pFT_Rescan == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Rescan.");
+                ShowErrorMessage("Failed to load function FT_Rescan.");
             }
         }
         return ftStatus;
@@ -1345,7 +1343,7 @@ public class FTDI
         {
             if (pFT_Reload == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_Reload.");
+                ShowErrorMessage("Failed to load function FT_Reload.");
             }
         }
         return ftStatus;
@@ -1496,7 +1494,7 @@ public class FTDI
         {
             if (pFT_SetBitMode == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBitMode.");
+                ShowErrorMessage("Failed to load function FT_SetBitMode.");
             }
         }
         return ftStatus;
@@ -1531,7 +1529,7 @@ public class FTDI
         {
             if (pFT_GetBitMode == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetBitMode.");
+                ShowErrorMessage("Failed to load function FT_GetBitMode.");
             }
         }
         return ftStatus;
@@ -1567,7 +1565,7 @@ public class FTDI
         {
             if (pFT_ReadEE == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_ReadEE.");
+                ShowErrorMessage("Failed to load function FT_ReadEE.");
             }
         }
         return ftStatus;
@@ -1603,7 +1601,7 @@ public class FTDI
         {
             if (pFT_WriteEE == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_WriteEE.");
+                ShowErrorMessage("Failed to load function FT_WriteEE.");
             }
         }
         return ftStatus;
@@ -1649,7 +1647,7 @@ public class FTDI
         {
             if (pFT_EraseEE == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EraseEE.");
+                ShowErrorMessage("Failed to load function FT_EraseEE.");
             }
         }
         return ftStatus;
@@ -1735,7 +1733,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -1831,7 +1829,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -1932,7 +1930,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -2037,7 +2035,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -2141,7 +2139,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -2252,7 +2250,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -2381,7 +2379,7 @@ public class FTDI
         {
             if (pFT_EE_Read == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Read.");
+                ShowErrorMessage("Failed to load function FT_EE_Read.");
             }
         }
         return ftStatus;
@@ -2487,7 +2485,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -2604,7 +2602,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -2729,7 +2727,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -2854,7 +2852,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -2978,7 +2976,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -3107,7 +3105,7 @@ public class FTDI
         {
             if (pFT_EE_Program == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_Program.");
+                ShowErrorMessage("Failed to load function FT_EE_Program.");
             }
         }
         return ftStatus;
@@ -3290,11 +3288,11 @@ public class FTDI
         {
             if (pFT_EE_UASize == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_UASize.");
+                ShowErrorMessage("Failed to load function FT_EE_UASize.");
             }
             if (pFT_EE_UARead == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_UARead.");
+                ShowErrorMessage("Failed to load function FT_EE_UARead.");
             }
         }
         return ftStatus;
@@ -3339,11 +3337,11 @@ public class FTDI
         {
             if (pFT_EE_UASize == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_UASize.");
+                ShowErrorMessage("Failed to load function FT_EE_UASize.");
             }
             if (pFT_EE_UAWrite == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_UAWrite.");
+                ShowErrorMessage("Failed to load function FT_EE_UAWrite.");
             }
         }
         return ftStatus;
@@ -3384,7 +3382,7 @@ public class FTDI
         {
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
+                ShowErrorMessage("Failed to load function FT_GetDeviceInfo.");
             }
         }
         return ftStatus;
@@ -3423,7 +3421,7 @@ public class FTDI
         {
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
+                ShowErrorMessage("Failed to load function FT_GetDeviceInfo.");
             }
         }
         return ftStatus;
@@ -3468,7 +3466,7 @@ public class FTDI
         {
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
+                ShowErrorMessage("Failed to load function FT_GetDeviceInfo.");
             }
         }
         return ftStatus;
@@ -3513,7 +3511,7 @@ public class FTDI
         {
             if (pFT_GetDeviceInfo == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDeviceInfo.");
+                ShowErrorMessage("Failed to load function FT_GetDeviceInfo.");
             }
         }
         return ftStatus;
@@ -3548,7 +3546,7 @@ public class FTDI
         {
             if (pFT_GetQueueStatus == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetQueueStatus.");
+                ShowErrorMessage("Failed to load function FT_GetQueueStatus.");
             }
         }
         return ftStatus;
@@ -3586,7 +3584,7 @@ public class FTDI
         {
             if (pFT_GetStatus == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetStatus.");
+                ShowErrorMessage("Failed to load function FT_GetStatus.");
             }
         }
         return ftStatus;
@@ -3624,7 +3622,7 @@ public class FTDI
         {
             if (pFT_GetStatus == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetStatus.");
+                ShowErrorMessage("Failed to load function FT_GetStatus.");
             }
         }
         return ftStatus;
@@ -3663,7 +3661,7 @@ public class FTDI
         {
             if (pFT_GetModemStatus == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetModemStatus.");
+                ShowErrorMessage("Failed to load function FT_GetModemStatus.");
             }
         }
         return ftStatus;
@@ -3701,7 +3699,7 @@ public class FTDI
         {
             if (pFT_GetModemStatus == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetModemStatus.");
+                ShowErrorMessage("Failed to load function FT_GetModemStatus.");
             }
         }
         return ftStatus;
@@ -3736,7 +3734,7 @@ public class FTDI
         {
             if (pFT_SetBaudRate == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBaudRate.");
+                ShowErrorMessage("Failed to load function FT_SetBaudRate.");
             }
         }
         return ftStatus;
@@ -3773,7 +3771,7 @@ public class FTDI
         {
             if (pFT_SetDataCharacteristics == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDataCharacteristics.");
+                ShowErrorMessage("Failed to load function FT_SetDataCharacteristics.");
             }
         }
         return ftStatus;
@@ -3810,7 +3808,7 @@ public class FTDI
         {
             if (pFT_SetFlowControl == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetFlowControl.");
+                ShowErrorMessage("Failed to load function FT_SetFlowControl.");
             }
         }
         return ftStatus;
@@ -3854,11 +3852,11 @@ public class FTDI
         {
             if (pFT_SetRts == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetRts.");
+                ShowErrorMessage("Failed to load function FT_SetRts.");
             }
             if (pFT_ClrRts == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_ClrRts.");
+                ShowErrorMessage("Failed to load function FT_ClrRts.");
             }
         }
         return ftStatus;
@@ -3902,11 +3900,11 @@ public class FTDI
         {
             if (pFT_SetDtr == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDtr.");
+                ShowErrorMessage("Failed to load function FT_SetDtr.");
             }
             if (pFT_ClrDtr == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_ClrDtr.");
+                ShowErrorMessage("Failed to load function FT_ClrDtr.");
             }
         }
         return ftStatus;
@@ -3942,7 +3940,7 @@ public class FTDI
         {
             if (pFT_SetTimeouts == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetTimeouts.");
+                ShowErrorMessage("Failed to load function FT_SetTimeouts.");
             }
         }
         return ftStatus;
@@ -3986,11 +3984,11 @@ public class FTDI
         {
             if (pFT_SetBreakOn == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBreakOn.");
+                ShowErrorMessage("Failed to load function FT_SetBreakOn.");
             }
             if (pFT_SetBreakOff == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetBreakOff.");
+                ShowErrorMessage("Failed to load function FT_SetBreakOff.");
             }
         }
         return ftStatus;
@@ -4026,7 +4024,7 @@ public class FTDI
         {
             if (pFT_SetResetPipeRetryCount == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetResetPipeRetryCount.");
+                ShowErrorMessage("Failed to load function FT_SetResetPipeRetryCount.");
             }
         }
         return ftStatus;
@@ -4061,7 +4059,7 @@ public class FTDI
         {
             if (pFT_GetDriverVersion == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetDriverVersion.");
+                ShowErrorMessage("Failed to load function FT_GetDriverVersion.");
             }
         }
         return ftStatus;
@@ -4093,7 +4091,7 @@ public class FTDI
         {
             if (pFT_GetLibraryVersion == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetLibraryVersion.");
+                ShowErrorMessage("Failed to load function FT_GetLibraryVersion.");
             }
         }
         return ftStatus;
@@ -4128,7 +4126,7 @@ public class FTDI
         {
             if (pFT_SetDeadmanTimeout == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetDeadmanTimeout.");
+                ShowErrorMessage("Failed to load function FT_SetDeadmanTimeout.");
             }
         }
         return ftStatus;
@@ -4176,7 +4174,7 @@ public class FTDI
         {
             if (pFT_SetLatencyTimer == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetLatencyTimer.");
+                ShowErrorMessage("Failed to load function FT_SetLatencyTimer.");
             }
         }
         return ftStatus;
@@ -4211,7 +4209,7 @@ public class FTDI
         {
             if (pFT_GetLatencyTimer == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetLatencyTimer.");
+                ShowErrorMessage("Failed to load function FT_GetLatencyTimer.");
             }
         }
         return ftStatus;
@@ -4250,7 +4248,7 @@ public class FTDI
         {
             if (pFT_SetUSBParameters == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetUSBParameters.");
+                ShowErrorMessage("Failed to load function FT_SetUSBParameters.");
             }
         }
         return ftStatus;
@@ -4288,7 +4286,7 @@ public class FTDI
         {
             if (pFT_SetChars == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_SetChars.");
+                ShowErrorMessage("Failed to load function FT_SetChars.");
             }
         }
         return ftStatus;
@@ -4322,7 +4320,7 @@ public class FTDI
         {
             if (pFT_EE_UASize == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_EE_UASize.");
+                ShowErrorMessage("Failed to load function FT_EE_UASize.");
             }
         }
         return ftStatus;
@@ -4373,7 +4371,7 @@ public class FTDI
         {
             if (pFT_GetComPortNumber == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_GetComPortNumber.");
+                ShowErrorMessage("Failed to load function FT_GetComPortNumber.");
             }
         }
         return ftStatus;
@@ -4407,7 +4405,7 @@ public class FTDI
         {
             if (pFT_VendorCmdGet == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_VendorCmdGet.");
+                ShowErrorMessage("Failed to load function FT_VendorCmdGet.");
             }
         }
         return ftStatus;
@@ -4441,7 +4439,7 @@ public class FTDI
         {
             if (pFT_VendorCmdSet == IntPtr.Zero)
             {
-                Console.WriteLine("Failed to load function FT_VendorCmdSet.");
+                ShowErrorMessage("Failed to load function FT_VendorCmdSet.");
             }
         }
         return ftStatus;
@@ -4501,5 +4499,15 @@ public class FTDI
     {
         ftStatus.ThrowIfNotOK();
         ftErrorCondition.ThrowIfNotOK();
+    }
+
+    private void ShowErrorMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
+
+    private void ShowMessage(string message)
+    {
+        Console.WriteLine(message);
     }
 }

@@ -21,7 +21,7 @@ public class FtdiManager
     /// <summary>
     /// Returns all devices currently connected to the computer
     /// </summary>
-    public ConnectedDevice[] GetConnectedDevices()
+    public DeviceInfo[] GetDevices()
     {
         UInt32 numDevices = 0;
         FTD2XX.GetNumberOfDevices(ref numDevices);
@@ -29,7 +29,7 @@ public class FtdiManager
         FT_DEVICE_INFO_NODE[] nodes = new FT_DEVICE_INFO_NODE[numDevices];
         FTD2XX.GetDeviceList(nodes);
 
-        ConnectedDevice[] devices = nodes.Select(x => x.ToDevice()).ToArray();
+        DeviceInfo[] devices = nodes.Select(x => x.ToDevice()).ToArray();
 
         return devices;
     }

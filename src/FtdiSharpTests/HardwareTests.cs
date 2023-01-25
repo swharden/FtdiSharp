@@ -6,10 +6,10 @@ public class HardwareTests
     public void Test_Scan_Devices()
     {
         FtdiManager ftman = new();
-        ConnectedDevice[] devices = ftman.GetConnectedDevices();
+        DeviceInfo[] devices = ftman.GetDevices();
         Console.WriteLine($"Connected devices: {devices.Length}");
 
-        foreach (ConnectedDevice device in devices)
+        foreach (DeviceInfo device in devices)
         {
             Console.WriteLine(device);
         }

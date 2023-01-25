@@ -2,7 +2,7 @@
 
 namespace FtdiSharp;
 
-public struct ConnectedDevice
+public struct DeviceInfo
 {
     public bool IsOpen;
     public bool IsHighSpeed;
@@ -18,16 +18,19 @@ public struct ConnectedDevice
     }
 }
 
-public static class ConnectedDeviceExtensions
+public static class DeviceInfoExtensions
 {
-    public static ConnectedDevice ToDevice(this FT_DEVICE_INFO_NODE device)
+    public static DeviceInfo ToDevice(this FT_DEVICE_INFO_NODE device)
     {
-        return new ConnectedDevice()
+        return new DeviceInfo()
         {
             IsOpen = (device.Flags & 0b01) > 0,
             IsHighSpeed = (device.Flags & 0b10) > 0,
             Type = device.Type.ToReadableName(),
             ID = device.ID,
+            LocationID = device.LocId,
+            SerialNumber = device.SerialNumber,
+            Description = device.Description,
         };
     }
 

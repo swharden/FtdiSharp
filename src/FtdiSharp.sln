@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FtdiSharp", "FtdiSharp\Ftdi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FtdiSharpDemo", "FtdiSharpDemo\FtdiSharpDemo.csproj", "{A57017FA-2675-4001-BE9D-24D90A5C46D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtdiSharpTests", "FtdiSharpTests\FtdiSharpTests.csproj", "{B909C067-6C9F-445F-8819-D5B32B67155D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A57017FA-2675-4001-BE9D-24D90A5C46D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A57017FA-2675-4001-BE9D-24D90A5C46D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A57017FA-2675-4001-BE9D-24D90A5C46D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B909C067-6C9F-445F-8819-D5B32B67155D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B909C067-6C9F-445F-8819-D5B32B67155D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B909C067-6C9F-445F-8819-D5B32B67155D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B909C067-6C9F-445F-8819-D5B32B67155D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

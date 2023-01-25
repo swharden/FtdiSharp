@@ -7,7 +7,10 @@
 public class FT_DEVICE_INFO_NODE
 {
     /// <summary>
-    /// Indicates device state.  Can be any combination of the following: FT_FLAGS_OPENED, FT_FLAGS_HISPEED
+    /// Indicates device state.  
+    /// Can be any combination of the following: FT_FLAGS_OPENED, FT_FLAGS_HISPEED
+    /// Bit 0 (least significant bit) indicates if the port is open (1) or closed (0). 
+    /// Bit 1 indicates if the device is enumerated as a high-speed USB device (2) or a full-speed USB device (0).
     /// </summary>
     public UInt32 Flags;
 
@@ -25,6 +28,7 @@ public class FT_DEVICE_INFO_NODE
     /// The physical location identifier of the device
     /// </summary>
     public UInt32 LocId;
+
     /// <summary>
     /// The device serial number
     /// </summary>

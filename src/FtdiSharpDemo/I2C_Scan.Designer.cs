@@ -1,6 +1,6 @@
 ﻿namespace FtdiSharpDemo;
 
-partial class I2CScan
+partial class I2C_Scan
 {
     /// <summary>
     /// Required designer variable.

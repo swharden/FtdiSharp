@@ -180,4 +180,64 @@ public class I2C
 
         return devices.ToArray();
     }
+
+    public byte I2C_ReadByte(bool ACK)
+    {
+        const byte MSB_RISING_EDGE_CLOCK_BYTE_IN = 0x20;
+        const byte MSB_FALLING_EDGE_CLOCK_BIT_OUT = 0x13;
+        const byte I2C_Data_SDAhi_SCLlo = 0x02;
+        const byte I2C_Dir_SDAout_SCLout = 0x03;
+        int bytesToSend = 0;
+
+        // Clock in one data byte
+        byte[] buffer = new byte[100];
+        buffer[bytesToSend++] = MSB_RISING_EDGE_CLOCK_BYTE_IN;      // Clock data byte in
+        buffer[bytesToSend++] = 0x00;
+        buffer[bytesToSend++] = 0x00;                               // Data length of 0x0000 means 1 byte data to clock in
+
+        // clock out one bit as ack/nak bit
+        buffer[bytesToSend++] = MSB_FALLING_EDGE_CLOCK_BIT_OUT;     // Clock data bit out
+        buffer[bytesToSend++] = 0x00;                               // Length of 0 means 1 bit
+        if (ACK == true)
+            buffer[bytesToSend++] = 0x00;                           // Data bit to send is a '0'
+        else
+            buffer[bytesToSend++] = 0xFF;                           // Data bit to send is a '1'
+
+        // I2C lines back to idle state 
+        buffer[bytesToSend++] = 0x80;                               //       ' Command - set low byte
+        buffer[bytesToSend++] = I2C_Data_SDAhi_SCLlo;                            //      ' Set the values
+        buffer[bytesToSend++] = I2C_Dir_SDAout_SCLout;                             //     ' Set the directions
+
+        // This command then tells the MPSSE to send any results gathered back immediately
+        buffer[bytesToSend++] = 0x87;                                  //    ' Send answer back immediate command
+
+        // send commands to chip
+        byte[] msg = buffer.Take(bytesToSend).ToArray();
+        FTMan.FTD2XX.Write(msg).ThrowIfNotOK();
+
+        // get the byte which has been read from the driver's receive buffer
+        byte[] readBuffer = new byte[1];
+        uint bytesRead = 0;
+        FtdiDevice.Read(readBuffer, 1, ref bytesRead).ThrowIfNotOK();
+
+        return readBuffer[0];
+    }
+
+    public byte[] Read(byte address, int length)
+    {
+        I2C_SetStart();
+
+        I2C_SendDeviceAddr(address, read: true);
+
+        byte[] bytes = new byte[length];
+        for (int i = 0; i < length; i++)
+        {
+            bool isLastByte = i == length - 1;
+            bytes[i] = I2C_ReadByte(ACK: isLastByte);
+        }
+
+        I2C_SetStop();
+
+        return bytes;
+    }
 }

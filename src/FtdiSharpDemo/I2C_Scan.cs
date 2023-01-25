@@ -1,10 +1,10 @@
 ﻿namespace FtdiSharpDemo;
 
-public partial class I2CScan : Form
+public partial class I2C_Scan : Form
 {
     FtdiSharp.FtdiManager FTMan => deviceSelector1.FTMan;
 
-    public I2CScan()
+    public I2C_Scan()
     {
         InitializeComponent();
         button1.Enabled = false;

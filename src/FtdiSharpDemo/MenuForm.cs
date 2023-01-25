@@ -8,5 +8,6 @@ public partial class MenuForm : Form
     }
 
     private void btnConnectedDevices_Click(object sender, EventArgs e) => new DeviceInfoForm().ShowDialog();
-    private void btnAddressScanner_Click(object sender, EventArgs e) => new I2CScan().ShowDialog();
+    private void btnAddressScanner_Click(object sender, EventArgs e) => new I2C_Scan().ShowDialog();
+    private void btnLM75A_Click(object sender, EventArgs e) => new I2C_LM75A().ShowDialog();
 }

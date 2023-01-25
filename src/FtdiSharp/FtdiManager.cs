@@ -33,4 +33,20 @@ public class FtdiManager
 
         return devices;
     }
+
+    public void Open(DeviceInfo device)
+    {
+        if (FTD2XX.IsOpen)
+            throw new InvalidOperationException("a device is already open");
+
+        FTD2XX.OpenBySerialNumber(device.SerialNumber).ThrowIfNotOK();
+    }
+
+    public void Close()
+    {
+        if (!FTD2XX.IsOpen)
+            throw new InvalidOperationException("no device is open");
+
+        FTD2XX.Close().ThrowIfNotOK();
+    }
 }

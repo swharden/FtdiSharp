@@ -27,3 +27,6 @@ jobs:
       - name: 🛠️ Build
         working-directory: src
         run: msbuild -property:Configuration=Release -verbosity:minimal
+      - name: 🧪 Test
+        working-directory: src
+        run: dotnet test --no-restore --verbosity minimal

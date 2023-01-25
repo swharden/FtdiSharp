@@ -11,6 +11,7 @@
 
 using FtdiSharp.FTD2XX.EEPROM_STRUCTURES;
 using System;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FtdiSharp.FTD2XX;
 
@@ -874,6 +875,14 @@ public class FTDI
         return ftStatus;
     }
 
+    public (FT_STATUS status, byte[] bytes) ReadBytes(uint count)
+    {
+        byte[] readBuffer = new byte[count];
+        uint bytesRead = 0;
+        FT_STATUS status = Read(readBuffer, count, ref bytesRead);
+        return (status, readBuffer);
+    }
+
     /// <summary>
     /// Write data to an open FTDI device.
     /// </summary>
@@ -1026,6 +1035,12 @@ public class FTDI
             }
         }
         return ftStatus;
+    }
+
+    public FT_STATUS Write(byte[] bytes)
+    {
+        uint bytesWritten = 0;
+        return Write(bytes, bytes.Length, ref bytesWritten);
     }
 
     /// <summary>
@@ -4511,5 +4526,18 @@ public class FTDI
     private static void ShowErrorMessageToConsole(string message)
     {
         System.Diagnostics.Debug.WriteLine(message);
+    }
+
+    public void FlushBuffer()
+    {
+        uint BytesAvailable = 0;
+        GetRxBytesAvailable(ref BytesAvailable).ThrowIfNotOK();
+
+        if (BytesAvailable == 0)
+            return;
+
+        byte[] buffer = new byte[BytesAvailable];
+        uint NumBytesRead = 0;
+        Read(buffer, BytesAvailable, ref NumBytesRead).ThrowIfNotOK();
     }
 }

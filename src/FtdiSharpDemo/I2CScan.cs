@@ -25,5 +25,11 @@ public partial class I2CScan : Form
     private void button1_Click(object sender, EventArgs e)
     {
         listBox1.Items.Clear();
+
+        FtdiSharp.Protocols.I2C i2c = new(FTMan);
+        foreach (string address in i2c.Scan())
+        {
+            listBox1.Items.Add(address);
+        }
     }
 }

@@ -6,3 +6,5 @@
 This file is unmodified since downloading from https://ftdichip.com/software-examples/code-examples/csharp-examples/ on 2023-01-25
 
 See [readme.pdf](readme.pdf) for the official description of this project
+
+Unfortunately all the useful information is in one massive [MPSSE Sensor Demo.cs](MPSSE%20Sensor%20Demo.cs) file over 1,700 lines long 🤦

@@ -119,21 +119,26 @@ public class I2C
 
     public bool I2C_SendDeviceAddr(byte address, bool read, bool throwOnNAK = false)
     {
+        address <<= 1;
+        if (read == true)
+            address |= 0x01;
+
+        return I2C_SendByte(address, throwOnNAK);
+    }
+
+    public bool I2C_SendByte(byte byteToSend, bool throwOnNAK = false)
+    {
         const byte I2C_Data_SDAhi_SCLlo = 0x02;
         const byte MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
         const byte I2C_Dir_SDAout_SCLout = 0x03;
         const byte MSB_RISING_EDGE_CLOCK_BIT_IN = 0x22;
-
-        address <<= 1;
-        if (read == true)
-            address |= 0x01;
 
         byte[] buffer = new byte[100];
         int bytesToSend = 0;
         buffer[bytesToSend++] = MSB_FALLING_EDGE_CLOCK_BYTE_OUT;        // clock data byte out
         buffer[bytesToSend++] = 0x00;                                   // 
         buffer[bytesToSend++] = 0x00;                                   //  Data length of 0x0000 means 1 byte data to clock in
-        buffer[bytesToSend++] = address;                                //  Byte to send
+        buffer[bytesToSend++] = byteToSend;                             //  Byte to send
 
         // Put line back to idle (data released, clock pulled low)
         buffer[bytesToSend++] = 0x80;                                   // Command - set low byte
@@ -182,7 +187,7 @@ public class I2C
         return devices.ToArray();
     }
 
-    private byte I2C_ReadByte(bool ACK)
+    public byte I2C_ReadByte(bool ACK = true)
     {
         const byte MSB_RISING_EDGE_CLOCK_BYTE_IN = 0x20;
         const byte MSB_FALLING_EDGE_CLOCK_BIT_OUT = 0x13;
@@ -236,8 +241,7 @@ public class I2C
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++)
         {
-            bool isLastByte = i == length - 1;
-            bytes[i] = I2C_ReadByte(ACK: isLastByte);
+            bytes[i] = I2C_ReadByte(ACK: true);
         }
 
         I2C_SetStop();

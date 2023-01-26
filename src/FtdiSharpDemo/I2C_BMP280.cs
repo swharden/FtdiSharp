@@ -9,10 +9,6 @@ public partial class I2C_BMP280 : Form
 {
     FtdiSharp.Protocols.I2C? I2C;
 
-    UInt16 T1;
-    Int16 T2;
-    Int16 T3;
-
     public I2C_BMP280()
     {
         InitializeComponent();
@@ -56,7 +52,7 @@ public partial class I2C_BMP280 : Form
         bytes[1] = I2C.I2C_ReadByte();
         I2C.I2C_SetStop();
 
-        Debug.WriteLine($"CALIBRATION [{memoryAddress:X2}] = {bytes[0]}, {bytes[1]}");
+        //Debug.WriteLine($"CALIBRATION [{memoryAddress:X2}] = {bytes[0]}, {bytes[1]}");
 
         return bytes;
 
@@ -84,8 +80,6 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             return;
 
-        //(int[] calTemperature, int[] calPressure) = ReadCalibrationValues(deviceAddress);
-
         UInt16 T1 = BitConverter.ToUInt16(GetConfigBytes(deviceAddress, 0x88));
         Int16 T2 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8A));
         Int16 T3 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8C));
@@ -103,9 +97,7 @@ public partial class I2C_BMP280 : Form
         I2C.I2C_SendByte(config);
         I2C.I2C_SetStop();
 
-        /*
         // setup control register
-
         byte ctrlAddress = 0xF4;
         byte ctrl = 0;
         ctrl |= 0b00100000;  // oversampling (x1)
@@ -118,34 +110,10 @@ public partial class I2C_BMP280 : Form
         I2C.I2C_SendByte(ctrl);
         I2C.I2C_SetStop();
 
-        bool isStillConverting = true;
-
-        while (isStillConverting)
-        {
-            byte statusAddress = 0xF3;
-
-            I2C.I2C_SetStart();
-            I2C.I2C_SendDeviceAddr(deviceAddress, read: false);
-            I2C.I2C_SendByte(statusAddress);
-            I2C.I2C_SetStart();
-            I2C.I2C_SendDeviceAddr(deviceAddress, read: true);
-            byte status = I2C.I2C_ReadByte();
-            I2C.I2C_SetStop();
-
-            // https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
-            // Register 0xF3 bit 3 is 1 while a conversion is happening
-            isStillConverting = (status & 0b00001000) > 0;
-            //Debug.WriteLine($"Status: " + Convert.ToString(status, 2) + $" {isStillConverting}");
-        }
-        */
-
-        Thread.Sleep(100);
-
         // read temperature
-        byte temperatureAddress = 0xFA;
         I2C.I2C_SetStart();
         I2C.I2C_SendDeviceAddr(deviceAddress, read: false);
-        I2C.I2C_SendByte(temperatureAddress);
+        I2C.I2C_SendByte(0xFA);
         I2C.I2C_SetStart();
         I2C.I2C_SendDeviceAddr(deviceAddress, read: true);
         byte temp0 = I2C.I2C_ReadByte();

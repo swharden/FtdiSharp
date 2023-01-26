@@ -8,7 +8,7 @@ public partial class DeviceSelector : UserControl
 
     readonly List<DeviceInfo> Devices = new();
 
-    public event EventHandler DeviceOpened = delegate { };
+    public event EventHandler DeviceOpened = delegate { }; // TODO: pass the ftman
 
     public event EventHandler DeviceClosed = delegate { };
 

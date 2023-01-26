@@ -35,6 +35,7 @@ partial class MenuForm
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnBMP280 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +66,7 @@ partial class MenuForm
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnBMP280);
             this.groupBox1.Controls.Add(this.btnLM75A);
             this.groupBox1.Controls.Add(this.btnAddressScanner);
             this.groupBox1.Location = new System.Drawing.Point(218, 12);
@@ -114,6 +116,18 @@ partial class MenuForm
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
             // 
+            // btnBMP280
+            // 
+            this.btnBMP280.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBMP280.Location = new System.Drawing.Point(6, 110);
+            this.btnBMP280.Name = "btnBMP280";
+            this.btnBMP280.Size = new System.Drawing.Size(186, 38);
+            this.btnBMP280.TabIndex = 3;
+            this.btnBMP280.Text = "BMP280 Pressure Sensor";
+            this.btnBMP280.UseVisualStyleBackColor = true;
+            this.btnBMP280.Click += new System.EventHandler(this.btnBMP280_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -141,4 +155,5 @@ partial class MenuForm
     private GroupBox groupBox2;
     private GroupBox groupBox3;
     private GroupBox groupBox4;
+    private Button btnBMP280;
 }

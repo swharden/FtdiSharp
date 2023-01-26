@@ -5,6 +5,7 @@ namespace FtdiSharp;
 
 /// <summary>
 /// A high-level FTDI device manager that interacts with the native library so you don't have to.
+/// FTDI232H pins: D0=SCL, D1+D2=SDA
 /// </summary>
 public class FtdiManager
 {
@@ -40,6 +41,8 @@ public class FtdiManager
             throw new InvalidOperationException("a device is already open");
 
         FTD2XX.OpenBySerialNumber(device.SerialNumber).ThrowIfNotOK();
+
+        FTD2XX.ResetDevice();
     }
 
     public void Close()

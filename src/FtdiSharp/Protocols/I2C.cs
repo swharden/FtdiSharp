@@ -1,12 +1,13 @@
 ﻿using FtdiSharp.FTD2XX;
+using System.Diagnostics;
 using System.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FtdiSharp.Protocols;
 
 public class I2C
 {
     public readonly FtdiManager FTMan;
+
     public FTDI FtdiDevice => FTMan.FTD2XX;
 
     public I2C(FtdiManager ftman)
@@ -15,7 +16,7 @@ public class I2C
         I2C_ConfigureMpsse();
     }
 
-    public void I2C_ConfigureMpsse()
+    private void I2C_ConfigureMpsse()
     {
         FtdiDevice.SetTimeouts(1000, 1000).ThrowIfNotOK();
         FtdiDevice.SetLatency(16).ThrowIfNotOK();
@@ -132,19 +133,19 @@ public class I2C
         buffer[bytesToSend++] = MSB_FALLING_EDGE_CLOCK_BYTE_OUT;        // clock data byte out
         buffer[bytesToSend++] = 0x00;                                   // 
         buffer[bytesToSend++] = 0x00;                                   //  Data length of 0x0000 means 1 byte data to clock in
-        buffer[bytesToSend++] = address;           //  Byte to send
+        buffer[bytesToSend++] = address;                                //  Byte to send
 
         // Put line back to idle (data released, clock pulled low)
         buffer[bytesToSend++] = 0x80;                                   // Command - set low byte
-        buffer[bytesToSend++] = I2C_Data_SDAhi_SCLlo;                               // Set the values
-        buffer[bytesToSend++] = I2C_Dir_SDAout_SCLout;                               // Set the directions
+        buffer[bytesToSend++] = I2C_Data_SDAhi_SCLlo;                   // Set the values
+        buffer[bytesToSend++] = I2C_Dir_SDAout_SCLout;                  // Set the directions
 
         // CLOCK IN ACK
         buffer[bytesToSend++] = MSB_RISING_EDGE_CLOCK_BIT_IN;           // clock data bits in
         buffer[bytesToSend++] = 0x00;                                   // Length of 0 means 1 bit
 
         // This command then tells the MPSSE to send any results gathered (in this case the ack bit) back immediately
-        buffer[bytesToSend++] = 0x87;                                //  ' Send answer back immediate command
+        buffer[bytesToSend++] = 0x87;
 
         // send commands to chip
         byte[] msg = buffer.Take(bytesToSend).ToArray();
@@ -181,7 +182,7 @@ public class I2C
         return devices.ToArray();
     }
 
-    public byte I2C_ReadByte(bool ACK)
+    private byte I2C_ReadByte(bool ACK)
     {
         const byte MSB_RISING_EDGE_CLOCK_BYTE_IN = 0x20;
         const byte MSB_FALLING_EDGE_CLOCK_BIT_OUT = 0x13;
@@ -223,7 +224,10 @@ public class I2C
         return readBuffer[0];
     }
 
-    public byte[] Read(byte address, int length)
+    /// <summary>
+    /// Read multiple bytes from the given address
+    /// </summary>
+    public byte[] ReadBytes(byte address, int length)
     {
         I2C_SetStart();
 
@@ -239,5 +243,31 @@ public class I2C
         I2C_SetStop();
 
         return bytes;
+    }
+
+    /// <summary>
+    /// Read a single byte from the given address
+    /// </summary>
+    public byte ReadByte(byte address)
+    {
+        return ReadBytes(address, 1)[0];
+    }
+
+    public UInt16 ReadUInt16(byte address)
+    {
+        byte[] bytes = ReadBytes(address, 2);
+
+        // reverse for endian?
+        return BitConverter.ToUInt16(bytes, 0);
+    }
+
+    public Int16 ReadInt16(byte address)
+    {
+        byte[] bytes = ReadBytes(address, 2);
+
+        Debug.WriteLine($"Read [{address:X2}] = {bytes[0]}, {bytes[1]}");
+
+        // reverse for endian?
+        return BitConverter.ToInt16(bytes, 0);
     }
 }

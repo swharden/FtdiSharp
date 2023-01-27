@@ -9,12 +9,30 @@ public partial class I2C_BMP280 : Form
 {
     FtdiSharp.Protocols.I2C? I2C;
 
+    CalibrationValues Cal;
+
+    struct CalibrationValues
+    {
+        public UInt16 T1;
+        public Int16 T2;
+        public Int16 T3;
+        public UInt16 P1;
+        public Int16 P2;
+        public Int16 P3;
+        public Int16 P4;
+        public Int16 P5;
+        public Int16 P6;
+        public Int16 P7;
+        public Int16 P8;
+        public Int16 P9;
+    }
+
     public I2C_BMP280()
     {
         InitializeComponent();
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
         deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
-        lblSensor.Text = string.Empty;
+        lblTemperature.Text = string.Empty;
         lblPressure.Text = string.Empty;
     }
 
@@ -26,20 +44,24 @@ public partial class I2C_BMP280 : Form
     private void DeviceSelector1_DeviceClosed(object? sender, EventArgs e)
     {
         I2C = null;
-        lblSensor.Text = string.Empty;
+        lblTemperature.Text = string.Empty;
         lblPressure.Text = string.Empty;
     }
 
     private void timer1_Tick(object sender, EventArgs e)
     {
+        if (I2C is null)
+            return;
+
         byte deviceAddress = 0x76;
+        ReadCalibrationData(deviceAddress);
         MakeReading(deviceAddress);
     }
 
     private byte[] GetConfigBytes(byte deviceAddress, byte memoryAddress)
     {
         if (I2C is null)
-            throw new InvalidOperationException();
+            throw new NullReferenceException(nameof(I2C));
 
         I2C.I2C_SetStart();
         I2C.I2C_SendDeviceAddr(deviceAddress, read: false);
@@ -75,14 +97,45 @@ public partial class I2C_BMP280 : Form
         */
     }
 
+    private void ReadCalibrationData(byte deviceAddress)
+    {
+        // https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf page 21
+
+        Cal.T1 = BitConverter.ToUInt16(GetConfigBytes(deviceAddress, 0x88));
+        Cal.T2 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8A));
+        Cal.T3 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8C));
+
+        Cal.P1 = BitConverter.ToUInt16(GetConfigBytes(deviceAddress, 0x8E));
+        Cal.P2 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x90));
+        Cal.P3 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x92));
+        Cal.P4 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x94));
+        Cal.P5 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x96));
+        Cal.P6 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x98));
+        Cal.P7 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x9A));
+        Cal.P8 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x9C));
+        Cal.P9 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x9E));
+
+        lbCalibration.Items.Clear();
+
+        lbCalibration.Items.Add($"[T1] {Cal.T1}");
+        lbCalibration.Items.Add($"[T2] {Cal.T2}");
+        lbCalibration.Items.Add($"[T3] {Cal.T3}");
+
+        lbCalibration.Items.Add($"[P1] {Cal.P1}");
+        lbCalibration.Items.Add($"[P2] {Cal.P2}");
+        lbCalibration.Items.Add($"[P3] {Cal.P3}");
+        lbCalibration.Items.Add($"[P4] {Cal.P4}");
+        lbCalibration.Items.Add($"[P5] {Cal.P5}");
+        lbCalibration.Items.Add($"[P6] {Cal.P6}");
+        lbCalibration.Items.Add($"[P7] {Cal.P7}");
+        lbCalibration.Items.Add($"[P8] {Cal.P8}");
+        lbCalibration.Items.Add($"[P9] {Cal.P9}");
+    }
+
     private void MakeReading(byte deviceAddress)
     {
         if (I2C is null)
-            return;
-
-        UInt16 T1 = BitConverter.ToUInt16(GetConfigBytes(deviceAddress, 0x88));
-        Int16 T2 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8A));
-        Int16 T3 = BitConverter.ToInt16(GetConfigBytes(deviceAddress, 0x8C));
+            throw new NullReferenceException(nameof(I2C));
 
         // setup config register
         byte configAddress = 0xF5;
@@ -116,37 +169,61 @@ public partial class I2C_BMP280 : Form
         I2C.I2C_SendByte(0xFA);
         I2C.I2C_SetStart();
         I2C.I2C_SendDeviceAddr(deviceAddress, read: true);
-        byte temp0 = I2C.I2C_ReadByte();
-        byte temp1 = I2C.I2C_ReadByte();
-        byte temp2 = I2C.I2C_ReadByte();
+        byte[] temperatureBytes =
+        {
+            I2C.I2C_ReadByte(),
+            I2C.I2C_ReadByte(),
+            I2C.I2C_ReadByte(),
+        };
         I2C.I2C_SetStop();
 
-        UInt32 result = 0;
-        result += (UInt32)(temp0 << 16);
-        result += (UInt32)(temp1 << 8);
-        result += (UInt32)(temp2 << 0);
-        lblSensor.Text = result.ToString();
+        // read pressure
+        I2C.I2C_SetStart();
+        I2C.I2C_SendDeviceAddr(deviceAddress, read: false);
+        I2C.I2C_SendByte(0xF7);
+        I2C.I2C_SetStart();
+        I2C.I2C_SendDeviceAddr(deviceAddress, read: true);
+        byte[] pressureBytes =
+        {
+            I2C.I2C_ReadByte(),
+            I2C.I2C_ReadByte(),
+            I2C.I2C_ReadByte(),
+        };
+        I2C.I2C_SetStop();
 
-        double temperature = ConvertTemperature(result, T1, T2, T3);
-        lblPressure.Text = $"{temperature:N3} F";
-
-        Debug.WriteLine($"T={temp0}, {temp1}, {temp2}");
+        (double temperature, double pressure) = GetTemperatureAndPressure(temperatureBytes, pressureBytes);
+        lblTemperature.Text = $"{temperature:N3} F";
+        lblPressure.Text = $"{pressure}";
     }
 
-    double ConvertTemperature(UInt32 adc_T, UInt16 dig_T1, Int16 dig_T2, Int16 dig_T3)
+    (double t, double p) GetTemperatureAndPressure(byte[] temperatureBytes, byte[] pressureBytes)
     {
+        // convert bytes into unsigned integers
+        long adc_T = 0;
+        adc_T += temperatureBytes[0] << 16;
+        adc_T += temperatureBytes[1] << 8;
+        adc_T += temperatureBytes[2] << 0;
         adc_T >>= 4;
 
-        long var1 = (((adc_T >> 3) - (dig_T1 << 1)) * (dig_T2)) >> 11;
+        long adc_P = 0;
+        adc_P += pressureBytes[0] << 16;
+        adc_P += pressureBytes[1] << 8;
+        adc_P += pressureBytes[2] << 0;
+        adc_P >>= 4;
 
-        long var2 = (((((adc_T >> 4) - ((int)dig_T1)) * ((adc_T >> 4) - ((int)dig_T1))) >> 12) * ((int)dig_T3)) >> 14;
-
-        long t_fine = var1 + var2;
-
+        // temperature conversion according to datasheet page 22
+        // https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
+        long tv1 = (((adc_T >> 3) - (Cal.T1 << 1)) * (Cal.T2)) >> 11;
+        long tv2 = (((((adc_T >> 4) - Cal.T1) * ((adc_T >> 4) - Cal.T1)) >> 12) * Cal.T3) >> 14;
+        long t_fine = tv1 + tv2;
         double T = (t_fine * 5 + 128) >> 8;
-
         T = T * 9.0 / 5 + 3200;  // C to F
+        double temperature = T / 100.0;
 
-        return T / 100.0;
+        // pressure conversion according to datasheet page 22
+        // https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
+        double pressure = adc_P; // TODO: I give up reading that thing...
+
+        return (temperature, pressure);
     }
 }

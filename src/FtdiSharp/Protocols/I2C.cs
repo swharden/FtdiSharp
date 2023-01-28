@@ -1,6 +1,7 @@
 ﻿using FtdiSharp.FTD2XX;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 
 namespace FtdiSharp.Protocols;
 
@@ -13,10 +14,12 @@ public class I2C
     public I2C(FtdiManager ftman)
     {
         FTMan = ftman;
-        I2C_ConfigureMpsse();
+        ConfigureMpsse();
     }
 
-    private void I2C_ConfigureMpsse()
+    public void Flush() => FtdiDevice.FlushBuffer();
+
+    public void ConfigureMpsse()
     {
         FtdiDevice.SetTimeouts(1000, 1000).ThrowIfNotOK();
         FtdiDevice.SetLatency(16).ThrowIfNotOK();
@@ -40,7 +43,7 @@ public class I2C
         if ((rx2[0] != 0xFA) || (rx2[1] != 0xAB))
             throw new InvalidOperationException($"bad echo bytes: {rx2[0]} {rx2[1]}");
 
-        const uint ClockDivisor = 49;
+        const uint ClockDivisor = 199; //49 for 200 KHz, 199 for 100 KHz
         const byte I2C_Data_SDAhi_SCLhi = 0x03;
         const byte I2C_Dir_SDAout_SCLout = 0x03;
 
@@ -117,16 +120,29 @@ public class I2C
         FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
-    public bool I2C_SendDeviceAddr(byte address, bool read, bool throwOnNAK = false)
+    public void SendAddressForWriting(byte address)
+    {
+        address <<= 1;
+        I2C_SendByte(address);
+    }
+
+    public void SendAddressForReading(byte address)
+    {
+        address <<= 1;
+        address |= 0x01;
+        I2C_SendByte(address);
+    }
+
+    public bool I2C_SendDeviceAddr(byte address, bool read)
     {
         address <<= 1;
         if (read == true)
             address |= 0x01;
 
-        return I2C_SendByte(address, throwOnNAK);
+        return I2C_SendByte(address);
     }
 
-    public bool I2C_SendByte(byte byteToSend, bool throwOnNAK = false)
+    public bool I2C_SendByte(byte byteToSend)
     {
         const byte I2C_Data_SDAhi_SCLlo = 0x02;
         const byte MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
@@ -161,8 +177,6 @@ public class I2C
 
         // if ack bit is 0 then sensor acked the transfer, otherwise it nak'd the transfer
         bool ack = (rx1[0] & 0x01) == 0;
-        if (!ack && throwOnNAK)
-            throw new InvalidOperationException("NAKd");
 
         return ack;
     }

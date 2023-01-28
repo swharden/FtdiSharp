@@ -37,6 +37,10 @@ partial class I2C_BMP280
             this.label3 = new System.Windows.Forms.Label();
             this.lblTemperature = new System.Windows.Forms.Label();
             this.lblPressure = new System.Windows.Forms.Label();
+            this.I2cAddressSelector1 = new FtdiSharpDemo.I2cAddressSelector();
+            this.lblTemperatureBytes = new System.Windows.Forms.Label();
+            this.lblPressureBytes = new System.Windows.Forms.Label();
+            this.lblReads = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // deviceSelector1
@@ -66,7 +70,7 @@ partial class I2C_BMP280
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label2
@@ -74,9 +78,9 @@ partial class I2C_BMP280
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(193, 87);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 15);
+            this.label2.Size = new System.Drawing.Size(73, 15);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Sensor Reading";
+            this.label2.Text = "Temperature";
             // 
             // label3
             // 
@@ -107,11 +111,52 @@ partial class I2C_BMP280
             this.lblPressure.TabIndex = 7;
             this.lblPressure.Text = "12345";
             // 
+            // I2cAddressSelector1
+            // 
+            this.I2cAddressSelector1.Address = ((byte)(72));
+            this.I2cAddressSelector1.Location = new System.Drawing.Point(413, 12);
+            this.I2cAddressSelector1.Name = "I2cAddressSelector1";
+            this.I2cAddressSelector1.Size = new System.Drawing.Size(125, 53);
+            this.I2cAddressSelector1.TabIndex = 8;
+            // 
+            // lblTemperatureBytes
+            // 
+            this.lblTemperatureBytes.AutoSize = true;
+            this.lblTemperatureBytes.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblTemperatureBytes.Location = new System.Drawing.Point(193, 129);
+            this.lblTemperatureBytes.Name = "lblTemperatureBytes";
+            this.lblTemperatureBytes.Size = new System.Drawing.Size(42, 15);
+            this.lblTemperatureBytes.TabIndex = 9;
+            this.lblTemperatureBytes.Text = "12345";
+            // 
+            // lblPressureBytes
+            // 
+            this.lblPressureBytes.AutoSize = true;
+            this.lblPressureBytes.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblPressureBytes.Location = new System.Drawing.Point(381, 129);
+            this.lblPressureBytes.Name = "lblPressureBytes";
+            this.lblPressureBytes.Size = new System.Drawing.Size(42, 15);
+            this.lblPressureBytes.TabIndex = 10;
+            this.lblPressureBytes.Text = "12345";
+            // 
+            // lblReads
+            // 
+            this.lblReads.AutoSize = true;
+            this.lblReads.Location = new System.Drawing.Point(193, 289);
+            this.lblReads.Name = "lblReads";
+            this.lblReads.Size = new System.Drawing.Size(50, 15);
+            this.lblReads.TabIndex = 11;
+            this.lblReads.Text = "Reads: 0";
+            // 
             // I2C_BMP280
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 344);
+            this.Controls.Add(this.lblReads);
+            this.Controls.Add(this.lblPressureBytes);
+            this.Controls.Add(this.lblTemperatureBytes);
+            this.Controls.Add(this.I2cAddressSelector1);
             this.Controls.Add(this.lblPressure);
             this.Controls.Add(this.lblTemperature);
             this.Controls.Add(this.label3);
@@ -137,4 +182,8 @@ partial class I2C_BMP280
     private Label label3;
     private Label lblTemperature;
     private Label lblPressure;
+    private I2cAddressSelector I2cAddressSelector1;
+    private Label lblTemperatureBytes;
+    private Label lblPressureBytes;
+    private Label lblReads;
 }

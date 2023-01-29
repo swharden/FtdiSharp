@@ -1,4 +1,6 @@
-﻿namespace FtdiSharpDemo;
+﻿using System.Diagnostics;
+
+namespace FtdiSharpDemo;
 
 public partial class BarGraph : UserControl
 {
@@ -7,13 +9,16 @@ public partial class BarGraph : UserControl
     public BarGraph()
     {
         InitializeComponent();
-        panel2.Width = panel1.Width / 2;
+
+        bool isDesignMode = Process.GetCurrentProcess().ProcessName == "devenv";
+        panel2.Width = isDesignMode ? panel1.Width / 2 : 0;
         panel2.Height = panel1.Height;
+        label1.Text = isDesignMode ? "title" : string.Empty;
     }
 
-    public void SetValue(double value, double max)
+    public void SetValue(double value, double max, string label)
     {
-        label1.Text = value.ToString();
+        label1.Text = label;
         double span = CenterAtZero ? max * 2 : max;
         int panelWidth = (int)(Math.Abs(value) / span * panel1.Width);
         int panelCenterX = panel1.Width / 2;
@@ -21,13 +26,9 @@ public partial class BarGraph : UserControl
         if (CenterAtZero)
         {
             panelWidth /= 2;
-            panel2.Width = panelWidth;
+            panel2.Width = Math.Max(panelWidth, 1);
 
-            if (value == 0)
-            {
-                panel2.Width = 0;
-            }
-            else if (value < 0)
+            if (value < 0)
             {
                 panel2.Left = panelCenterX - panelWidth;
             }

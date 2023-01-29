@@ -78,7 +78,7 @@ public partial class I2C_LIS3DH : Form
         I2C.SendStop();
     }
 
-    private void ReadAxis(byte addressL, byte addressH, BarGraph bar)
+    private void ReadAxis(byte addressL, byte addressH, BarGraph bar, string title)
     {
         if (I2C is null)
             return;
@@ -101,15 +101,16 @@ public partial class I2C_LIS3DH : Form
 
         I2C.SendStop();
 
-        double value = BitConverter.ToInt16(bytes);
+        Int16 value = BitConverter.ToInt16(bytes);
+        value >>= 6;
 
-        bar.SetValue(value, 2000);
+        bar.SetValue(value, 200, $"{title}: {value}");
     }
 
     private void ReadAxes()
     {
-        ReadAxis(0x28, 0x29, barGraph1);
-        ReadAxis(0x2A, 0x2B, barGraph2);
-        ReadAxis(0x2C, 0x2D, barGraph3);
+        ReadAxis(0x28, 0x29, barGraph1, "X");
+        ReadAxis(0x2A, 0x2B, barGraph2, "Y");
+        ReadAxis(0x2C, 0x2D, barGraph3, "Z");
     }
 }

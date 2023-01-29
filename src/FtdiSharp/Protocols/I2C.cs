@@ -243,9 +243,7 @@ public class I2C
         return readBuffer[0];
     }
 
-    /// <summary>
-    /// Read multiple bytes from the given address
-    /// </summary>
+    [Obsolete]
     public byte[] ReadBytes(byte address, int length)
     {
         SendStart();
@@ -263,29 +261,49 @@ public class I2C
         return bytes;
     }
 
-    /// <summary>
-    /// Read a single byte from the given address
-    /// </summary>
-    public byte ReadByte(byte address)
+    public void SendBytesToDevice(byte address, byte byte1, byte byte2)
     {
-        return ReadBytes(address, 1)[0];
+        SendStart();
+        SendAddressForWriting(address);
+        SendByte(byte1);
+        SendByte(byte2);
+        SendStop();
     }
 
-    public UInt16 ReadUInt16(byte address)
+    public void SendBytesToDevice(byte address, byte[] bytes)
     {
-        byte[] bytes = ReadBytes(address, 2);
-
-        // reverse for endian?
-        return BitConverter.ToUInt16(bytes, 0);
+        SendStart();
+        SendAddressForWriting(address);
+        foreach (byte b in bytes)
+        {
+            SendByte(b);
+        }
+        SendStop();
     }
 
-    public Int16 ReadInt16(byte address)
+    public byte ReadByteFromDevice(byte address, byte memoryAddress)
     {
-        byte[] bytes = ReadBytes(address, 2);
+        return ReadBytesFromDevice(address, memoryAddress, 1)[0];
+    }
 
-        Debug.WriteLine($"Read [{address:X2}] = {bytes[0]}, {bytes[1]}");
+    public byte[] ReadBytesFromDevice(byte deviceAddress, byte memoryAddress, int byteCount)
+    {
+        byte[] bytes = new byte[byteCount];
 
-        // reverse for endian?
-        return BitConverter.ToInt16(bytes, 0);
+        SendStart();
+        SendAddressForWriting(deviceAddress);
+        SendByte(memoryAddress);
+        SendStop();
+
+        SendStart();
+        SendAddressForReading(deviceAddress);
+        for (int i = 0; i < byteCount; i++)
+        {
+            bool isLastByte = i == byteCount - 1;
+            bytes[i] = ReadByte(ACK: !isLastByte);
+        }
+        SendStop();
+
+        return bytes;
     }
 }

@@ -49,14 +49,7 @@ public partial class I2C_LIS3DH : Form
         if (I2C is null)
             return;
 
-        I2C.SendStart();
-        I2C.SendAddressForWriting(DeviceAddress);
-        I2C.SendByte(0x0F);
-
-        I2C.SendStart();
-        I2C.SendAddressForReading(DeviceAddress);
-        byte result = I2C.ReadByte(false);
-        I2C.SendStop();
+        byte result = I2C.ReadByteFromDevice(DeviceAddress, 0x0F);
 
         const byte expectedResult = 0b00110011;
 
@@ -70,12 +63,9 @@ public partial class I2C_LIS3DH : Form
     {
         // https://www.st.com/resource/en/datasheet/cd00274221.pdf (section 8.8)
 
-        I2C.SendStart();
-        I2C.SendAddressForWriting(DeviceAddress);
-        I2C.SendByte(0x20); // CTRL_REG1
-        I2C.SendByte(0b00110111); // 25 Hz, enable all 3 axes
-
-        I2C.SendStop();
+        byte CTRL_REG1 = 0x20;
+        byte CONFIG = 0b00110111; // 25 Hz, enable all 3 axes
+        I2C?.SendBytesToDevice(DeviceAddress, CTRL_REG1, CONFIG);
     }
 
     private void ReadAxis(byte addressL, byte addressH, BarGraph bar, string title)
@@ -83,25 +73,10 @@ public partial class I2C_LIS3DH : Form
         if (I2C is null)
             return;
 
-        byte[] bytes = { 0, 0 };
+        byte byteL = I2C.ReadByteFromDevice(DeviceAddress, addressL);
+        byte byteH = I2C.ReadByteFromDevice(DeviceAddress, addressH);
 
-        I2C.SendStart();
-        I2C.SendAddressForWriting(DeviceAddress);
-        I2C.SendByte(addressL);
-        I2C.SendStart();
-        I2C.SendAddressForReading(DeviceAddress);
-        bytes[0] = I2C.ReadByte(false);
-
-        I2C.SendStart();
-        I2C.SendAddressForWriting(DeviceAddress);
-        I2C.SendByte(addressH);
-        I2C.SendStart();
-        I2C.SendAddressForReading(DeviceAddress);
-        bytes[1] = I2C.ReadByte(false);
-
-        I2C.SendStop();
-
-        Int16 value = BitConverter.ToInt16(bytes);
+        Int16 value = BitConverter.ToInt16(new byte[] { byteL, byteH });
         value >>= 6;
 
         bar.SetValue(value, 200, $"{title}: {value}");

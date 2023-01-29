@@ -31,11 +31,12 @@ partial class MenuForm
             this.btnConnectedDevices = new System.Windows.Forms.Button();
             this.btnAddressScanner = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnBMP280 = new System.Windows.Forms.Button();
             this.btnLM75A = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btnBMP280 = new System.Windows.Forms.Button();
+            this.btnLIS3DH = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -66,6 +67,7 @@ partial class MenuForm
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnLIS3DH);
             this.groupBox1.Controls.Add(this.btnBMP280);
             this.groupBox1.Controls.Add(this.btnLM75A);
             this.groupBox1.Controls.Add(this.btnAddressScanner);
@@ -75,6 +77,18 @@ partial class MenuForm
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "I2C";
+            // 
+            // btnBMP280
+            // 
+            this.btnBMP280.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBMP280.Location = new System.Drawing.Point(6, 110);
+            this.btnBMP280.Name = "btnBMP280";
+            this.btnBMP280.Size = new System.Drawing.Size(186, 38);
+            this.btnBMP280.TabIndex = 3;
+            this.btnBMP280.Text = "BMP280 Pressure Sensor";
+            this.btnBMP280.UseVisualStyleBackColor = true;
+            this.btnBMP280.Click += new System.EventHandler(this.btnBMP280_Click);
             // 
             // btnLM75A
             // 
@@ -116,17 +130,17 @@ partial class MenuForm
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
             // 
-            // btnBMP280
+            // btnLIS3DH
             // 
-            this.btnBMP280.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnLIS3DH.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBMP280.Location = new System.Drawing.Point(6, 110);
-            this.btnBMP280.Name = "btnBMP280";
-            this.btnBMP280.Size = new System.Drawing.Size(186, 38);
-            this.btnBMP280.TabIndex = 3;
-            this.btnBMP280.Text = "BMP280 Pressure Sensor";
-            this.btnBMP280.UseVisualStyleBackColor = true;
-            this.btnBMP280.Click += new System.EventHandler(this.btnBMP280_Click);
+            this.btnLIS3DH.Location = new System.Drawing.Point(6, 154);
+            this.btnLIS3DH.Name = "btnLIS3DH";
+            this.btnLIS3DH.Size = new System.Drawing.Size(186, 38);
+            this.btnLIS3DH.TabIndex = 4;
+            this.btnLIS3DH.Text = "LIS3DH Accelerometer";
+            this.btnLIS3DH.UseVisualStyleBackColor = true;
+            this.btnLIS3DH.Click += new System.EventHandler(this.btnLIS3DH_Click);
             // 
             // MenuForm
             // 
@@ -156,4 +170,5 @@ partial class MenuForm
     private GroupBox groupBox3;
     private GroupBox groupBox4;
     private Button btnBMP280;
+    private Button btnLIS3DH;
 }

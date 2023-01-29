@@ -71,7 +71,7 @@ public class I2C
         FtdiDevice.Write(msg).ThrowIfNotOK();
     }
 
-    public void I2C_SetStart()
+    public void SendStart()
     {
         List<byte> bytes = new();
 
@@ -97,7 +97,7 @@ public class I2C
         FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
-    public void I2C_SetStop()
+    public void SendStop()
     {
         List<byte> bytes = new();
 
@@ -123,14 +123,14 @@ public class I2C
     public void SendAddressForWriting(byte address)
     {
         address <<= 1;
-        I2C_SendByte(address);
+        SendByte(address);
     }
 
     public void SendAddressForReading(byte address)
     {
         address <<= 1;
         address |= 0x01;
-        I2C_SendByte(address);
+        SendByte(address);
     }
 
     public bool I2C_SendDeviceAddr(byte address, bool read)
@@ -139,10 +139,10 @@ public class I2C
         if (read == true)
             address |= 0x01;
 
-        return I2C_SendByte(address);
+        return SendByte(address);
     }
 
-    public bool I2C_SendByte(byte byteToSend)
+    public bool SendByte(byte byteToSend)
     {
         const byte I2C_Data_SDAhi_SCLlo = 0x02;
         const byte MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
@@ -187,9 +187,9 @@ public class I2C
 
         for (int address = 1; address < 127; address++)
         {
-            I2C_SetStart();
+            SendStart();
             bool ack = I2C_SendDeviceAddr((byte)address, read: true);
-            I2C_SetStop();
+            SendStop();
 
             if (ack)
                 devices.Add($"0x{address:X2}");
@@ -201,7 +201,7 @@ public class I2C
         return devices.ToArray();
     }
 
-    public byte I2C_ReadByte(bool ACK = true)
+    public byte ReadByte(bool ACK = true)
     {
         const byte MSB_RISING_EDGE_CLOCK_BYTE_IN = 0x20;
         const byte MSB_FALLING_EDGE_CLOCK_BIT_OUT = 0x13;
@@ -248,17 +248,17 @@ public class I2C
     /// </summary>
     public byte[] ReadBytes(byte address, int length)
     {
-        I2C_SetStart();
+        SendStart();
 
         I2C_SendDeviceAddr(address, read: true);
 
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++)
         {
-            bytes[i] = I2C_ReadByte(ACK: true);
+            bytes[i] = ReadByte(ACK: true);
         }
 
-        I2C_SetStop();
+        SendStop();
 
         return bytes;
     }

@@ -114,14 +114,14 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             throw new NullReferenceException(nameof(I2C));
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(0xD0);
+        I2C.SendByte(0xD0);
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForReading(deviceAddress);
-        byte id = I2C.I2C_ReadByte(false);
-        I2C.I2C_SetStop();
+        byte id = I2C.ReadByte(false);
+        I2C.SendStop();
 
         return id == 0x58;
     }
@@ -131,17 +131,17 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             throw new NullReferenceException(nameof(I2C));
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(memoryAddress);
+        I2C.SendByte(memoryAddress);
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForReading(deviceAddress);
         byte[] bytes = {
-            I2C.I2C_ReadByte(true),
-            I2C.I2C_ReadByte(false),
+            I2C.ReadByte(true),
+            I2C.ReadByte(false),
         };
-        I2C.I2C_SetStop();
+        I2C.SendStop();
 
         //Debug.WriteLine($"Config bytes at {memoryAddress} are {bytes[0]}, {bytes[1]}");
 
@@ -173,11 +173,11 @@ public partial class I2C_BMP280 : Form
 
         // write 0xB6 to register 0xE0 to reset (datasheet section 4.3.2)
         // https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.I2C_SendDeviceAddr(deviceAddress, read: false);
-        I2C.I2C_SendByte(0xE0);
-        I2C.I2C_SendByte(0xB6);
-        I2C.I2C_SetStop();
+        I2C.SendByte(0xE0);
+        I2C.SendByte(0xB6);
+        I2C.SendStop();
     }
 
     private void ReadCalibrationData(byte deviceAddress)
@@ -218,11 +218,11 @@ public partial class I2C_BMP280 : Form
         config |= 0b00000000;  // filter (disable filter)
         config |= 0b00000000;  // spi3w_en (disable 3-wire)
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(configAddress);
-        I2C.I2C_SendByte(config);
-        I2C.I2C_SetStop();
+        I2C.SendByte(configAddress);
+        I2C.SendByte(config);
+        I2C.SendStop();
     }
 
     private void SetupControlRegister(byte deviceAddress)
@@ -238,11 +238,11 @@ public partial class I2C_BMP280 : Form
         ctrl |= 0b00001100; // pressure resolution
         ctrl |= 0b00000011; // normal mode (continous running)
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(ctrlAddress);
-        I2C.I2C_SendByte(ctrl);
-        I2C.I2C_SetStop();
+        I2C.SendByte(ctrlAddress);
+        I2C.SendByte(ctrl);
+        I2C.SendStop();
     }
 
     private void WaitForConversion(byte deviceAddress)
@@ -254,14 +254,14 @@ public partial class I2C_BMP280 : Form
         bool isConverting = false;
         while (isMeasuring || isConverting)
         {
-            I2C.I2C_SetStart();
+            I2C.SendStart();
             I2C.SendAddressForWriting(deviceAddress);
-            I2C.I2C_SendByte(0xF3);
-            I2C.I2C_SendByte(0xF3);
-            I2C.I2C_SetStart();
+            I2C.SendByte(0xF3);
+            I2C.SendByte(0xF3);
+            I2C.SendStart();
             I2C.SendAddressForReading(deviceAddress);
-            byte status = I2C.I2C_ReadByte(false);
-            I2C.I2C_SetStop();
+            byte status = I2C.ReadByte(false);
+            I2C.SendStop();
             isMeasuring = (status & 0b00001000) > 0;
             isConverting = (status & 0b00000001) > 0;
             if (isMeasuring)
@@ -279,32 +279,32 @@ public partial class I2C_BMP280 : Form
             throw new NullReferenceException(nameof(I2C));
 
         // read temperature
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(0xFA);
+        I2C.SendByte(0xFA);
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForReading(deviceAddress);
         byte[] temperatureBytes = {
-            I2C.I2C_ReadByte(true),
-            I2C.I2C_ReadByte(true),
-            I2C.I2C_ReadByte(false),
+            I2C.ReadByte(true),
+            I2C.ReadByte(true),
+            I2C.ReadByte(false),
         };
-        I2C.I2C_SetStop();
+        I2C.SendStop();
 
         // read pressure
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForWriting(deviceAddress);
-        I2C.I2C_SendByte(0xF7);
+        I2C.SendByte(0xF7);
 
-        I2C.I2C_SetStart();
+        I2C.SendStart();
         I2C.SendAddressForReading(deviceAddress);
         byte[] pressureBytes = {
-            I2C.I2C_ReadByte(true),
-            I2C.I2C_ReadByte(true),
-            I2C.I2C_ReadByte(false),
+            I2C.ReadByte(true),
+            I2C.ReadByte(true),
+            I2C.ReadByte(false),
         };
-        I2C.I2C_SetStop();
+        I2C.SendStop();
 
         lblTemperatureBytes.Text = string.Join(", ", temperatureBytes.Select(x => x.ToString()));
         lblPressureBytes.Text = string.Join(", ", pressureBytes.Select(x => x.ToString()));

@@ -243,8 +243,11 @@ public class I2C
         return readBuffer[0];
     }
 
-    [Obsolete]
-    public byte[] ReadBytes(byte address, int length)
+    #region PUBLIC API
+
+    public byte TransactRead(byte address) => TransactRead(address, 1)[0];
+
+    public byte[] TransactRead(byte address, int length)
     {
         SendStart();
 
@@ -261,16 +264,9 @@ public class I2C
         return bytes;
     }
 
-    public void SendBytesToDevice(byte address, byte byte1, byte byte2)
-    {
-        SendStart();
-        SendAddressForWriting(address);
-        SendByte(byte1);
-        SendByte(byte2);
-        SendStop();
-    }
+    public void TransactWrite(byte address, byte byte1) => TransactWrite(address, new byte[] { byte1 });
 
-    public void SendBytesToDevice(byte address, byte[] bytes)
+    public void TransactWrite(byte address, byte[] bytes)
     {
         SendStart();
         SendAddressForWriting(address);
@@ -281,29 +277,30 @@ public class I2C
         SendStop();
     }
 
-    public byte ReadByteFromDevice(byte address, byte memoryAddress)
-    {
-        return ReadBytesFromDevice(address, memoryAddress, 1)[0];
-    }
+    public byte TransactWriteThenRead(byte deviceAddress, byte memoryAddress) => TransactWriteThenRead(deviceAddress, memoryAddress, 1)[0];
 
-    public byte[] ReadBytesFromDevice(byte deviceAddress, byte memoryAddress, int byteCount)
+    public byte[] TransactWriteThenRead(byte deviceAddress, byte memoryAddress, int byteCount)
     {
         byte[] bytes = new byte[byteCount];
 
         SendStart();
         SendAddressForWriting(deviceAddress);
+
+        // TODO: ensure ack?
         SendByte(memoryAddress);
-        SendStop();
 
         SendStart();
         SendAddressForReading(deviceAddress);
         for (int i = 0; i < byteCount; i++)
         {
             bool isLastByte = i == byteCount - 1;
-            bytes[i] = ReadByte(ACK: !isLastByte);
+            bool ack = !isLastByte;
+            bytes[i] = ReadByte(ack);
         }
         SendStop();
 
         return bytes;
     }
+
+    #endregion
 }

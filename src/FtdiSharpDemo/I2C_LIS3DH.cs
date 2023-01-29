@@ -49,7 +49,8 @@ public partial class I2C_LIS3DH : Form
         if (I2C is null)
             return;
 
-        byte result = I2C.ReadByteFromDevice(DeviceAddress, 0x0F);
+        const byte WHO_AM_I_ADDRESS = 0x0F;
+        byte result = I2C.TransactWriteThenRead(DeviceAddress, WHO_AM_I_ADDRESS);
 
         const byte expectedResult = 0b00110011;
 
@@ -65,7 +66,7 @@ public partial class I2C_LIS3DH : Form
 
         byte CTRL_REG1 = 0x20;
         byte CONFIG = 0b00110111; // 25 Hz, enable all 3 axes
-        I2C?.SendBytesToDevice(DeviceAddress, CTRL_REG1, CONFIG);
+        I2C?.TransactWrite(DeviceAddress, new byte[] { CTRL_REG1, CONFIG });
     }
 
     private void ReadAxis(byte addressL, byte addressH, BarGraph bar, string title)
@@ -73,10 +74,9 @@ public partial class I2C_LIS3DH : Form
         if (I2C is null)
             return;
 
-        byte byteL = I2C.ReadByteFromDevice(DeviceAddress, addressL);
-        byte byteH = I2C.ReadByteFromDevice(DeviceAddress, addressH);
+        byte[] bytes = I2C.TransactWriteThenRead(DeviceAddress, addressH, 2);
 
-        Int16 value = BitConverter.ToInt16(new byte[] { byteL, byteH });
+        Int16 value = BitConverter.ToInt16(bytes);
         value >>= 6;
 
         bar.SetValue(value, 200, $"{title}: {value}");

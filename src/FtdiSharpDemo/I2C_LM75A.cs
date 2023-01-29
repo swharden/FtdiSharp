@@ -36,7 +36,7 @@ public partial class I2C_LM75A : Form
         // https://www.mouser.com/datasheet/2/302/LM75A-1126516.pdf
 
         byte deviceAddress = (byte)nudAddress.Value;
-        byte[] bytes = I2CCOM.TransactRead(deviceAddress, 2);
+        byte[] bytes = I2CCOM.Read(deviceAddress, 2);
 
         lblSensor.Text = Convert.ToString(bytes[0], 2).PadLeft(8, '0') +
             Environment.NewLine +

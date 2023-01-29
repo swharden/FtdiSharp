@@ -95,7 +95,7 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             throw new NullReferenceException(nameof(I2C));
 
-        byte id = I2C.TransactWriteThenRead(deviceAddress, 0xD0);
+        byte id = I2C.WriteThenRead(deviceAddress, 0xD0);
 
         const byte expectedID = 0x58;
 
@@ -108,7 +108,7 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             throw new NullReferenceException(nameof(I2C));
 
-        byte[] bytes = I2C.TransactWriteThenRead(deviceAddress, memoryAddress, 2);
+        byte[] bytes = I2C.WriteThenRead(deviceAddress, memoryAddress, 2);
 
         return bytes;
     }
@@ -123,7 +123,7 @@ public partial class I2C_BMP280 : Form
 
         const byte register = 0xE0;
         const byte value = 0xB6;
-        I2C.TransactWrite(deviceAddress, new byte[] { register, value });
+        I2C.Write(deviceAddress, new byte[] { register, value });
     }
 
     private void ReadCalibrationData(byte deviceAddress)
@@ -163,7 +163,7 @@ public partial class I2C_BMP280 : Form
         configValue |= 0b00000000;  // filter (disable filter)
         configValue |= 0b00000000;  // spi3w_en (disable 3-wire)
 
-        I2C.TransactWrite(deviceAddress, new byte[] { configAddress, configValue });
+        I2C.Write(deviceAddress, new byte[] { configAddress, configValue });
     }
 
     private void SetupControlRegister(byte deviceAddress)
@@ -177,7 +177,7 @@ public partial class I2C_BMP280 : Form
         ctrlValue |= 0b00001100; // pressure resolution
         ctrlValue |= 0b00000011; // normal mode (continous running)
 
-        I2C.TransactWrite(deviceAddress, new byte[] { ctrlAddress, ctrlValue });
+        I2C.Write(deviceAddress, new byte[] { ctrlAddress, ctrlValue });
     }
 
     private void WaitForConversion(byte deviceAddress)
@@ -189,7 +189,7 @@ public partial class I2C_BMP280 : Form
         bool isConverting = false;
         while (isMeasuring || isConverting)
         {
-            byte status = I2C.TransactWriteThenRead(deviceAddress, 0xF3);
+            byte status = I2C.WriteThenRead(deviceAddress, 0xF3);
             isMeasuring = (status & 0b00001000) > 0;
             isConverting = (status & 0b00000001) > 0;
         }
@@ -200,8 +200,8 @@ public partial class I2C_BMP280 : Form
         if (I2C is null)
             throw new NullReferenceException(nameof(I2C));
 
-        byte[] temperatureBytes = I2C.TransactWriteThenRead(deviceAddress, 0xFA, 3);
-        byte[] pressureBytes = I2C.TransactWriteThenRead(deviceAddress, 0xF7, 3);
+        byte[] temperatureBytes = I2C.WriteThenRead(deviceAddress, 0xFA, 3);
+        byte[] pressureBytes = I2C.WriteThenRead(deviceAddress, 0xF7, 3);
 
         lblTemperatureBytes.Text = string.Join(", ", temperatureBytes.Select(x => x.ToString()));
         lblPressureBytes.Text = string.Join(", ", pressureBytes.Select(x => x.ToString()));

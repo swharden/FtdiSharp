@@ -14,12 +14,12 @@ public class I2C
     public I2C(FtdiManager ftman)
     {
         FTMan = ftman;
-        ConfigureMpsse();
+        FTDI_ConfigureMpsse();
     }
 
-    public void Flush() => FtdiDevice.FlushBuffer();
+    #region PRIVATE
 
-    public void ConfigureMpsse()
+    private void FTDI_ConfigureMpsse()
     {
         FtdiDevice.SetTimeouts(1000, 1000).ThrowIfNotOK();
         FtdiDevice.SetLatency(16).ThrowIfNotOK();
@@ -71,7 +71,7 @@ public class I2C
         FtdiDevice.Write(msg).ThrowIfNotOK();
     }
 
-    public void SendStart()
+    private void FTDI_Start()
     {
         List<byte> bytes = new();
 
@@ -97,7 +97,7 @@ public class I2C
         FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
-    public void SendStop()
+    private void FTDI_Stop()
     {
         List<byte> bytes = new();
 
@@ -120,29 +120,20 @@ public class I2C
         FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
-    public void SendAddressForWriting(byte address)
+    private bool FTDI_CommandWrite(byte address)
     {
         address <<= 1;
-        SendByte(address);
+        return FTDI_SendByte(address);
     }
 
-    public void SendAddressForReading(byte address)
+    private bool FTDI_CommandRead(byte address)
     {
         address <<= 1;
         address |= 0x01;
-        SendByte(address);
+        return FTDI_SendByte(address);
     }
 
-    public bool I2C_SendDeviceAddr(byte address, bool read)
-    {
-        address <<= 1;
-        if (read == true)
-            address |= 0x01;
-
-        return SendByte(address);
-    }
-
-    public bool SendByte(byte byteToSend)
+    private bool FTDI_SendByte(byte byteToSend)
     {
         const byte I2C_Data_SDAhi_SCLlo = 0x02;
         const byte MSB_FALLING_EDGE_CLOCK_BYTE_OUT = 0x11;
@@ -181,27 +172,7 @@ public class I2C
         return ack;
     }
 
-    public string[] Scan()
-    {
-        List<string> devices = new();
-
-        for (int address = 1; address < 127; address++)
-        {
-            SendStart();
-            bool ack = I2C_SendDeviceAddr((byte)address, read: true);
-            SendStop();
-
-            if (ack)
-                devices.Add($"0x{address:X2}");
-        }
-
-        if (devices.Count == 0)
-            return new string[] { "No devices found" };
-
-        return devices.ToArray();
-    }
-
-    public byte ReadByte(bool ACK = true)
+    private byte FTDI_ReadByte(bool ACK = true)
     {
         const byte MSB_RISING_EDGE_CLOCK_BYTE_IN = 0x20;
         const byte MSB_FALLING_EDGE_CLOCK_BIT_OUT = 0x13;
@@ -243,61 +214,83 @@ public class I2C
         return readBuffer[0];
     }
 
-    #region PUBLIC API
+    #endregion
 
-    public byte TransactRead(byte address) => TransactRead(address, 1)[0];
+    #region PUBLIC
 
-    public byte[] TransactRead(byte address, int length)
+    public string[] Scan()
     {
-        SendStart();
+        List<string> devices = new();
 
-        I2C_SendDeviceAddr(address, read: true);
+        for (int address = 1; address < 127; address++)
+        {
+            FTDI_Start();
+            bool ack = FTDI_CommandRead((byte)address);
+            FTDI_Stop();
+
+            if (ack)
+                devices.Add($"0x{address:X2}");
+        }
+
+        if (devices.Count == 0)
+            return new string[] { "No devices found" };
+
+        return devices.ToArray();
+    }
+
+    public byte Read(byte address) => Read(address, 1)[0];
+
+    public byte[] Read(byte address, int length)
+    {
+        FTDI_Start();
+
+        FTDI_CommandRead(address);
 
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++)
         {
-            bytes[i] = ReadByte(ACK: true);
+            bytes[i] = FTDI_ReadByte(ACK: true);
         }
 
-        SendStop();
+        FTDI_Stop();
 
         return bytes;
     }
 
-    public void TransactWrite(byte address, byte byte1) => TransactWrite(address, new byte[] { byte1 });
+    public void Write(byte address, byte byte1) => Write(address, new byte[] { byte1 });
 
-    public void TransactWrite(byte address, byte[] bytes)
+    public void Write(byte deviceAddress, byte[] bytes)
     {
-        SendStart();
-        SendAddressForWriting(address);
+        FTDI_Start();
+        FTDI_CommandWrite(deviceAddress);
         foreach (byte b in bytes)
         {
-            SendByte(b);
+            FTDI_SendByte(b);
         }
-        SendStop();
+        FTDI_Stop();
     }
 
-    public byte TransactWriteThenRead(byte deviceAddress, byte memoryAddress) => TransactWriteThenRead(deviceAddress, memoryAddress, 1)[0];
+    public byte WriteThenRead(byte deviceAddress, byte memoryAddress) => WriteThenRead(deviceAddress, memoryAddress, 1)[0];
 
-    public byte[] TransactWriteThenRead(byte deviceAddress, byte memoryAddress, int byteCount)
+    public byte[] WriteThenRead(byte deviceAddress, byte memoryAddress, int byteCount)
     {
         byte[] bytes = new byte[byteCount];
 
-        SendStart();
-        SendAddressForWriting(deviceAddress);
+        FTDI_Start();
+        FTDI_CommandWrite(deviceAddress);
 
         // TODO: ensure ack?
-        SendByte(memoryAddress);
+        FTDI_SendByte(memoryAddress);
 
-        SendStart();
-        SendAddressForReading(deviceAddress);
+        FTDI_Start();
+        FTDI_CommandRead(deviceAddress);
         for (int i = 0; i < byteCount; i++)
         {
             bool isLastByte = i == byteCount - 1;
             bool ack = !isLastByte;
-            bytes[i] = ReadByte(ack);
+            bytes[i] = FTDI_ReadByte(ack);
         }
-        SendStop();
+        FTDI_Stop();
 
         return bytes;
     }

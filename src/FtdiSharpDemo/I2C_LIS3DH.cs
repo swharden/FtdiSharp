@@ -29,12 +29,9 @@ public partial class I2C_LIS3DH : Form
 
     private void timer1_Tick(object sender, EventArgs e)
     {
-        if (I2C is not null)
-            ReadAccel();
-    }
+        if (I2C is null || !I2C.IsOpen)
+            return;
 
-    private void ReadAccel()
-    {
         AssertWhoAmI();
         SetupDevice();
         ReadAxes();

@@ -26,6 +26,9 @@ public partial class I2C_Scan : Form
     {
         listBox1.Items.Clear();
 
+        if (!FTMan.FTD2XX.IsOpen)
+            return;
+
         FtdiSharp.Protocols.I2C i2c = new(FTMan);
         foreach (string address in i2c.Scan())
         {

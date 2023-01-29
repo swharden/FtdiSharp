@@ -15,8 +15,14 @@ public partial class DeviceSelector : UserControl
     public DeviceSelector()
     {
         InitializeComponent();
+        HandleDestroyed += DeviceSelector_HandleDestroyed;
         btnClose.Enabled = false;
         Scan();
+    }
+
+    private void DeviceSelector_HandleDestroyed(object? sender, EventArgs e)
+    {
+        FTMan.FTD2XX.Close();
     }
 
     public void Scan()

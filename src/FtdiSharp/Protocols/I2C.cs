@@ -1,13 +1,13 @@
 ﻿using FtdiSharp.FTD2XX;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 
 namespace FtdiSharp.Protocols;
 
 public class I2C
 {
     public readonly FtdiManager FTMan;
+
+    public bool IsOpen => FTMan.FTD2XX.IsOpen;
 
     public FTDI FtdiDevice => FTMan.FTD2XX;
 

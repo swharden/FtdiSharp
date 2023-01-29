@@ -38,7 +38,10 @@ partial class I2C_LM75A
             this.lblSensor = new System.Windows.Forms.Label();
             this.lblTemperature = new System.Windows.Forms.Label();
             this.lblAddress = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.nudAddress)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // deviceSelector1
@@ -129,11 +132,28 @@ partial class I2C_LM75A
             this.lblAddress.TabIndex = 7;
             this.lblAddress.Text = "0x00";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 172);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(468, 22);
+            this.statusStrip1.TabIndex = 8;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // I2C_LM75A
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 194);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lblAddress);
             this.Controls.Add(this.lblTemperature);
             this.Controls.Add(this.lblSensor);
@@ -146,6 +166,8 @@ partial class I2C_LM75A
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FtdiSharp LM75A Demo";
             ((System.ComponentModel.ISupportInitialize)(this.nudAddress)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,4 +184,6 @@ partial class I2C_LM75A
     private Label lblSensor;
     private Label lblTemperature;
     private Label lblAddress;
+    private StatusStrip statusStrip1;
+    private ToolStripStatusLabel toolStripStatusLabel1;
 }

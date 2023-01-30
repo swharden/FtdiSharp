@@ -220,22 +220,19 @@ public class I2C
 
     #region PUBLIC
 
-    public string[] Scan()
+    public byte[] Scan()
     {
-        List<string> devices = new();
+        List<byte> devices = new();
 
-        for (int address = 1; address < 127; address++)
+        for (byte address = 0; address < 127; address++)
         {
             FTDI_Start();
-            bool ack = FTDI_CommandRead((byte)address);
+            bool ack = FTDI_CommandRead(address);
             FTDI_Stop();
 
             if (ack)
-                devices.Add($"0x{address:X2}");
+                devices.Add(address);
         }
-
-        if (devices.Count == 0)
-            return new string[] { "No devices found" };
 
         return devices.ToArray();
     }

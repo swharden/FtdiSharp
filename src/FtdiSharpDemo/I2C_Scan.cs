@@ -30,9 +30,9 @@ public partial class I2C_Scan : Form
             return;
 
         FtdiSharp.Protocols.I2C i2c = new(FTMan);
-        foreach (string address in i2c.Scan())
+        foreach (byte address in i2c.Scan())
         {
-            listBox1.Items.Add(address);
+            listBox1.Items.Add($"0x{address:X2}");
         }
     }
 }

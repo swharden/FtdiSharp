@@ -18,6 +18,7 @@
         <PackageProjectUrl>https://github.com/swharden/FtdiSharp</PackageProjectUrl>
         <RepositoryUrl>https://github.com/swharden/FtdiSharp.git</RepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <IncludeSource>true</IncludeSource>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <Deterministic>true</Deterministic>

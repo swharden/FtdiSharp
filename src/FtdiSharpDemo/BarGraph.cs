@@ -4,8 +4,6 @@ namespace FtdiSharpDemo;
 
 public partial class BarGraph : UserControl
 {
-    public bool CenterAtZero = true;
-
     public BarGraph()
     {
         InitializeComponent();
@@ -16,14 +14,14 @@ public partial class BarGraph : UserControl
         label1.Text = isDesignMode ? "title" : string.Empty;
     }
 
-    public void SetValue(double value, double max, string label)
+    public void SetValue(double value, double max, string label, bool centerAtZero = true)
     {
         label1.Text = label;
-        double span = CenterAtZero ? max * 2 : max;
+        double span = centerAtZero ? max * 2 : max;
         int panelWidth = (int)(Math.Abs(value) / span * panel1.Width);
         int panelCenterX = panel1.Width / 2;
 
-        if (CenterAtZero)
+        if (centerAtZero)
         {
             panelWidth /= 2;
             panel2.Width = Math.Max(panelWidth, 1);

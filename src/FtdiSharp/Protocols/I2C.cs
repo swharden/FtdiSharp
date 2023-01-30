@@ -1,5 +1,7 @@
 ﻿using FtdiSharp.FTD2XX;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace FtdiSharp.Protocols;
 
@@ -261,36 +263,50 @@ public class I2C
 
     public void Write(byte deviceAddress, byte[] bytes)
     {
+        bool[] ack = new bool[bytes.Length + 1];
+
         FTDI_Start();
-        FTDI_CommandWrite(deviceAddress);
-        foreach (byte b in bytes)
+        ack[0] = FTDI_CommandWrite(deviceAddress);
+        for (int i = 0; i < bytes.Length; i++)
         {
-            FTDI_SendByte(b);
+            ack[i + 1] = FTDI_SendByte(bytes[i]);
         }
         FTDI_Stop();
+
+        if (ack.Where(x => x == false).Any())
+        {
+            Debug.WriteLine("WARNING: not all writes were ACK'd");
+            Debug.WriteLine(string.Join(",", ack.Select(x => x.ToString())));
+        }
     }
 
     public byte WriteThenRead(byte deviceAddress, byte memoryAddress) => WriteThenRead(deviceAddress, memoryAddress, 1)[0];
 
     public byte[] WriteThenRead(byte deviceAddress, byte memoryAddress, int byteCount)
     {
+        bool[] ack = new bool[3];
         byte[] bytes = new byte[byteCount];
 
         FTDI_Start();
-        FTDI_CommandWrite(deviceAddress);
+        ack[0] = FTDI_CommandWrite(deviceAddress);
 
         // TODO: ensure ack?
-        FTDI_SendByte(memoryAddress);
+        ack[1] = FTDI_SendByte(memoryAddress);
 
         FTDI_Start();
-        FTDI_CommandRead(deviceAddress);
+        ack[2] = FTDI_CommandRead(deviceAddress);
         for (int i = 0; i < byteCount; i++)
         {
             bool isLastByte = i == byteCount - 1;
-            bool ack = !isLastByte;
-            bytes[i] = FTDI_ReadByte(ack);
+            bytes[i] = FTDI_ReadByte(ACK: !isLastByte);
         }
         FTDI_Stop();
+
+        if (ack.Where(x => x == false).Any())
+        {
+            Debug.WriteLine("WARNING: not all reads were ACK'd");
+            Debug.WriteLine(string.Join(",", ack.Select(x => x.ToString())));
+        }
 
         return bytes;
     }

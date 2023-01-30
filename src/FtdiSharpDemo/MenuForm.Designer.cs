@@ -31,12 +31,13 @@ partial class MenuForm
             this.btnConnectedDevices = new System.Windows.Forms.Button();
             this.btnAddressScanner = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLIS3DH = new System.Windows.Forms.Button();
             this.btnBMP280 = new System.Windows.Forms.Button();
             this.btnLM75A = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btnLIS3DH = new System.Windows.Forms.Button();
+            this.btnADS1115 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +68,7 @@ partial class MenuForm
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnADS1115);
             this.groupBox1.Controls.Add(this.btnLIS3DH);
             this.groupBox1.Controls.Add(this.btnBMP280);
             this.groupBox1.Controls.Add(this.btnLM75A);
@@ -77,6 +79,18 @@ partial class MenuForm
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "I2C";
+            // 
+            // btnLIS3DH
+            // 
+            this.btnLIS3DH.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLIS3DH.Location = new System.Drawing.Point(6, 154);
+            this.btnLIS3DH.Name = "btnLIS3DH";
+            this.btnLIS3DH.Size = new System.Drawing.Size(186, 38);
+            this.btnLIS3DH.TabIndex = 4;
+            this.btnLIS3DH.Text = "LIS3DH Accelerometer";
+            this.btnLIS3DH.UseVisualStyleBackColor = true;
+            this.btnLIS3DH.Click += new System.EventHandler(this.btnLIS3DH_Click);
             // 
             // btnBMP280
             // 
@@ -130,17 +144,17 @@ partial class MenuForm
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
             // 
-            // btnLIS3DH
+            // btnADS1115
             // 
-            this.btnLIS3DH.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnADS1115.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLIS3DH.Location = new System.Drawing.Point(6, 154);
-            this.btnLIS3DH.Name = "btnLIS3DH";
-            this.btnLIS3DH.Size = new System.Drawing.Size(186, 38);
-            this.btnLIS3DH.TabIndex = 4;
-            this.btnLIS3DH.Text = "LIS3DH Accelerometer";
-            this.btnLIS3DH.UseVisualStyleBackColor = true;
-            this.btnLIS3DH.Click += new System.EventHandler(this.btnLIS3DH_Click);
+            this.btnADS1115.Location = new System.Drawing.Point(6, 198);
+            this.btnADS1115.Name = "btnADS1115";
+            this.btnADS1115.Size = new System.Drawing.Size(186, 38);
+            this.btnADS1115.TabIndex = 5;
+            this.btnADS1115.Text = "ADS1115 ADC";
+            this.btnADS1115.UseVisualStyleBackColor = true;
+            this.btnADS1115.Click += new System.EventHandler(this.btnADS1115_Click);
             // 
             // MenuForm
             // 
@@ -171,4 +185,5 @@ partial class MenuForm
     private GroupBox groupBox4;
     private Button btnBMP280;
     private Button btnLIS3DH;
+    private Button btnADS1115;
 }

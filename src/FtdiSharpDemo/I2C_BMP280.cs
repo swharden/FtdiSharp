@@ -22,6 +22,7 @@ public partial class I2C_BMP280 : Form
         public Int16 P7;
         public Int16 P8;
         public Int16 P9;
+
         private string BytesString(UInt16 value) => string.Join(", ", BitConverter.GetBytes(value).Select(x => x.ToString()));
         private string BytesString(Int16 value) => string.Join(", ", BitConverter.GetBytes(value).Select(x => x.ToString()));
         public string[] GetSummary()

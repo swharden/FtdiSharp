@@ -5,7 +5,11 @@ public partial class I2cAddressSelector : UserControl
     public byte Address
     {
         get => (byte)nudAddress.Value;
-        set => nudAddress.Value = value;
+        set
+        {
+            nudAddress.Value = value;
+            nudAddress_ValueChanged(null!, null!);
+        }
     }
 
     public I2cAddressSelector()

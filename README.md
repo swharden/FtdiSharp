@@ -35,7 +35,7 @@ foreach (byte address in i2c.Scan())
 
 ### Interact with an I2C Device
 
-This code reads luminosity from a BH1750 light sensor according to its [datasheet](https://www.mouser.com/datasheet/2/348/Rohm_11162017_ROHMS34826-1-1279292.pdf) (page 5)
+This code reads luminosity from a [BH1750 light sensor](https://www.mouser.com/datasheet/2/348/Rohm_11162017_ROHMS34826-1-1279292.pdf)
 
 ```cs
 // enable continuous sensor reading mode

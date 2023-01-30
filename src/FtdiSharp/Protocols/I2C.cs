@@ -33,14 +33,14 @@ public class I2C
 
         /***** Synchronize the MPSSE interface by sending bad command 0xAA *****/
         FtdiDevice.Write(new byte[] { 0xAA }).ThrowIfNotOK();
-        (FT_STATUS status1, byte[] rx1) = FtdiDevice.ReadBytes(2);
+        byte[] rx1 = FtdiDevice.ReadBytes(2, out FT_STATUS status1);
         status1.ThrowIfNotOK();
         if ((rx1[0] != 0xFA) || (rx1[1] != 0xAA))
             throw new InvalidOperationException($"bad echo bytes: {rx1[0]} {rx1[1]}");
 
         /***** Synchronize the MPSSE interface by sending bad command 0xAB *****/
         FtdiDevice.Write(new byte[] { 0xAB }).ThrowIfNotOK();
-        (FT_STATUS status2, byte[] rx2) = FtdiDevice.ReadBytes(2);
+        byte[] rx2 = FtdiDevice.ReadBytes(2, out FT_STATUS status2);
         status2.ThrowIfNotOK();
         if ((rx2[0] != 0xFA) || (rx2[1] != 0xAB))
             throw new InvalidOperationException($"bad echo bytes: {rx2[0]} {rx2[1]}");
@@ -165,7 +165,7 @@ public class I2C
         byte[] msg = buffer.Take(bytesToSend).ToArray();
         FTMan.FTD2XX.Write(msg).ThrowIfNotOK();
 
-        (FT_STATUS status, byte[] rx1) = FTMan.FTD2XX.ReadBytes(1);
+        byte[] rx1 = FTMan.FTD2XX.ReadBytes(1, out FT_STATUS status);
         status.ThrowIfNotOK();
 
         // if ack bit is 0 then sensor acked the transfer, otherwise it nak'd the transfer

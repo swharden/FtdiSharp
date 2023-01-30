@@ -875,12 +875,12 @@ public class FTDI
         return ftStatus;
     }
 
-    public (FT_STATUS status, byte[] bytes) ReadBytes(uint count)
+    public byte[] ReadBytes(uint count, out FT_STATUS status)
     {
         byte[] readBuffer = new byte[count];
         uint bytesRead = 0;
-        FT_STATUS status = Read(readBuffer, count, ref bytesRead);
-        return (status, readBuffer);
+        status = Read(readBuffer, count, ref bytesRead);
+        return readBuffer;
     }
 
     /// <summary>

@@ -30,3 +30,6 @@ jobs:
       - name: 🧪 Test
         working-directory: src
         run: dotnet test --no-restore --verbosity minimal
+      - name: 📦 Pack
+        working-directory: src
+        run: dotnet pack --configuration Release

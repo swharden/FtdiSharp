@@ -1,0 +1,38 @@
+name: Deploy to NuGet
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    name: Build and Push
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v3
+      - name: 🐢 Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: ✨ Setup .NET 6.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
+      - name: 🚚 Restore
+        run: dotnet restore "src/FtdiSharp"
+      - name: 🛠️ Build
+        run: dotnet build "src/FtdiSharp" --configuration Release --no-restore
+      - name: 🧪 Test
+        run: dotnet test "src/FtdiSharp" --no-restore --verbosity minimal
+      - name: 📦 Pack
+        run: dotnet pack "src/FtdiSharp" --configuration Release
+      - name: 💾 Store Packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: Packages
+          retention-days: 1
+          path: src/FtdiSharp/bin/Release/*.nupkg
+      - name: 🛠️ Setup NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+      - name: 🚀 Publish Packages
+        run: nuget push "src\FtdiSharp\bin\Release\*.nupkg" -SkipDuplicate -Source https://api.nuget.org/v3/index.json

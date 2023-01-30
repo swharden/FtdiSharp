@@ -5,7 +5,6 @@
         <ImplicitUsings>false</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 
 </Project>

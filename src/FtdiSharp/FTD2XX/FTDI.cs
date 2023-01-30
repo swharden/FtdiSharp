@@ -10,8 +10,6 @@
  */
 
 using FtdiSharp.FTD2XX.EEPROM_STRUCTURES;
-using System;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace FtdiSharp.FTD2XX;
 

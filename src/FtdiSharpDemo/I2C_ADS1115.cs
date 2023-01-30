@@ -5,13 +5,15 @@ namespace FtdiSharpDemo;
 public partial class I2C_ADS1115 : Form
 {
     FtdiSharp.Protocols.I2C? I2C = null;
+    int Reads = 0;
 
     public I2C_ADS1115()
     {
         InitializeComponent();
         i2cAddressSelector1.Address = 0x48;
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
-        lblA0.Text = "";
+        lblA0.Text = string.Empty;
+        toolStripStatusLabel1.Text = "Reads: 0";
     }
 
     private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
@@ -57,5 +59,6 @@ public partial class I2C_ADS1115 : Form
         value = Math.Max(value, 0);
         value *= 6.144 / (2 << 14);
         lblA0.Text = $"{value:N4} V";
+        toolStripStatusLabel1.Text = $"Reads: {++Reads}";
     }
 }

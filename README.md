@@ -38,16 +38,14 @@ foreach (byte address in i2c.Scan())
 This code reads luminosity from a [BH1750 light sensor](https://www.mouser.com/datasheet/2/348/Rohm_11162017_ROHMS34826-1-1279292.pdf)
 
 ```cs
-// enable continuous sensor reading mode
-byte deviceAddress = 0x23;
-byte continuousMode = 0b00010000;
-I2C.Write(deviceAddress, continuousMode);
+// Enter continuous sensor mode
+byte address = 0x23;
+byte config = 0b00010000;
+I2C.Write(address, config);
 
-// read light intensity from two bytes at a given address
-byte deviceAddress = i2cAddressSelector1.Address;
-byte sensorRegister = 0x02;
-byte[] bytes = I2C.Read(deviceAddress, sensorRegister);
+// Read light intensity as two bytes
+byte[] bytes = I2C.Read(address, 2);
 
-// convert the two bytes to lumens according to the datasheet
+// Convert the two bytes to lumens according to the datasheet
 double value = (bytes[0] * 256 + bytes[1]) / 1.2;
 ```

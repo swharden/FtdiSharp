@@ -6,7 +6,7 @@ public partial class DeviceSelector : UserControl
 {
     public readonly FtdiManager FTMan = new();
 
-    readonly List<DeviceInfo> Devices = new();
+    readonly List<FtdiDevice> Devices = new();
 
     public event EventHandler DeviceOpened = delegate { }; // TODO: pass the ftman
 
@@ -30,7 +30,7 @@ public partial class DeviceSelector : UserControl
         cbDevices.Items.Clear();
         Devices.Clear();
 
-        foreach (var device in FTMan.GetDevices())
+        foreach (var device in FtdiDevices.Scan())
         {
             Devices.Add(device);
             cbDevices.Items.Add(device.ToString());
@@ -47,7 +47,7 @@ public partial class DeviceSelector : UserControl
         btnOpen.Enabled = false;
         btnClose.Enabled = true;
         cbDevices.Enabled = false;
-        DeviceInfo device = Devices[cbDevices.SelectedIndex];
+        FtdiDevice device = Devices[cbDevices.SelectedIndex];
         FTMan.Open(device);
         DeviceOpened.Invoke(this, EventArgs.Empty);
     }

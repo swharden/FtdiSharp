@@ -2,8 +2,9 @@
 
 namespace FtdiSharp;
 
-public struct DeviceInfo
+public struct FtdiDevice
 {
+    public int Index;
     public bool IsOpen;
     public bool IsHighSpeed;
     public string Type;
@@ -20,10 +21,11 @@ public struct DeviceInfo
 
 public static class DeviceInfoExtensions
 {
-    public static DeviceInfo ToDevice(this FT_DEVICE_INFO_NODE device)
+    public static FtdiDevice ToDevice(this FT_DEVICE_INFO_NODE device, int index)
     {
-        return new DeviceInfo()
+        return new FtdiDevice()
         {
+            Index = index,
             IsOpen = (device.Flags & 0b01) > 0,
             IsHighSpeed = (device.Flags & 0b10) > 0,
             Type = device.Type.ToReadableName(),

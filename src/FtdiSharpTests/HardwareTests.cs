@@ -7,36 +7,27 @@ public class HardwareTests
     [Test]
     public void Test_Scan_Devices()
     {
-        FtdiManager ftman = new();
-        DeviceInfo[] devices = ftman.GetDevices();
-        Console.WriteLine($"Connected devices: {devices.Length}");
-
-        foreach (DeviceInfo device in devices)
-        {
+        foreach (FtdiDevice device in FtdiDevices.Scan())
             Console.WriteLine(device);
-        }
     }
 
     [Test]
     public void Test_Quickstart()
     {
-        // Create a FTDI communication manager
-        FtdiManager ftman = new();
-
         // Display all connected FTDI devices
-        DeviceInfo[] devices = ftman.GetDevices();
-        foreach (DeviceInfo device in devices)
+        foreach (FtdiDevice device in FtdiDevices.Scan())
             Console.WriteLine(device);
 
         // Open the first FTDI device
-        ftman.Open(devices.First());
+        FtdiManager ftman = new(FtdiDevices.First());
     }
 
-    //[Test]
+    [Test]
     public void Test_Scan_I2C()
     {
-        FtdiManager ftman = new();
-        ftman.Open(index: 0);
+        FtdiDevice device = FtdiDevices.First();
+
+        FtdiManager ftman = new(device);
 
         FtdiSharp.Protocols.I2C i2c = new(ftman);
 

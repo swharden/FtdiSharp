@@ -1,7 +1,6 @@
 ﻿using FtdiSharp.FTD2XX;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace FtdiSharp.Protocols;
 
@@ -15,6 +14,9 @@ public class I2C
 
     public I2C(FtdiManager ftman)
     {
+        if (!ftman.FTD2XX.IsOpen)
+            throw new InvalidOperationException("device passed in must be open");
+
         FTMan = ftman;
         FTDI_ConfigureMpsse();
     }

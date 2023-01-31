@@ -35,12 +35,76 @@ public class FtdiManager
         return devices;
     }
 
+    public void Open(int? index = null, uint? location = null, string? description = null, string? serialNumber = null)
+    {
+        if (index is not null)
+        {
+            OpenByIndex(index.Value);
+            return;
+        }
+
+        if (location is not null)
+        {
+            OpenByLocation(location.Value);
+            return;
+        }
+
+        if (description is not null)
+        {
+            OpenByDescription(description);
+            return;
+        }
+
+        if (serialNumber is not null)
+        {
+            OpenBySerialNumber(serialNumber);
+            return;
+        }
+
+        throw new ArgumentException("At least one argument must be defined");
+    }
+
     public void Open(DeviceInfo device)
+    {
+        OpenByLocation(device.LocationID);
+    }
+
+    public void OpenByIndex(int deviceIndex)
     {
         if (FTD2XX.IsOpen)
             throw new InvalidOperationException("a device is already open");
 
-        FTD2XX.OpenBySerialNumber(device.SerialNumber).ThrowIfNotOK();
+        FTD2XX.OpenByIndex((uint)deviceIndex).ThrowIfNotOK();
+
+        FTD2XX.ResetDevice().ThrowIfNotOK();
+    }
+
+    public void OpenByLocation(uint location)
+    {
+        if (FTD2XX.IsOpen)
+            throw new InvalidOperationException("a device is already open");
+
+        FTD2XX.OpenByLocation((uint)location);
+
+        FTD2XX.ResetDevice();
+    }
+
+    public void OpenByDescription(string description)
+    {
+        if (FTD2XX.IsOpen)
+            throw new InvalidOperationException("a device is already open");
+
+        FTD2XX.OpenByDescription(description);
+
+        FTD2XX.ResetDevice();
+    }
+
+    public void OpenBySerialNumber(string serial)
+    {
+        if (FTD2XX.IsOpen)
+            throw new InvalidOperationException("a device is already open");
+
+        FTD2XX.OpenBySerialNumber(serial);
 
         FTD2XX.ResetDevice();
     }

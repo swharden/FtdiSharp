@@ -1,4 +1,6 @@
-﻿namespace FtdiSharpDemo;
+﻿using FtdiSharp;
+
+namespace FtdiSharpDemo;
 
 public partial class I2C_LM75A : Form
 {
@@ -13,6 +15,7 @@ public partial class I2C_LM75A : Form
         lblTemperature.Text = "";
         nudAddress_ValueChanged(null!, EventArgs.Empty);
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
+        deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
         FormClosing += I2C_LM75A_FormClosing;
         toolStripStatusLabel1.Text = "Reads: 0";
     }
@@ -20,12 +23,18 @@ public partial class I2C_LM75A : Form
     private void I2C_LM75A_FormClosing(object? sender, FormClosingEventArgs e)
     {
         timer1.Enabled = false;
-        I2CCOM?.FtdiDevice.Close();
+        I2CCOM?.Dispose();
     }
 
-    private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceOpened(object? sender, FtdiDevice device)
     {
-        I2CCOM = new(deviceSelector1.FTMan);
+        I2CCOM = new(device);
+    }
+
+    private void DeviceSelector1_DeviceClosed(object? sender, FtdiSharp.FtdiDevice e)
+    {
+        I2CCOM?.Dispose();
+        I2CCOM = null;
     }
 
     private void timer1_Tick(object sender, EventArgs e)

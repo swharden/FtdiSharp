@@ -1,5 +1,3 @@
-using System.Runtime.Intrinsics.X86;
-
 namespace FtdiSharpTests;
 
 public class HardwareTests
@@ -12,24 +10,14 @@ public class HardwareTests
     }
 
     [Test]
-    public void Test_Quickstart()
+    public void Test_Scan_I2C_Addresses()
     {
-        // Display all connected FTDI devices
-        foreach (FtdiDevice device in FtdiDevices.Scan())
-            Console.WriteLine(device);
+        if (!FtdiDevices.Scan().Any())
+            return;
 
-        // Open the first FTDI device
-        FtdiManager ftman = new(FtdiDevices.First());
-    }
+        FtdiDevice device = FtdiDevices.Scan().First();
 
-    [Test]
-    public void Test_Scan_I2C()
-    {
-        FtdiDevice device = FtdiDevices.First();
-
-        FtdiManager ftman = new(device);
-
-        FtdiSharp.Protocols.I2C i2c = new(ftman);
+        FtdiSharp.Protocols.I2C i2c = new(device);
 
         foreach (byte address in i2c.Scan())
             Console.WriteLine(address);

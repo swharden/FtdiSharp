@@ -2,6 +2,7 @@
 
 namespace FtdiSharp;
 
+[Obsolete("Use a communicator.")]
 public class FtdiManager
 {
     public readonly FTDI FTD2XX = new();

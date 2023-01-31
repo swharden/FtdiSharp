@@ -1,4 +1,5 @@
-﻿using FtdiSharp.Protocols;
+﻿using FtdiSharp;
+using FtdiSharp.Protocols;
 using System.Diagnostics;
 
 namespace FtdiSharpDemo;
@@ -17,14 +18,15 @@ public partial class I2C_LIS3DH : Form
         deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
     }
 
-    private void DeviceSelector1_DeviceClosed(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceOpened(object? sender, FtdiDevice device)
     {
-        I2C = null;
+        I2C = new(device);
     }
 
-    private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceClosed(object? sender, FtdiDevice device)
     {
-        I2C = new(deviceSelector1.FTMan);
+        I2C?.Dispose();
+        I2C = null;
     }
 
     private void timer1_Tick(object sender, EventArgs e)

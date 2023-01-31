@@ -4,20 +4,10 @@ using System.Linq;
 
 namespace FtdiSharp.Protocols;
 
-public class I2C
+public class I2C : ProtocolBase
 {
-    public readonly FtdiManager FTMan;
-
-    public bool IsOpen => FTMan.FTD2XX.IsOpen;
-
-    public FTDI FtdiDevice => FTMan.FTD2XX;
-
-    public I2C(FtdiManager ftman)
+    public I2C(FtdiDevice device) : base(device)
     {
-        if (!ftman.FTD2XX.IsOpen)
-            throw new InvalidOperationException("device passed in must be open");
-
-        FTMan = ftman;
         FTDI_ConfigureMpsse();
     }
 
@@ -98,7 +88,7 @@ public class I2C
 
         bytes.AddRange(new byte[] { I2C_ADbus, I2C_Data_SDAhi_SCLlo, I2C_Dir_SDAout_SCLout, });
 
-        FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
+        FtdiDevice.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
     private void FTDI_Stop()
@@ -121,7 +111,7 @@ public class I2C
         for (int i = 0; i < 6; i++)
             bytes.AddRange(new byte[] { I2C_ADbus, I2C_Data_SDAhi_SCLhi, I2C_Dir_SDAout_SCLout, });
 
-        FTMan.FTD2XX.Write(bytes.ToArray()).ThrowIfNotOK();
+        FtdiDevice.Write(bytes.ToArray()).ThrowIfNotOK();
     }
 
     private bool FTDI_CommandWrite(byte address)
@@ -165,9 +155,9 @@ public class I2C
 
         // send commands to chip
         byte[] msg = buffer.Take(bytesToSend).ToArray();
-        FTMan.FTD2XX.Write(msg).ThrowIfNotOK();
+        FtdiDevice.Write(msg).ThrowIfNotOK();
 
-        byte[] rx1 = FTMan.FTD2XX.ReadBytes(1, out FT_STATUS status);
+        byte[] rx1 = FtdiDevice.ReadBytes(1, out FT_STATUS status);
         status.ThrowIfNotOK();
 
         // if ack bit is 0 then sensor acked the transfer, otherwise it nak'd the transfer
@@ -208,7 +198,7 @@ public class I2C
 
         // send commands to chip
         byte[] msg = buffer.Take(bytesToSend).ToArray();
-        FTMan.FTD2XX.Write(msg).ThrowIfNotOK();
+        FtdiDevice.Write(msg).ThrowIfNotOK();
 
         // get the byte which has been read from the driver's receive buffer
         byte[] readBuffer = new byte[1];

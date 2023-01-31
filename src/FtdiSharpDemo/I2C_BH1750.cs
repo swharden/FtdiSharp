@@ -1,4 +1,6 @@
-﻿namespace FtdiSharpDemo;
+﻿using FtdiSharp;
+
+namespace FtdiSharpDemo;
 
 public partial class I2C_BH1750 : Form
 {
@@ -15,14 +17,15 @@ public partial class I2C_BH1750 : Form
         toolStripStatusLabel1.Text = "Reads: 0";
     }
 
-    private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceOpened(object? sender, FtdiDevice device)
     {
-        I2C = new FtdiSharp.Protocols.I2C(deviceSelector1.FTMan);
+        I2C = new FtdiSharp.Protocols.I2C(device);
         SetupDevice();
     }
 
-    private void DeviceSelector1_DeviceClosed(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceClosed(object? sender, FtdiDevice e)
     {
+        I2C?.Dispose();
         I2C = null;
     }
 

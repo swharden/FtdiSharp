@@ -1,4 +1,6 @@
-﻿namespace FtdiSharpDemo;
+﻿using FtdiSharp;
+
+namespace FtdiSharpDemo;
 
 public partial class I2C_BMP280 : Form
 {
@@ -57,16 +59,17 @@ public partial class I2C_BMP280 : Form
         I2cAddressSelector1.Address = 0x76;
     }
 
-    private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceOpened(object? sender, FtdiDevice device)
     {
-        I2C = new(deviceSelector1.FTMan);
+        I2C = new(device);
         ResetDevice(I2cAddressSelector1.Address);
         timer1.Enabled = true;
     }
 
-    private void DeviceSelector1_DeviceClosed(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceClosed(object? sender, FtdiDevice device)
     {
         timer1.Enabled = false;
+        I2C?.Dispose();
         I2C = null;
         lblTemperature.Text = string.Empty;
         lblPressure.Text = string.Empty;

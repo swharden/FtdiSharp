@@ -4,25 +4,17 @@ namespace FtdiSharpDemo;
 
 public partial class DeviceSelector : UserControl
 {
-    public readonly FtdiManager FTMan = new();
-
     readonly List<FtdiDevice> Devices = new();
 
-    public event EventHandler DeviceOpened = delegate { }; // TODO: pass the ftman
+    public event EventHandler<FtdiDevice> DeviceOpened = delegate { }; // TODO: pass the ftman
 
-    public event EventHandler DeviceClosed = delegate { };
+    public event EventHandler<FtdiDevice> DeviceClosed = delegate { };
 
     public DeviceSelector()
     {
         InitializeComponent();
-        HandleDestroyed += DeviceSelector_HandleDestroyed;
         btnClose.Enabled = false;
         Scan();
-    }
-
-    private void DeviceSelector_HandleDestroyed(object? sender, EventArgs e)
-    {
-        FTMan.FTD2XX.Close();
     }
 
     public void Scan()
@@ -48,8 +40,7 @@ public partial class DeviceSelector : UserControl
         btnClose.Enabled = true;
         cbDevices.Enabled = false;
         FtdiDevice device = Devices[cbDevices.SelectedIndex];
-        FTMan.Open(device);
-        DeviceOpened.Invoke(this, EventArgs.Empty);
+        DeviceOpened.Invoke(this, device);
     }
 
     private void btnClose_Click(object sender, EventArgs e)
@@ -57,7 +48,7 @@ public partial class DeviceSelector : UserControl
         btnOpen.Enabled = true;
         btnClose.Enabled = false;
         cbDevices.Enabled = true;
-        FTMan.Close();
-        DeviceClosed.Invoke(this, EventArgs.Empty);
+        FtdiDevice device = Devices[cbDevices.SelectedIndex];
+        DeviceClosed.Invoke(this, device);
     }
 }

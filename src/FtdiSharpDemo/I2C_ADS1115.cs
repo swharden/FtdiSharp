@@ -12,14 +12,21 @@ public partial class I2C_ADS1115 : Form
         InitializeComponent();
         i2cAddressSelector1.Address = 0x48;
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
+        deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
         lblA0.Text = string.Empty;
         toolStripStatusLabel1.Text = "Reads: 0";
     }
 
-    private void DeviceSelector1_DeviceOpened(object? sender, EventArgs e)
+    private void DeviceSelector1_DeviceOpened(object? sender, FtdiDevice device)
     {
-        I2C = new(deviceSelector1.FTMan);
+        I2C = new(device);
         ConfigureADC();
+    }
+
+    private void DeviceSelector1_DeviceClosed(object? sender, FtdiDevice e)
+    {
+        I2C?.Dispose();
+        I2C = null;
     }
 
     private void ConfigureADC()

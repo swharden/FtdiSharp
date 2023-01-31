@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml/badge.svg)](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml)
 
-**FtdiSharp is a simple .NET interface for FTDI USB controllers.** FtdiSharp has high-level communication managers that make it easy to exchange data using UART, I²C, and SPI, but it also provides low-level access to functions in FTDI's DLL for advanced users.  
+**FtdiSharp is a simple .NET interface for FTDI USB controllers.** FtdiSharp has high-level communication managers that make it easy to exchange data using UART, I²C, SPI, and FIFO, but it also provides low-level access to functions in FTDI's DLL for advanced users.
 
 FTDI's FTD2XX source code has been refactored to break it into smaller files, improve XML documentation, and utilize modern language features. FtdiSharp targets .NET Framework 4.6.2 and .NET 6 so it can be used in .NET Framework and .NET Core environments.
 

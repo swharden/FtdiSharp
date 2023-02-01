@@ -47,4 +47,22 @@ public class HardwareTests
         double value = (bytes[0] * 256 + bytes[1]) / 1.2;
         Console.WriteLine(value);
     }
+
+    [Test]
+    public void Test_SPI_Write()
+    {
+        if (!FtdiDeviceFound)
+            return;
+
+        FtdiDevice device = FtdiDevices.Scan().First();
+        FtdiSharp.Protocols.SPI spi = new(device);
+        byte[] bytes = spi.ReadBytes(2);
+        Console.WriteLine(Display.Binary(bytes));
+
+        /*
+        byte b1 = (byte)(readBuffer[0] & 0b00011111); // see MCP3201 datasheet figure 6-1
+        byte b2 = (byte)(readBuffer[1] & 0b11111110);
+        int value = b1 * 256 + b2;
+        */
+    }
 }

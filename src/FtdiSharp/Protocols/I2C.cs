@@ -2,6 +2,12 @@
 using System.Diagnostics;
 using System.Linq;
 
+// Why didn't I use dotnet/iot's Ft232H bus?
+// Because the readme has incorrect information and I could never get the code to run on my computer.
+// I think it's a good effort, but not carefully maintained.
+// If it works for you though, use it.
+// https://github.com/dotnet/iot/blob/f3870a8e3af355da17ad7453183e7b2fd7a10402/src/devices/Ft232H/Ft232HI2cBus.cs
+
 namespace FtdiSharp.Protocols;
 
 public class I2C : ProtocolBase

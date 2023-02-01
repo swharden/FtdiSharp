@@ -31,16 +31,18 @@ partial class MenuForm
             this.btnConnectedDevices = new System.Windows.Forms.Button();
             this.btnAddressScanner = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblBH1750 = new System.Windows.Forms.Button();
             this.btnADS1115 = new System.Windows.Forms.Button();
             this.btnLIS3DH = new System.Windows.Forms.Button();
             this.btnBMP280 = new System.Windows.Forms.Button();
             this.btnLM75A = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnMCP3008 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.lblBH1750 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnectedDevices
@@ -81,6 +83,18 @@ partial class MenuForm
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "I2C";
+            // 
+            // lblBH1750
+            // 
+            this.lblBH1750.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblBH1750.Location = new System.Drawing.Point(6, 242);
+            this.lblBH1750.Name = "lblBH1750";
+            this.lblBH1750.Size = new System.Drawing.Size(186, 38);
+            this.lblBH1750.TabIndex = 6;
+            this.lblBH1750.Text = "BH1750 Light Sensor";
+            this.lblBH1750.UseVisualStyleBackColor = true;
+            this.lblBH1750.Click += new System.EventHandler(this.lblBH1750_Click);
             // 
             // btnADS1115
             // 
@@ -142,12 +156,25 @@ partial class MenuForm
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnMCP3008);
             this.groupBox3.Location = new System.Drawing.Point(422, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(200, 100);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "SPI";
+            // 
+            // btnMCP3008
+            // 
+            this.btnMCP3008.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMCP3008.Location = new System.Drawing.Point(8, 22);
+            this.btnMCP3008.Name = "btnMCP3008";
+            this.btnMCP3008.Size = new System.Drawing.Size(186, 38);
+            this.btnMCP3008.TabIndex = 2;
+            this.btnMCP3008.Text = "MCP3201 ADC";
+            this.btnMCP3008.UseVisualStyleBackColor = true;
+            this.btnMCP3008.Click += new System.EventHandler(this.btnMCP3201_Click);
             // 
             // groupBox4
             // 
@@ -157,18 +184,6 @@ partial class MenuForm
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
-            // 
-            // lblBH1750
-            // 
-            this.lblBH1750.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBH1750.Location = new System.Drawing.Point(6, 242);
-            this.lblBH1750.Name = "lblBH1750";
-            this.lblBH1750.Size = new System.Drawing.Size(186, 38);
-            this.lblBH1750.TabIndex = 6;
-            this.lblBH1750.Text = "BH1750 Light Sensor";
-            this.lblBH1750.UseVisualStyleBackColor = true;
-            this.lblBH1750.Click += new System.EventHandler(this.lblBH1750_Click);
             // 
             // MenuForm
             // 
@@ -184,6 +199,7 @@ partial class MenuForm
             this.Text = "FtdiSharp Demo";
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
     }
@@ -201,4 +217,5 @@ partial class MenuForm
     private Button btnLIS3DH;
     private Button btnADS1115;
     private Button lblBH1750;
+    private Button btnMCP3008;
 }

@@ -51,7 +51,7 @@ public class SPI : ProtocolBase
         Thread.Sleep(50);
     }
 
-    public void CsHighDisable()
+    public void CsHigh()
     {
         byte[] bytes = new byte[]
         {
@@ -59,10 +59,12 @@ public class SPI : ProtocolBase
             0x08, // set CS high, MOSI and SCL low
             0x0b, // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         };
-        FtdiDevice.Write(bytes);
+
+        for (int i = 0; i < 5; i++)
+            FtdiDevice.Write(bytes);
     }
 
-    public void CsLowEnable()
+    public void CsLow()
     {
         byte[] bytes = new byte[]
         {
@@ -70,7 +72,9 @@ public class SPI : ProtocolBase
             0x00, // set CS, MOSI, and SCL all low
             0x0b, // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         };
-        FtdiDevice.Write(bytes);
+
+        for (int i = 0; i < 5; i++)
+            FtdiDevice.Write(bytes);
     }
 
     public void WriteBytes(byte[] bytes)
@@ -79,15 +83,14 @@ public class SPI : ProtocolBase
 
     public byte[] ReadBytes(int length)
     {
-        CsLowEnable();
+        CsLow();
 
         byte lengthL = (byte)length;
         byte lengthH = (byte)(length >> 8);
         if (lengthH != 0)
             throw new NotImplementedException();
 
-        const byte DATA_IN_BYTES_FALLING_EDGE = 0x24; // app note section 3.3
-        //const byte DATA_IN_BYTES_RISING_EDGE = 0x20; // app note section 3.3
+        const byte DATA_IN_BYTES_FALLING_EDGE = 0x24; // Application Note AN_108 (section 3.3)
 
         byte[] writeBytes = { DATA_IN_BYTES_FALLING_EDGE, lengthL, lengthH };
         FtdiDevice.Write(writeBytes);
@@ -96,25 +99,9 @@ public class SPI : ProtocolBase
         uint bytesRead = 0;
         FtdiDevice.Read(readBytes, (uint)length, ref bytesRead).ThrowIfNotOK();
 
-        CsHighDisable();
+        CsHigh();
 
         return readBytes;
-    }
-
-    private static byte GetGpioMask(bool sck = false, bool mosi = false, bool miso = false, bool cs = false)
-    {
-        byte b = 0;
-
-        if (sck)
-            b |= (0 << 1);
-        if (mosi)
-            b |= (1 << 1);
-        if (miso)
-            b |= (2 << 1);
-        if (cs)
-            b |= (3 << 1);
-
-        return b;
     }
 
     /// <summary>
@@ -126,8 +113,8 @@ public class SPI : ProtocolBase
         const byte CMD_SET_GPIO_STATE = 0x80; // Application Note AN_108 (section 3.6.1)
         const byte GPIO_DIRECTION = 0b00001011; //  bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
 
-        byte[] bytesClockLow = new byte[] { CMD_SET_GPIO_STATE, 0b11111111, GPIO_DIRECTION };
-        byte[] bytesClockHigh = new byte[] { CMD_SET_GPIO_STATE, 0b11111110, GPIO_DIRECTION };
+        byte[] bytesClockLow = new byte[] { CMD_SET_GPIO_STATE, 0b11110111, GPIO_DIRECTION };
+        byte[] bytesClockHigh = new byte[] { CMD_SET_GPIO_STATE, 0b11110110, GPIO_DIRECTION };
 
         for (int i = 0; i < count; i++)
         {
@@ -147,32 +134,5 @@ public class SPI : ProtocolBase
         FtdiDevice.Read(result, 1, ref numBytesRead).ThrowIfNotOK();
 
         return result[0];
-    }
-
-    /// <summary>
-    /// Let the other guy do the clocking
-    /// </summary>
-    public byte[] RxData(uint BytesToRead)
-    {
-        uint NumBytesInQueue = 0;
-        uint TotalBytesRead = 0;
-        uint NumBytesRxd = 0;
-
-        byte[] InputBuffer = new byte[BytesToRead];
-
-        while (TotalBytesRead < BytesToRead)
-        {
-            FtdiDevice.GetRxBytesAvailable(ref NumBytesInQueue);
-
-            if (NumBytesInQueue == 0)
-                continue;
-
-            FtdiDevice.Read(InputBuffer, NumBytesInQueue, ref NumBytesRxd);
-
-            if (NumBytesInQueue == NumBytesRxd)
-                return InputBuffer;
-        }
-
-        return InputBuffer;
     }
 }

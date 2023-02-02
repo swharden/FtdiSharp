@@ -13,6 +13,7 @@ namespace FtdiSharpDemo;
 public partial class SPI_MCP3201 : Form
 {
     FtdiSharp.Protocols.SPI? SPI;
+    int MaxSeenValue = 0;
 
     int Reads = 0;
 
@@ -22,7 +23,6 @@ public partial class SPI_MCP3201 : Form
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
         deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
         toolStripStatusLabel1.Text = "Reads: 0";
-        lblSensor.Text = "";
     }
 
     private void DeviceSelector1_DeviceClosed(object? sender, FtdiSharp.FtdiDevice e)
@@ -41,13 +41,19 @@ public partial class SPI_MCP3201 : Form
         if (SPI is null || !SPI.IsOpen)
             return;
 
+        // https://www.mouser.com/pdfDocs/21290c-28774.pdf
+
+        SPI.FtdiDevice.FlushBuffer();
         byte[] bytes = SPI.ReadBytes(2);
 
-        byte b1 = (byte)(bytes[0] & 0b00011111); // see MCP3201 datasheet figure 6-1
+        // see MCP3201 datasheet figure 6-1
+        byte b1 = (byte)(bytes[0] & 0b00011111); // first 3 clock cycles are null bits
         byte b2 = (byte)(bytes[1] & 0b11111110);
         int value = (b1 << 8) + b2;
+        value >>= 1;
+        MaxSeenValue = Math.Max(MaxSeenValue, value);
 
-        lblSensor.Text = value.ToString();
         toolStripStatusLabel1.Text = $"Reads: {++Reads}";
+        barGraph1.SetValue(value, MaxSeenValue, value.ToString(), false);
     }
 }

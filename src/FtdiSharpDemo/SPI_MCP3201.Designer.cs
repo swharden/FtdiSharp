@@ -33,7 +33,7 @@ partial class SPI_MCP3201
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblSensor = new System.Windows.Forms.Label();
+            this.barGraph1 = new FtdiSharpDemo.BarGraph();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,22 +65,19 @@ partial class SPI_MCP3201
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // lblSensor
+            // barGraph1
             // 
-            this.lblSensor.AutoSize = true;
-            this.lblSensor.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblSensor.Location = new System.Drawing.Point(48, 92);
-            this.lblSensor.Name = "lblSensor";
-            this.lblSensor.Size = new System.Drawing.Size(70, 24);
-            this.lblSensor.TabIndex = 6;
-            this.lblSensor.Text = "12345";
+            this.barGraph1.Location = new System.Drawing.Point(12, 86);
+            this.barGraph1.Name = "barGraph1";
+            this.barGraph1.Size = new System.Drawing.Size(429, 70);
+            this.barGraph1.TabIndex = 7;
             // 
             // SPI_MCP3201
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(474, 191);
-            this.Controls.Add(this.lblSensor);
+            this.Controls.Add(this.barGraph1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.deviceSelector1);
             this.Name = "SPI_MCP3201";
@@ -99,5 +96,5 @@ partial class SPI_MCP3201
     private System.Windows.Forms.Timer timer1;
     private StatusStrip statusStrip1;
     private ToolStripStatusLabel toolStripStatusLabel1;
-    private Label lblSensor;
+    private BarGraph barGraph1;
 }

@@ -22,6 +22,7 @@ public partial class SPI_MCP3201 : Form
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
         deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
         toolStripStatusLabel1.Text = "Reads: 0";
+        lblSensor.Text = "";
     }
 
     private void DeviceSelector1_DeviceClosed(object? sender, FtdiSharp.FtdiDevice e)

@@ -40,6 +40,7 @@ partial class MenuForm
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnMCP3008 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnHX710 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -156,10 +157,11 @@ partial class MenuForm
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnHX710);
             this.groupBox3.Controls.Add(this.btnMCP3008);
             this.groupBox3.Location = new System.Drawing.Point(422, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 100);
+            this.groupBox3.Size = new System.Drawing.Size(200, 314);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "SPI";
@@ -184,6 +186,18 @@ partial class MenuForm
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
+            // 
+            // btnHX710
+            // 
+            this.btnHX710.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHX710.Location = new System.Drawing.Point(8, 66);
+            this.btnHX710.Name = "btnHX710";
+            this.btnHX710.Size = new System.Drawing.Size(186, 38);
+            this.btnHX710.TabIndex = 3;
+            this.btnHX710.Text = "HX710 ADC";
+            this.btnHX710.UseVisualStyleBackColor = true;
+            this.btnHX710.Click += new System.EventHandler(this.btnHX710_Click);
             // 
             // MenuForm
             // 
@@ -218,4 +232,5 @@ partial class MenuForm
     private Button btnADS1115;
     private Button lblBH1750;
     private Button btnMCP3008;
+    private Button btnHX710;
 }

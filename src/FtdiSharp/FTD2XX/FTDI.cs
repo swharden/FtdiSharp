@@ -1041,6 +1041,11 @@ public class FTDI
         return Write(bytes, bytes.Length, ref bytesWritten);
     }
 
+    public FT_STATUS Write(byte b)
+    {
+        return Write(new byte[] { b });
+    }
+
     /// <summary>
     /// Reset an open FTDI device.
     /// </summary>

@@ -19,7 +19,7 @@ public class HardwareTests
 
         FtdiDevice device = FtdiDevices.Scan().First();
 
-        FtdiSharp.Protocols.I2C i2c = new(device);
+        using FtdiSharp.Protocols.I2C i2c = new(device);
 
         foreach (byte address in i2c.Scan())
             Console.WriteLine(address);
@@ -33,7 +33,7 @@ public class HardwareTests
 
         // Connect to the first USB FTDI device
         FtdiDevice device = FtdiDevices.Scan().First();
-        FtdiSharp.Protocols.I2C i2c = new(device);
+        using FtdiSharp.Protocols.I2C i2c = new(device);
 
         // Enter continuous sensor mode
         byte address = 0x23;
@@ -55,14 +55,8 @@ public class HardwareTests
             return;
 
         FtdiDevice device = FtdiDevices.Scan().First();
-        FtdiSharp.Protocols.SPI spi = new(device);
+        using FtdiSharp.Protocols.SPI spi = new(device);
         byte[] bytes = spi.ReadBytes(2);
         Console.WriteLine(Display.Binary(bytes));
-
-        /*
-        byte b1 = (byte)(readBuffer[0] & 0b00011111); // see MCP3201 datasheet figure 6-1
-        byte b2 = (byte)(readBuffer[1] & 0b11111110);
-        int value = b1 * 256 + b2;
-        */
     }
 }

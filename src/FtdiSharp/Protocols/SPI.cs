@@ -1,5 +1,4 @@
 ﻿using FtdiSharp.FTD2XX;
-using System.Net.NetworkInformation;
 
 namespace FtdiSharp.Protocols;
 

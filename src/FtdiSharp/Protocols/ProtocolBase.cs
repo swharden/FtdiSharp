@@ -10,12 +10,8 @@ public abstract class ProtocolBase : IDisposable
 
     public ProtocolBase(FtdiDevice device)
     {
-        if (FtdiDevice.IsOpen)
-            throw new InvalidOperationException("a device is already open");
-
-        FT_STATUS status = FtdiDevice.OpenByIndex((uint)device.Index);
-        if (status != FT_STATUS.FT_OK)
-            throw new InvalidOperationException($"Unable to open device: {device}");
+        if (!FtdiDevice.IsOpen)
+            FtdiDevice.OpenByIndex((uint)device.Index).ThrowIfNotOK();
 
         FtdiDevice.ResetDevice();
     }

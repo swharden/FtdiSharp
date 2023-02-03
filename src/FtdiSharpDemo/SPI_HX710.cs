@@ -62,8 +62,10 @@ public partial class SPI_HX710 : Form
 
         WaitForConversionComplete();
         SPI.FtdiDevice.FlushBuffer();
+        SPI.CsLow();
         byte[] data = SPI.ReadBytes(3);
         SPI.PulseClock(3); // set mode for next conversion (see datasheet)
+        SPI.CsHigh();
 
         data[0] ^= 0b10000000;  // flip the most significant bit
         long result = (data[0] << 16) + (data[1] << 8) + data[2];

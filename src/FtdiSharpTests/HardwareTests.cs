@@ -56,7 +56,11 @@ public class HardwareTests
 
         FtdiDevice device = FtdiDevices.Scan().First();
         using FtdiSharp.Protocols.SPI spi = new(device);
+
+        spi.CsLow();
         byte[] bytes = spi.ReadBytes(2);
+        spi.CsHigh();
+
         Console.WriteLine(Display.Binary(bytes));
     }
 }

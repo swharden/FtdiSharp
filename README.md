@@ -34,10 +34,12 @@ This code reads voltage from a [MCP3201 ADC](https://www.mouser.com/pdfDocs/2129
 ```cs
 // Use the first USB FTDI device found
 FtdiDevice device = FtdiDevices.Scan().First();
-FtdiSharp.Protocols.I2C i2c = new(device);
+FtdiSharp.Protocols.SPI spi = new(device);
 
-// Read two bytes (CS is pulled low automatically)
-byte[] bytes = SPI.ReadBytes(2);
+// Pull the cable select line low and read two bytes
+spi.CsLow();
+byte[] bytes = spi.ReadBytes(2);
+spi.CsHigh();
 
 // Calculate the 14-bit reading according to the datasheet
 byte b1 = (byte)(bytes[0] & 0b00011111);

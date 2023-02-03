@@ -1,9 +1,16 @@
 ﻿using FtdiSharp.FTD2XX;
+using System;
 
 namespace FtdiSharp.Protocols;
 
 public class SPI : ProtocolBase
 {
+    // https://ftdichip.com/wp-content/uploads/2020/08/AN_178_User-Guide-for-LibMPSSE-SPI-1.pdf
+    // http://www.ftdichip.com/Support/Documents/AppNotes/AN_108_Command_Processor_for_MPSSE_and_MCU_Host_Bus_Emulation_Modes.pdf
+    // https://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide(FT_000071).pdf
+    // https://ftdichip.com/wp-content/uploads/2020/08/AN_180_FT232H-MPSSE-Example-USB-Current-Meter-using-the-SPI-interface.pdf
+    // https://ftdichip.com/wp-content/uploads/2020/08/AN_114_FTDI_Hi_Speed_USB_To_SPI_Example.pdf
+
     public SPI(FtdiDevice device) : base(device)
     {
         FTDI_ConfigureMpsse();
@@ -18,7 +25,7 @@ public class SPI : ProtocolBase
         FtdiDevice.SetTimeouts(1000, 1000).ThrowIfNotOK(); // long
         Thread.Sleep(50);
 
-        // Configure the MPSSE for SPI communication
+        // Configure the MPSSE for SPI communication (app note FT_000109 section 6)
         byte[] bytes1 = new byte[]
         {
             0x8A, // disable clock divide by 5 for 60Mhz master clock
@@ -37,7 +44,7 @@ public class SPI : ProtocolBase
         byte[] bytes2 = new byte[]
         {
             0x80, // Set directions of lower 8 pins and force value on bits set as output
-            0x00, // Set SDA, SCL high, WP disabled by SK, DO at bit ＆＊, GPIOL0 at bit ＆＊
+            0x08, // Set SDA, SCL high, WP disabled by SK, DO at bit ＆＊, GPIOL0 at bit ＆＊
             0x0b, // Set SK,DO,GPIOL0 pins as output with bit ＊, other pins as input with bit ＆＊
             0x86, // use clock divisor
             (byte)(clockDivisor & 0xFF), // clock divisor low byte
@@ -51,13 +58,19 @@ public class SPI : ProtocolBase
         Thread.Sleep(50);
     }
 
+    public void Flush()
+    {
+        FtdiDevice.FlushBuffer();
+    }
+
     public void CsHigh()
     {
+        // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
         {
             0x80, // GPIO command for ADBUS
-            0x08, // set CS high, MOSI and SCL low
-            0x0b, // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
+            0b00001000, // value
+            0b00001011, // direction
         };
 
         for (int i = 0; i < 5; i++)
@@ -66,25 +79,40 @@ public class SPI : ProtocolBase
 
     public void CsLow()
     {
+        // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
         {
             0x80, // GPIO command for ADBUS
-            0x00, // set CS, MOSI, and SCL all low
-            0x0b, // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
+            0b00000000, // value
+            0b00001011, // direction
         };
 
         for (int i = 0; i < 5; i++)
             FtdiDevice.Write(bytes);
     }
 
-    public void WriteBytes(byte[] bytes)
+    /// <summary>
+    /// Shift data outward and inward at the same time and return what we receive
+    /// </summary>
+    public byte[] ReadWrite(byte[] tx)
     {
+        byte[] shiftOut = new byte[tx.Length + 3];
+        shiftOut[0] = 0x31; // 31 or 34
+        shiftOut[1] = (byte)tx.Length;
+        shiftOut[2] = (byte)(tx.Length >> 8);
+        Array.Copy(tx, 0, shiftOut, tx.Length, tx.Length);
+
+        FtdiDevice.FlushBuffer();
+        FtdiDevice.Write(shiftOut).ThrowIfNotOK();
+
+        byte[] rx = new byte[tx.Length];
+        uint NumBytesRead = 0;
+        FtdiDevice.Read(rx, (uint)rx.Length, ref NumBytesRead).ThrowIfNotOK();
+        return rx;
     }
 
     public byte[] ReadBytes(int length)
     {
-        CsLow();
-
         byte lengthL = (byte)length;
         byte lengthH = (byte)(length >> 8);
         if (lengthH != 0)
@@ -98,8 +126,6 @@ public class SPI : ProtocolBase
         byte[] readBytes = new byte[length];
         uint bytesRead = 0;
         FtdiDevice.Read(readBytes, (uint)length, ref bytesRead).ThrowIfNotOK();
-
-        CsHigh();
 
         return readBytes;
     }

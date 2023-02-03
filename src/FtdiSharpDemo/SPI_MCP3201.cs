@@ -44,7 +44,9 @@ public partial class SPI_MCP3201 : Form
         // https://www.mouser.com/pdfDocs/21290c-28774.pdf
 
         SPI.FtdiDevice.FlushBuffer();
+        SPI.CsLow();
         byte[] bytes = SPI.ReadBytes(2);
+        SPI.CsHigh();
 
         // see MCP3201 datasheet figure 6-1
         byte b1 = (byte)(bytes[0] & 0b00011111); // first 3 clock cycles are null bits

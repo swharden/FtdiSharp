@@ -13,7 +13,7 @@ public partial class BarGraph : UserControl
         panel2.Height = panel1.Height;
         label1.Text = isDesignMode ? "label1" : string.Empty;
         label2.Text = isDesignMode ? "label2" : string.Empty;
-        panel1.Visible = isDesignMode ? true : false;
+        //panel1.Visible = isDesignMode ? true : false;
     }
 
     public void SetValue(double value, double max, string label, bool centerAtZero = true)

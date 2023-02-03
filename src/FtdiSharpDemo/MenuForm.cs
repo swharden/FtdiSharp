@@ -16,4 +16,5 @@ public partial class MenuForm : Form
     private void lblBH1750_Click(object sender, EventArgs e) => new I2C_BH1750().ShowDialog();
     private void btnMCP3201_Click(object sender, EventArgs e) => new SPI_MCP3201().ShowDialog();
     private void btnHX710_Click(object sender, EventArgs e) => new SPI_HX710().ShowDialog();
+    private void btnMCP3008_Click(object sender, EventArgs e) => new SPI_MCP3008().ShowDialog();
 }

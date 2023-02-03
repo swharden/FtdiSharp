@@ -31,6 +31,7 @@ partial class BarGraph
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,10 +63,21 @@ partial class BarGraph
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(342, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 14);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "label2";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // BarGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel1);
             this.Name = "BarGraph";
@@ -81,4 +93,5 @@ partial class BarGraph
     private Panel panel1;
     private Panel panel2;
     private Label label1;
+    private Label label2;
 }

@@ -11,12 +11,12 @@ public class SPI : ProtocolBase
     // https://ftdichip.com/wp-content/uploads/2020/08/AN_180_FT232H-MPSSE-Example-USB-Current-Meter-using-the-SPI-interface.pdf
     // https://ftdichip.com/wp-content/uploads/2020/08/AN_114_FTDI_Hi_Speed_USB_To_SPI_Example.pdf
 
-    public SPI(FtdiDevice device) : base(device)
+    public SPI(FtdiDevice device, int slowDownFactor = 1) : base(device)
     {
-        FTDI_ConfigureMpsse();
+        FTDI_ConfigureMpsse(slowDownFactor);
     }
 
-    private void FTDI_ConfigureMpsse()
+    private void FTDI_ConfigureMpsse(int slowDownFactor = 1)
     {
         FtdiDevice.ResetDevice().ThrowIfNotOK();
         FtdiDevice.SetBitMode(0, 0).ThrowIfNotOK(); // reset
@@ -39,7 +39,7 @@ public class SPI : ProtocolBase
         UInt32 clockDivisor = 29; // for 1 MHz
 
         // increase clock divisor to slow down signaling
-        //clockDivisor *= 100;
+        clockDivisor *= (uint)slowDownFactor;
 
         byte[] bytes2 = new byte[]
         {
@@ -63,7 +63,7 @@ public class SPI : ProtocolBase
         FtdiDevice.FlushBuffer();
     }
 
-    public void CsHigh()
+    public void CsHigh(bool clockLineHigh = false)
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
@@ -73,11 +73,14 @@ public class SPI : ProtocolBase
             0b00001011, // direction
         };
 
+        if (clockLineHigh)
+            bytes[1] |= 0b00000001;
+
         for (int i = 0; i < 5; i++)
             FtdiDevice.Write(bytes);
     }
 
-    public void CsLow()
+    public void CsLow(bool clockLineHigh = false)
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
@@ -87,8 +90,30 @@ public class SPI : ProtocolBase
             0b00001011, // direction
         };
 
+        if (clockLineHigh)
+            bytes[1] |= 0b00000001;
+
         for (int i = 0; i < 5; i++)
             FtdiDevice.Write(bytes);
+    }
+
+    public byte ReadGpioLow()
+    {
+        Flush();
+
+        // This will read the current state of the first 8 pins and send back 1 byte.
+        const byte READ_GPIO_LOW = 0x81; // Application Note AN_108 (section 3.6.3) 
+
+        // This will make the chip flush its buffer back to the PC.
+        const byte SEND_IMMEDIATE = 0x87;
+
+        FtdiDevice.Write(new byte[] { READ_GPIO_LOW, SEND_IMMEDIATE });
+
+        byte[] result = { 0 };
+        uint numBytesRead = 0;
+        FtdiDevice.Read(result, 1, ref numBytesRead).ThrowIfNotOK();
+
+        return result[0];
     }
 
     /// <summary>
@@ -111,17 +136,34 @@ public class SPI : ProtocolBase
         return rx;
     }
 
-    public byte[] ReadBytes(int length)
+    /// <summary>
+    /// use this when the clock line rests low
+    /// </summary>
+    /// <param name="b"></param>
+    public void WriteOnRisingEdge(byte b)
+    {
+        byte[] bytes = { 0x10, 0, 0, b }; // see AN_108 section 3.3
+        FtdiDevice.Write(bytes).ThrowIfNotOK();
+    }
+
+    /// <summary>
+    /// use this when the clock line rests high
+    /// </summary>
+    public void WriteOnFallingEdge(byte b)
+    {
+        byte[] bytes = { 0x11, 0, 0, b }; // see AN_108 section 3.3
+        FtdiDevice.Write(bytes).ThrowIfNotOK();
+    }
+
+    public byte[] ReadBytes(int length, bool fallingEdge = true)
     {
         byte lengthL = (byte)length;
         byte lengthH = (byte)(length >> 8);
-        if (lengthH != 0)
-            throw new NotImplementedException();
 
-        const byte DATA_IN_BYTES_FALLING_EDGE = 0x24; // Application Note AN_108 (section 3.3)
+        byte cmd = fallingEdge ? (byte)0x24 : (byte)0x20; // see AN_108 (section 3.3)
 
-        byte[] writeBytes = { DATA_IN_BYTES_FALLING_EDGE, lengthL, lengthH };
-        FtdiDevice.Write(writeBytes);
+        byte[] writeBytes = { cmd, lengthL, lengthH };
+        FtdiDevice.Write(writeBytes).ThrowIfNotOK();
 
         byte[] readBytes = new byte[length];
         uint bytesRead = 0;
@@ -147,18 +189,5 @@ public class SPI : ProtocolBase
             FtdiDevice.Write(bytesClockLow);
             FtdiDevice.Write(bytesClockHigh);
         }
-    }
-
-    public byte ReadGpioLow()
-    {
-        const byte READ_GPIO_LOW = 0x81; // Application Note AN_108 (section 3.6.3)
-        const byte SEND_IMMEDIATE = 0x87;
-        FtdiDevice.Write(new byte[] { READ_GPIO_LOW, SEND_IMMEDIATE });
-
-        byte[] result = { 0 };
-        uint numBytesRead = 0;
-        FtdiDevice.Read(result, 1, ref numBytesRead).ThrowIfNotOK();
-
-        return result[0];
     }
 }

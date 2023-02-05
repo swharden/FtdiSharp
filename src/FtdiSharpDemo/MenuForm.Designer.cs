@@ -38,10 +38,11 @@ partial class MenuForm
             this.btnLM75A = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnAD7705 = new System.Windows.Forms.Button();
+            this.btnMCP3008 = new System.Windows.Forms.Button();
             this.btnHX710 = new System.Windows.Forms.Button();
             this.btnMCP3201 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btnMCP3008 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -158,6 +159,7 @@ partial class MenuForm
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnAD7705);
             this.groupBox3.Controls.Add(this.btnMCP3008);
             this.groupBox3.Controls.Add(this.btnHX710);
             this.groupBox3.Controls.Add(this.btnMCP3201);
@@ -167,6 +169,31 @@ partial class MenuForm
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "SPI";
+            // 
+            // btnAD7705
+            // 
+            this.btnAD7705.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAD7705.Enabled = false;
+            this.btnAD7705.Location = new System.Drawing.Point(8, 154);
+            this.btnAD7705.Name = "btnAD7705";
+            this.btnAD7705.Size = new System.Drawing.Size(186, 38);
+            this.btnAD7705.TabIndex = 5;
+            this.btnAD7705.Text = "AD7705 ADC";
+            this.btnAD7705.UseVisualStyleBackColor = true;
+            this.btnAD7705.Click += new System.EventHandler(this.btnAD7705_Click);
+            // 
+            // btnMCP3008
+            // 
+            this.btnMCP3008.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMCP3008.Location = new System.Drawing.Point(8, 110);
+            this.btnMCP3008.Name = "btnMCP3008";
+            this.btnMCP3008.Size = new System.Drawing.Size(186, 38);
+            this.btnMCP3008.TabIndex = 4;
+            this.btnMCP3008.Text = "MCP3008 ADC";
+            this.btnMCP3008.UseVisualStyleBackColor = true;
+            this.btnMCP3008.Click += new System.EventHandler(this.btnMCP3008_Click);
             // 
             // btnHX710
             // 
@@ -200,18 +227,6 @@ partial class MenuForm
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
-            // 
-            // btnMCP3008
-            // 
-            this.btnMCP3008.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMCP3008.Location = new System.Drawing.Point(8, 110);
-            this.btnMCP3008.Name = "btnMCP3008";
-            this.btnMCP3008.Size = new System.Drawing.Size(186, 38);
-            this.btnMCP3008.TabIndex = 4;
-            this.btnMCP3008.Text = "MCP3008 ADC";
-            this.btnMCP3008.UseVisualStyleBackColor = true;
-            this.btnMCP3008.Click += new System.EventHandler(this.btnMCP3008_Click);
             // 
             // MenuForm
             // 
@@ -248,4 +263,5 @@ partial class MenuForm
     private Button btnMCP3201;
     private Button btnHX710;
     private Button btnMCP3008;
+    private Button btnAD7705;
 }

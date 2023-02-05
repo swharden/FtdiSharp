@@ -34,7 +34,7 @@ public partial class SPI_ADS1220 : Form
             throw new InvalidOperationException();
 
         SPI.CsLow();
-        SPI.WriteOnRisingEdge(0x06); // RESET
+        SPI.Write(0x06); // RESET
         SPI.CsHigh();
     }
 
@@ -45,7 +45,7 @@ public partial class SPI_ADS1220 : Form
 
         // start a single conversion
         SPI.CsLow();
-        SPI.WriteOnRisingEdge(0b00001000);
+        SPI.Write(0b00001000);
         SPI.CsHigh();
 
         // wait for conversion to be ready

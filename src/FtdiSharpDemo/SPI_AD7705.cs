@@ -41,8 +41,8 @@ public partial class SPI_AD7705 : Form
 
     private void DeviceSelector1_DeviceOpened(object? sender, FtdiSharp.FtdiDevice e)
     {
-        SPI = new(e, 50);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI = new(e);
+        SPI.CsHigh();
     }
 
     private void WaitForReadyToBeHigh(int maxTries = 100)
@@ -53,7 +53,7 @@ public partial class SPI_AD7705 : Form
         int tries = 0;
         while (true)
         {
-            byte state = SPI.ReadGpioLow();
+            byte state = SPI.ReadGpioL();
             bool pinIsHigh = (state & 0b00010000) > 0;
             if (pinIsHigh)
                 return;
@@ -74,7 +74,7 @@ public partial class SPI_AD7705 : Form
         int tries = 0;
         while (true)
         {
-            byte state = SPI.ReadGpioLow();
+            byte state = SPI.ReadGpioL();
             bool pinIsHigh = (state & 0b00010000) > 0;
             if (!pinIsHigh)
                 return;
@@ -104,24 +104,24 @@ public partial class SPI_AD7705 : Form
         SPI.CsLow();
         Thread.Sleep(100);
 
-        SPI.CsLow(clockLineHigh: true);
-        SPI.WriteOnRisingEdge(0x20);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.CsLow();
+        SPI.Write(0x20);
+        SPI.CsHigh();
         Thread.Sleep(20);
 
-        SPI.CsLow(clockLineHigh: true);
-        SPI.WriteOnRisingEdge(0x0C);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.CsLow();
+        SPI.Write(0x0C);
+        SPI.CsHigh();
         Thread.Sleep(20);
 
-        SPI.CsLow(clockLineHigh: true);
-        SPI.WriteOnRisingEdge(0x10);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.CsLow();
+        SPI.Write(0x10);
+        SPI.CsHigh();
         Thread.Sleep(20);
 
-        SPI.CsLow(clockLineHigh: true);
-        SPI.WriteOnRisingEdge(0x40);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.CsLow();
+        SPI.Write(0x40);
+        SPI.CsHigh();
         Thread.Sleep(20);
     }
 
@@ -136,14 +136,14 @@ public partial class SPI_AD7705 : Form
         WaitForReadyToBeLow();
 
         SPI.CsLow(clockLineHigh: true);
-        SPI.WriteOnRisingEdge(0x38);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.Write(0x38);
+        SPI.CsHigh();
 
         WaitForReadyToBeLow();
 
         SPI.CsLow(clockLineHigh: true);
         byte[] bytes = SPI.ReadBytes(2);
-        SPI.CsHigh(clockLineHigh: true);
+        SPI.CsHigh();
 
         SPI.Flush();
 

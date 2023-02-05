@@ -11,7 +11,11 @@ public class SPI : ProtocolBase
     // https://ftdichip.com/wp-content/uploads/2020/08/AN_180_FT232H-MPSSE-Example-USB-Current-Meter-using-the-SPI-interface.pdf
     // https://ftdichip.com/wp-content/uploads/2020/08/AN_114_FTDI_Hi_Speed_USB_To_SPI_Example.pdf
 
-    public SPI(FtdiDevice device, int slowDownFactor = 1) : base(device)
+    readonly bool ClockIdlesLow;
+    readonly bool SampleOnRisingClock;
+    readonly bool TransmitOnRisingClock;
+
+    public SPI(FtdiDevice device, int spiMode = 1) : base(device)
     {
         // TODO: use SPI MODE and CPOL/CPHA terms to define clock line states
 
@@ -20,7 +24,15 @@ public class SPI : ProtocolBase
         // Mode 2: clock idles HIGH, data in on the RISING edge and out on the FALLING edge
         // Mode 3: clock idles HIGH, data in on the FALLING edge and out on the RISING edge
 
-        FTDI_ConfigureMpsse(slowDownFactor);
+        if (spiMode < 0 || spiMode > 3)
+            throw new ArgumentException(nameof(spiMode));
+
+        ClockIdlesLow = spiMode == 0 || spiMode == 1;
+        SampleOnRisingClock = spiMode == 0 || spiMode == 2;
+        TransmitOnRisingClock = spiMode == 1 || spiMode == 3;
+
+        FTDI_ConfigureMpsse();
+        CsHigh();
     }
 
     private void FTDI_ConfigureMpsse(int slowDownFactor = 1)
@@ -73,7 +85,7 @@ public class SPI : ProtocolBase
     /// <summary>
     /// CS pin is D3
     /// </summary>
-    public void CsHigh(bool clockLineHigh = false)
+    public void CsHigh()
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
@@ -83,7 +95,7 @@ public class SPI : ProtocolBase
             0b00001011, // direction
         };
 
-        if (clockLineHigh)
+        if (!ClockIdlesLow)
             bytes[1] |= 0b00000001;
 
         for (int i = 0; i < 5; i++)
@@ -103,24 +115,41 @@ public class SPI : ProtocolBase
             0b00001011, // direction
         };
 
-        if (clockLineHigh)
+        if (!ClockIdlesLow)
             bytes[1] |= 0b00000001;
 
         for (int i = 0; i < 5; i++)
             FtdiDevice.Write(bytes);
     }
 
-    public byte ReadGpioLow()
+    /// <summary>
+    /// Return a byte representing the voltage of the first 8 pins
+    /// </summary>
+    public byte ReadGpioL()
     {
         Flush();
-
-        // This will read the current state of the first 8 pins and send back 1 byte.
         const byte READ_GPIO_LOW = 0x81; // Application Note AN_108 (section 3.6.3) 
-
-        // This will make the chip flush its buffer back to the PC.
-        const byte SEND_IMMEDIATE = 0x87;
+        const byte SEND_IMMEDIATE = 0x87; // This will make the chip flush its buffer back to the PC.
 
         FtdiDevice.Write(new byte[] { READ_GPIO_LOW, SEND_IMMEDIATE });
+
+        byte[] result = { 0 };
+        uint numBytesRead = 0;
+        FtdiDevice.Read(result, 1, ref numBytesRead).ThrowIfNotOK();
+
+        return result[0];
+    }
+
+    /// <summary>
+    /// Return a byte representing the voltage of the upper 8 pins
+    /// </summary>
+    public byte ReadGpioH()
+    {
+        Flush();
+        const byte READ_GPIO_HIGH = 0x83; // Application Note AN_108 (section 3.6.4) 
+        const byte SEND_IMMEDIATE = 0x87; // This will make the chip flush its buffer back to the PC.
+
+        FtdiDevice.Write(new byte[] { READ_GPIO_HIGH, SEND_IMMEDIATE });
 
         byte[] result = { 0 };
         uint numBytesRead = 0;
@@ -135,7 +164,7 @@ public class SPI : ProtocolBase
     public byte[] ReadWrite(byte[] tx)
     {
         byte[] shiftOut = new byte[tx.Length + 3];
-        shiftOut[0] = 0x31; // 31 or 34
+        shiftOut[0] = SampleOnRisingClock ? (byte)0x31 : (byte)0x34;
         shiftOut[1] = (byte)tx.Length;
         shiftOut[2] = (byte)(tx.Length >> 8);
         Array.Copy(tx, 0, shiftOut, tx.Length, tx.Length);
@@ -150,30 +179,22 @@ public class SPI : ProtocolBase
     }
 
     /// <summary>
-    /// use this when the clock line rests low
+    /// Send a single byte
     /// </summary>
-    /// <param name="b"></param>
-    public void WriteOnRisingEdge(byte b)
+    public void Write(byte b)
     {
-        byte[] bytes = { 0x10, 0, 0, b }; // see AN_108 section 3.3
+        byte cmd = TransmitOnRisingClock ? (byte)0x10 : (byte)0x11; // AN_108 section 3.3
+        byte lengthL = 0;
+        byte lengthH = 0;
+        byte[] bytes = { cmd, lengthL, lengthH, b };
         FtdiDevice.Write(bytes).ThrowIfNotOK();
     }
 
-    /// <summary>
-    /// use this when the clock line rests high
-    /// </summary>
-    public void WriteOnFallingEdge(byte b)
+    public byte[] ReadBytes(int length)
     {
-        byte[] bytes = { 0x11, 0, 0, b }; // see AN_108 section 3.3
-        FtdiDevice.Write(bytes).ThrowIfNotOK();
-    }
-
-    public byte[] ReadBytes(int length, bool fallingEdge = true)
-    {
+        byte cmd = SampleOnRisingClock ? (byte)0x20 : (byte)0x24; // AN_108 (section 3.3)
         byte lengthL = (byte)length;
         byte lengthH = (byte)(length >> 8);
-
-        byte cmd = fallingEdge ? (byte)0x24 : (byte)0x20; // see AN_108 (section 3.3)
 
         byte[] writeBytes = { cmd, lengthL, lengthH };
         FtdiDevice.Write(writeBytes).ThrowIfNotOK();
@@ -194,8 +215,11 @@ public class SPI : ProtocolBase
         const byte CMD_SET_GPIO_STATE = 0x80; // Application Note AN_108 (section 3.6.1)
         const byte GPIO_DIRECTION = 0b00001011; //  bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
 
-        byte[] bytesClockLow = new byte[] { CMD_SET_GPIO_STATE, 0b11110111, GPIO_DIRECTION };
-        byte[] bytesClockHigh = new byte[] { CMD_SET_GPIO_STATE, 0b11110110, GPIO_DIRECTION };
+        byte clockOn = ClockIdlesLow ? (byte)0b11110111 : (byte)0b11110110;
+        byte clockOff = ClockIdlesLow ? (byte)0b11110110 : (byte)0b11110111;
+
+        byte[] bytesClockLow = new byte[] { CMD_SET_GPIO_STATE, clockOn, GPIO_DIRECTION };
+        byte[] bytesClockHigh = new byte[] { CMD_SET_GPIO_STATE, clockOff, GPIO_DIRECTION };
 
         for (int i = 0; i < count; i++)
         {
@@ -212,7 +236,7 @@ public class SPI : ProtocolBase
         int tries = 0;
         while (true)
         {
-            byte state = ReadGpioLow();
+            byte state = ReadGpioL();
             bool pinIsHigh = (state & 0b00010000) > 0;
             if (!pinIsHigh)
                 return;

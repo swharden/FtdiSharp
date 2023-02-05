@@ -37,7 +37,7 @@ public partial class SPI_HX710 : Form
         bool isConverting = true;
         while (isConverting)
         {
-            byte gpio = SPI.ReadGpioLow();
+            byte gpio = SPI.ReadGpioL();
             isConverting = (gpio & 0b00000100) > 0;
         }
     }
@@ -50,7 +50,7 @@ public partial class SPI_HX710 : Form
         bool isConverting = true;
         while (isConverting)
         {
-            byte gpio = SPI.ReadGpioLow();
+            byte gpio = SPI.ReadGpioL();
             isConverting = (gpio & 0b00000100) > 0;
         }
     }

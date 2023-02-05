@@ -43,6 +43,7 @@ partial class MenuForm
             this.btnHX710 = new System.Windows.Forms.Button();
             this.btnMCP3201 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnADS1220 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -159,6 +160,7 @@ partial class MenuForm
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnADS1220);
             this.groupBox3.Controls.Add(this.btnAD7705);
             this.groupBox3.Controls.Add(this.btnMCP3008);
             this.groupBox3.Controls.Add(this.btnHX710);
@@ -228,6 +230,18 @@ partial class MenuForm
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
             // 
+            // btnADS1220
+            // 
+            this.btnADS1220.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnADS1220.Location = new System.Drawing.Point(8, 198);
+            this.btnADS1220.Name = "btnADS1220";
+            this.btnADS1220.Size = new System.Drawing.Size(186, 38);
+            this.btnADS1220.TabIndex = 6;
+            this.btnADS1220.Text = "ADS1220 ADC";
+            this.btnADS1220.UseVisualStyleBackColor = true;
+            this.btnADS1220.Click += new System.EventHandler(this.btnADS1220_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -264,4 +278,5 @@ partial class MenuForm
     private Button btnHX710;
     private Button btnMCP3008;
     private Button btnAD7705;
+    private Button btnADS1220;
 }

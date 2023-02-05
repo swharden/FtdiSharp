@@ -1,5 +1,5 @@
 ﻿using FtdiSharp.FTD2XX;
-using System;
+using System.Diagnostics;
 
 namespace FtdiSharp.Protocols;
 
@@ -13,6 +13,13 @@ public class SPI : ProtocolBase
 
     public SPI(FtdiDevice device, int slowDownFactor = 1) : base(device)
     {
+        // TODO: use SPI MODE and CPOL/CPHA terms to define clock line states
+
+        // Mode 0: clock idles LOW, data in on the RISING edge and out on the FALLING edge
+        // Mode 1: clock idles LOW, data in on the FALLING edge and out on the RISING edge
+        // Mode 2: clock idles HIGH, data in on the RISING edge and out on the FALLING edge
+        // Mode 3: clock idles HIGH, data in on the FALLING edge and out on the RISING edge
+
         FTDI_ConfigureMpsse(slowDownFactor);
     }
 
@@ -63,6 +70,9 @@ public class SPI : ProtocolBase
         FtdiDevice.FlushBuffer();
     }
 
+    /// <summary>
+    /// CS pin is D3
+    /// </summary>
     public void CsHigh(bool clockLineHigh = false)
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
@@ -80,6 +90,9 @@ public class SPI : ProtocolBase
             FtdiDevice.Write(bytes);
     }
 
+    /// <summary>
+    /// CS pin is D3
+    /// </summary>
     public void CsLow(bool clockLineHigh = false)
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
@@ -188,6 +201,27 @@ public class SPI : ProtocolBase
         {
             FtdiDevice.Write(bytesClockLow);
             FtdiDevice.Write(bytesClockHigh);
+        }
+    }
+
+    /// <summary>
+    /// Ready pin is D4
+    /// </summary>
+    public void WaitForReadyToBeLow(int maxTries = 100, int msBetweenRetries = 1)
+    {
+        int tries = 0;
+        while (true)
+        {
+            byte state = ReadGpioLow();
+            bool pinIsHigh = (state & 0b00010000) > 0;
+            if (!pinIsHigh)
+                return;
+            if (tries++ >= maxTries)
+            {
+                Debug.WriteLine("WaitForReadyToBeLow Timeout");
+                return;
+            }
+            Thread.Sleep(msBetweenRetries);
         }
     }
 }

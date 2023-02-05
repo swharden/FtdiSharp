@@ -18,4 +18,5 @@ public partial class MenuForm : Form
     private void btnHX710_Click(object sender, EventArgs e) => new SPI_HX710().ShowDialog();
     private void btnMCP3008_Click(object sender, EventArgs e) => new SPI_MCP3008().ShowDialog();
     private void btnAD7705_Click(object sender, EventArgs e) => new SPI_AD7705().ShowDialog();
+    private void btnADS1220_Click(object sender, EventArgs e) => new SPI_ADS1220().ShowDialog();
 }

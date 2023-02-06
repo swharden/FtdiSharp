@@ -38,12 +38,12 @@ partial class MenuForm
             this.btnLM75A = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnADS1220 = new System.Windows.Forms.Button();
             this.btnAD7705 = new System.Windows.Forms.Button();
             this.btnMCP3008 = new System.Windows.Forms.Button();
             this.btnHX710 = new System.Windows.Forms.Button();
             this.btnMCP3201 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btnADS1220 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -172,11 +172,22 @@ partial class MenuForm
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "SPI";
             // 
+            // btnADS1220
+            // 
+            this.btnADS1220.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnADS1220.Location = new System.Drawing.Point(8, 198);
+            this.btnADS1220.Name = "btnADS1220";
+            this.btnADS1220.Size = new System.Drawing.Size(186, 38);
+            this.btnADS1220.TabIndex = 6;
+            this.btnADS1220.Text = "ADS1220 ADC";
+            this.btnADS1220.UseVisualStyleBackColor = true;
+            this.btnADS1220.Click += new System.EventHandler(this.btnADS1220_Click);
+            // 
             // btnAD7705
             // 
             this.btnAD7705.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAD7705.Enabled = false;
             this.btnAD7705.Location = new System.Drawing.Point(8, 154);
             this.btnAD7705.Name = "btnAD7705";
             this.btnAD7705.Size = new System.Drawing.Size(186, 38);
@@ -229,18 +240,6 @@ partial class MenuForm
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "USART";
-            // 
-            // btnADS1220
-            // 
-            this.btnADS1220.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnADS1220.Location = new System.Drawing.Point(8, 198);
-            this.btnADS1220.Name = "btnADS1220";
-            this.btnADS1220.Size = new System.Drawing.Size(186, 38);
-            this.btnADS1220.TabIndex = 6;
-            this.btnADS1220.Text = "ADS1220 ADC";
-            this.btnADS1220.UseVisualStyleBackColor = true;
-            this.btnADS1220.Click += new System.EventHandler(this.btnADS1220_Click);
             // 
             // MenuForm
             // 

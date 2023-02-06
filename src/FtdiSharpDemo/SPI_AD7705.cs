@@ -41,29 +41,7 @@ public partial class SPI_AD7705 : Form
 
     private void DeviceSelector1_DeviceOpened(object? sender, FtdiSharp.FtdiDevice e)
     {
-        SPI = new(e);
-        SPI.CsHigh();
-    }
-
-    private void WaitForReadyToBeHigh(int maxTries = 100)
-    {
-        if (SPI is null)
-            throw new InvalidOperationException();
-
-        int tries = 0;
-        while (true)
-        {
-            byte state = SPI.ReadGpioL();
-            bool pinIsHigh = (state & 0b00010000) > 0;
-            if (pinIsHigh)
-                return;
-            if (tries++ >= maxTries)
-            {
-                Debug.WriteLine("WaitForHigh Timeout");
-                return;
-            }
-            Thread.Sleep(1);
-        }
+        SPI = new(e, spiMode: 3, slowDownFactor: 8);
     }
 
     private void WaitForReadyToBeLow(int maxTries = 100)
@@ -100,29 +78,29 @@ public partial class SPI_AD7705 : Form
         //const byte REGISTER_SELECT_SETUP = 0b00010000; // RS2=0, RS1=0, RS0=1 (datasheet table 11)
         //const byte SETUP_CONFIG = 0b01000000; // self calibration, gain 1, bipolar mode (datasheet table 14)
 
-        Thread.Sleep(100);
         SPI.CsLow();
-        Thread.Sleep(100);
-
-        SPI.CsLow();
+        Thread.Sleep(10);
         SPI.Write(0x20);
+        Thread.Sleep(10);
         SPI.CsHigh();
-        Thread.Sleep(20);
 
         SPI.CsLow();
+        Thread.Sleep(10);
         SPI.Write(0x0C);
+        Thread.Sleep(10);
         SPI.CsHigh();
-        Thread.Sleep(20);
 
         SPI.CsLow();
+        Thread.Sleep(10);
         SPI.Write(0x10);
+        Thread.Sleep(10);
         SPI.CsHigh();
-        Thread.Sleep(20);
 
         SPI.CsLow();
+        Thread.Sleep(10);
         SPI.Write(0x40);
+        Thread.Sleep(10);
         SPI.CsHigh();
-        Thread.Sleep(20);
     }
 
     private void timer1_Tick(object sender, EventArgs e) { }
@@ -135,13 +113,13 @@ public partial class SPI_AD7705 : Form
         SPI.Flush();
         WaitForReadyToBeLow();
 
-        SPI.CsLow(clockLineHigh: true);
+        SPI.CsLow();
         SPI.Write(0x38);
         SPI.CsHigh();
 
         WaitForReadyToBeLow();
 
-        SPI.CsLow(clockLineHigh: true);
+        SPI.CsLow();
         byte[] bytes = SPI.ReadBytes(2);
         SPI.CsHigh();
 

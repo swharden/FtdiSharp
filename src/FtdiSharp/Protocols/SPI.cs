@@ -15,14 +15,21 @@ public class SPI : ProtocolBase
     readonly bool SampleOnRisingClock;
     readonly bool TransmitOnRisingClock;
 
-    public SPI(FtdiDevice device, int spiMode = 1) : base(device)
+    /// <summary>
+    /// This class provides high level operations for SPI communication
+    /// </summary>
+    /// <param name="device">FTDI device to use for this communicator</param>
+    /// <param name="spiMode">
+    /// Mode 0: clock idles LOW, data in on the RISING edge and out on the FALLING edge
+    /// Mode 1: clock idles LOW, data in on the FALLING edge and out on the RISING edge
+    /// Mode 2: clock idles HIGH, data in on the RISING edge and out on the FALLING edge
+    /// Mode 3: clock idles HIGH, data in on the FALLING edge and out on the RISING edge
+    /// </param>
+    /// <exception cref="ArgumentException"></exception>
+    public SPI(FtdiDevice device, int spiMode = 1, int slowDownFactor = 1) : base(device)
     {
         // TODO: use SPI MODE and CPOL/CPHA terms to define clock line states
 
-        // Mode 0: clock idles LOW, data in on the RISING edge and out on the FALLING edge
-        // Mode 1: clock idles LOW, data in on the FALLING edge and out on the RISING edge
-        // Mode 2: clock idles HIGH, data in on the RISING edge and out on the FALLING edge
-        // Mode 3: clock idles HIGH, data in on the FALLING edge and out on the RISING edge
 
         if (spiMode < 0 || spiMode > 3)
             throw new ArgumentException(nameof(spiMode));
@@ -31,7 +38,7 @@ public class SPI : ProtocolBase
         SampleOnRisingClock = spiMode == 0 || spiMode == 2;
         TransmitOnRisingClock = spiMode == 1 || spiMode == 3;
 
-        FTDI_ConfigureMpsse();
+        FTDI_ConfigureMpsse(slowDownFactor);
         CsHigh();
     }
 
@@ -105,7 +112,7 @@ public class SPI : ProtocolBase
     /// <summary>
     /// CS pin is D3
     /// </summary>
-    public void CsLow(bool clockLineHigh = false)
+    public void CsLow()
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]

@@ -5,6 +5,7 @@ public partial class MenuForm : Form
     public MenuForm()
     {
         InitializeComponent();
+        btnAD7705.Enabled = false;
     }
 
     private void btnConnectedDevices_Click(object sender, EventArgs e) => new DeviceInfoForm().ShowDialog();

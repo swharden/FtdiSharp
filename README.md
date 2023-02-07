@@ -8,9 +8,9 @@
 
 FtdiSharp aims to simplify the process of interfacing directly with sensors which communicate using I2C or SPI for FTDI chips which support these advanced protocols. **No microcontroller is required!** Connect your sensor directly to a compatible FTDI device and you can use FtdiSharp to easily control it and make readings. Pair FtdiSharp with with [ScottPlot](https://scottplot.net) to create real-time data visualization applications with only a few lines of code.
 
-![](dev/screenshots/i2c-connections.png)
+![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/i2c-connections.png)
 
-![](dev/screenshots/lm75a.png)
+![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/lm75a.png)
 
 ### Intended Audience
 
@@ -24,7 +24,7 @@ FtdiSharp aims to simplify the process of interfacing directly with sensors whic
 
 **This project comes with a demo app that shows how to directly interface several common sensors.** The FT232H can communicate directly with sensors using SPI and I2C, so no microcontroller is required. Unlike FTDI's official code samples (thousands of lines of spaghetti code, often in Visual Basic) the demo application in this project aims to demonstrate common I2C, SPI, and GPIO functionality with minimal complexity.
 
-![](dev/screenshots/demo.png)
+![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/demo.png)
 
 The demo app shows FtdiSharp interacts with common sensors:
 * [LM75A](https://www.ti.com/lit/ds/symlink/lm75a.pdf) I2C temperature sensor and thermal watchdog

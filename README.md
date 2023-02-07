@@ -37,6 +37,8 @@ The demo shows how to use FtdiSharp to interact with common sensors:
 * [MCP3008](https://cdn-shop.adafruit.com/datasheets/MCP3008.pdf) SPI 4-channel 10-bit ADC (200k samples per second)
 * [ADS1220](https://www.ti.com/lit/ds/symlink/ads1220.pdf) SPI 4-channel 24-bit ADC (2k samples per second)
 
+![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/adc-graph.gif)
+
 ### USB Interactions Limit Update Rate
 
 While sensors may support thousands of reads per second, limitations of the USB protocol restrict how frequently FtdiSharp can request data updates from connected devices. The strategy demonstrated on this page is best for applications which only require updates a few times per second. Applications which require high-speed repeated measurements or precise timing should not interface a FTDI controller directly to their sensor, but instead use a high-speed microcontroller to manage the interaction.

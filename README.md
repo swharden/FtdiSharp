@@ -22,16 +22,16 @@ FtdiSharp aims to simplify the process of interfacing directly with sensors whic
 
 ### Demo Application
 
-**This project comes with a demo app that shows how to directly interface several common sensors.** The FT232H can communicate directly with sensors using SPI and I2C, so no microcontroller is required. Unlike FTDI's official code samples (thousands of lines of spaghetti code, often in Visual Basic) the demo application in this project aims to demonstrate common I2C, SPI, and GPIO functionality with minimal complexity.
+**This project comes with a demo app that shows how to directly interface several common sensors.** The FT232H can communicate directly with sensors using SPI and I²C, so no microcontroller is required. Unlike FTDI's official code samples (thousands of lines of spaghetti code, often in Visual Basic) the demo application in this project aims to demonstrate common I²C, SPI, and GPIO functionality with minimal complexity.
 
 ![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/demo.png)
 
 The demo shows how to use FtdiSharp to interact with common sensors:
-* [LM75A](https://www.ti.com/lit/ds/symlink/lm75a.pdf) I2C temperature sensor and thermal watchdog
-* [BMP280](https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf) I2C pressure sensor (0.02 PSI sensitivity)
-* [LIS3DH](https://www.st.com/resource/en/datasheet/cd00274221.pdf) I2C 3-axis accelerometer
-* [ADS1115](https://www.ti.com/lit/ds/symlink/ads1115.pdf) I2C 4-channel 16-bit ADC (860 samples per second)
-* [BH1750](https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf) I2C 16-bit ambient light sensor
+* [LM75A](https://www.ti.com/lit/ds/symlink/lm75a.pdf) I²C temperature sensor and thermal watchdog
+* [BMP280](https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf) I²C pressure sensor (0.02 PSI sensitivity)
+* [LIS3DH](https://www.st.com/resource/en/datasheet/cd00274221.pdf) I²C 3-axis accelerometer
+* [ADS1115](https://www.ti.com/lit/ds/symlink/ads1115.pdf) I²C 4-channel 16-bit ADC (860 samples per second)
+* [BH1750](https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf) I²C 16-bit ambient light sensor
 * [MCP3201](http://ww1.microchip.com/downloads/en/devicedoc/21290f.pdf) SPI 12-bit ADC (100k samples per second)
 * [HX710](https://image.micros.com.pl/_dane_techniczne_auto/uphx710b%20smd.pdf) SPI 21-bit ADC (40 samples per second)
 * [MCP3008](https://cdn-shop.adafruit.com/datasheets/MCP3008.pdf) SPI 4-channel 10-bit ADC (200k samples per second)

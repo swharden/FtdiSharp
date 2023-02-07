@@ -32,9 +32,9 @@ partial class I2C_ADS1115
             this.deviceSelector1 = new FtdiSharpDemo.DeviceSelector();
             this.i2cAddressSelector1 = new FtdiSharpDemo.I2cAddressSelector();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.lblA0 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.barGraph1 = new FtdiSharpDemo.BarGraph();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,23 +58,13 @@ partial class I2C_ADS1115
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // lblA0
-            // 
-            this.lblA0.AutoSize = true;
-            this.lblA0.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblA0.Location = new System.Drawing.Point(94, 116);
-            this.lblA0.Name = "lblA0";
-            this.lblA0.Size = new System.Drawing.Size(46, 24);
-            this.lblA0.TabIndex = 7;
-            this.lblA0.Text = "0 V";
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 275);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(606, 22);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -84,13 +74,20 @@ partial class I2C_ADS1115
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
+            // barGraph1
+            // 
+            this.barGraph1.Location = new System.Drawing.Point(59, 135);
+            this.barGraph1.Name = "barGraph1";
+            this.barGraph1.Size = new System.Drawing.Size(429, 70);
+            this.barGraph1.TabIndex = 9;
+            // 
             // I2C_ADS1115
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(606, 297);
+            this.Controls.Add(this.barGraph1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.lblA0);
             this.Controls.Add(this.i2cAddressSelector1);
             this.Controls.Add(this.deviceSelector1);
             this.Name = "I2C_ADS1115";
@@ -108,7 +105,7 @@ partial class I2C_ADS1115
     private DeviceSelector deviceSelector1;
     private I2cAddressSelector i2cAddressSelector1;
     private System.Windows.Forms.Timer timer1;
-    private Label lblA0;
     private StatusStrip statusStrip1;
     private ToolStripStatusLabel toolStripStatusLabel1;
+    private BarGraph barGraph1;
 }

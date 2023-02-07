@@ -13,7 +13,6 @@ public partial class I2C_ADS1115 : Form
         i2cAddressSelector1.Address = 0x48;
         deviceSelector1.DeviceOpened += DeviceSelector1_DeviceOpened;
         deviceSelector1.DeviceClosed += DeviceSelector1_DeviceClosed;
-        lblA0.Text = string.Empty;
         toolStripStatusLabel1.Text = "Reads: 0";
     }
 
@@ -65,7 +64,8 @@ public partial class I2C_ADS1115 : Form
         double value = BitConverter.ToInt16(bytes);
         value = Math.Max(value, 0);
         value *= 6.144 / (2 << 14);
-        lblA0.Text = $"{value:N4} V";
+
+        barGraph1.SetValue(value, 5.0, $"{value:N4} V", centerAtZero: false);
         toolStripStatusLabel1.Text = $"Reads: {++Reads}";
     }
 }

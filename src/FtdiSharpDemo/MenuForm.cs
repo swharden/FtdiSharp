@@ -5,7 +5,6 @@ public partial class MenuForm : Form
     public MenuForm()
     {
         InitializeComponent();
-        btnAD7705.Enabled = false;
     }
 
     private void btnConnectedDevices_Click(object sender, EventArgs e) => new DeviceInfoForm().ShowDialog();
@@ -20,4 +19,5 @@ public partial class MenuForm : Form
     private void btnMCP3008_Click(object sender, EventArgs e) => new SPI_MCP3008().ShowDialog();
     private void btnAD7705_Click(object sender, EventArgs e) => new SPI_AD7705().ShowDialog();
     private void btnADS1220_Click(object sender, EventArgs e) => new SPI_ADS1220().ShowDialog();
+    private void btnLED_Click(object sender, EventArgs e) => new GPIO_LED().ShowDialog();
 }

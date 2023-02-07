@@ -2,11 +2,9 @@
 
 [![CI](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml/badge.svg)](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml)
 
-**FtdiSharp is a simple .NET interface for FTDI USB controllers.** FtdiSharp has high-level communication managers that make it easy to exchange data using UART, I²C, SPI, and FIFO, but it also provides low-level access to functions in FTDI's DLL for advanced users.
+**FtdiSharp is a simple .NET interface for FTDI USB controllers.** FtdiSharp has high-level communication managers that make it easy to exchange data using I²C, SPI, and GPIO, but it also provides low-level access to functions in FTDI's DLL for advanced users.
 
 FTDI's FTD2XX source code has been refactored to break it into smaller files, improve XML documentation, and utilize modern language features. FtdiSharp targets .NET Framework 4.6.2 and .NET 6 so it can be used in .NET Framework and .NET Core environments.
-
-> Warning: This library is in preview and its public API may change as it continues to evolve
 
 ## Quickstart
 
@@ -88,6 +86,24 @@ byte[] bytes = i2c.Read(address, 2);
 
 // Convert the two bytes to lumens according to the datasheet
 double value = (bytes[0] * 256 + bytes[1]) / 1.2;
+```
+
+## GPIO Protocol
+
+Pins of a FT232H may be used as general purpose I/O (GPIO) controlled by software.
+
+```cs
+// Use the first USB FTDI device found
+FtdiDevice device = FtdiDevices.Scan().First();
+FtdiSharp.Protocols.GPIO gpio = new(device);
+
+// Set pin states
+byte direction = 0b11110000; // make D4-D7 outputs
+byte value = 0b10100000; // make D7 and D5 high
+gpio.Set(direction, value);
+
+// Read pin states
+byte reading = gpio.Read();
 ```
 
 ## Additional Resources

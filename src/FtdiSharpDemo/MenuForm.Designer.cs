@@ -39,14 +39,15 @@ partial class MenuForm
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnADS1220 = new System.Windows.Forms.Button();
-            this.btnAD7705 = new System.Windows.Forms.Button();
             this.btnMCP3008 = new System.Windows.Forms.Button();
             this.btnHX710 = new System.Windows.Forms.Button();
             this.btnMCP3201 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnLED = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnectedDevices
@@ -161,7 +162,6 @@ partial class MenuForm
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.btnADS1220);
-            this.groupBox3.Controls.Add(this.btnAD7705);
             this.groupBox3.Controls.Add(this.btnMCP3008);
             this.groupBox3.Controls.Add(this.btnHX710);
             this.groupBox3.Controls.Add(this.btnMCP3201);
@@ -176,25 +176,13 @@ partial class MenuForm
             // 
             this.btnADS1220.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnADS1220.Location = new System.Drawing.Point(8, 198);
+            this.btnADS1220.Location = new System.Drawing.Point(8, 154);
             this.btnADS1220.Name = "btnADS1220";
             this.btnADS1220.Size = new System.Drawing.Size(186, 38);
             this.btnADS1220.TabIndex = 6;
             this.btnADS1220.Text = "ADS1220 ADC";
             this.btnADS1220.UseVisualStyleBackColor = true;
             this.btnADS1220.Click += new System.EventHandler(this.btnADS1220_Click);
-            // 
-            // btnAD7705
-            // 
-            this.btnAD7705.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAD7705.Location = new System.Drawing.Point(8, 154);
-            this.btnAD7705.Name = "btnAD7705";
-            this.btnAD7705.Size = new System.Drawing.Size(186, 38);
-            this.btnAD7705.TabIndex = 5;
-            this.btnAD7705.Text = "AD7705 ADC";
-            this.btnAD7705.UseVisualStyleBackColor = true;
-            this.btnAD7705.Click += new System.EventHandler(this.btnAD7705_Click);
             // 
             // btnMCP3008
             // 
@@ -234,12 +222,25 @@ partial class MenuForm
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnLED);
             this.groupBox4.Location = new System.Drawing.Point(628, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 100);
+            this.groupBox4.Size = new System.Drawing.Size(200, 314);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "USART";
+            this.groupBox4.Text = "GPIO";
+            // 
+            // btnLED
+            // 
+            this.btnLED.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLED.Location = new System.Drawing.Point(6, 22);
+            this.btnLED.Name = "btnLED";
+            this.btnLED.Size = new System.Drawing.Size(186, 38);
+            this.btnLED.TabIndex = 3;
+            this.btnLED.Text = "LED Control";
+            this.btnLED.UseVisualStyleBackColor = true;
+            this.btnLED.Click += new System.EventHandler(this.btnLED_Click);
             // 
             // MenuForm
             // 
@@ -256,6 +257,7 @@ partial class MenuForm
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
     }
@@ -276,6 +278,6 @@ partial class MenuForm
     private Button btnMCP3201;
     private Button btnHX710;
     private Button btnMCP3008;
-    private Button btnAD7705;
     private Button btnADS1220;
+    private Button btnLED;
 }

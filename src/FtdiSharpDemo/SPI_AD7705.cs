@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace FtdiSharpDemo;
 
@@ -14,6 +13,7 @@ public partial class SPI_AD7705 : Form
      * WARNING WARNING WARNING WARNING WARNING
      * 
      * THIS CODE DOES NOT WORK AS EXPECTED!!!!
+     * I think it's because I have a counterfeit chip.
      * 
      */
 

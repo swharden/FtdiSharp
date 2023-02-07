@@ -16,6 +16,11 @@ public abstract class ProtocolBase : IDisposable
         FtdiDevice.ResetDevice();
     }
 
+    public void Flush()
+    {
+        FtdiDevice.FlushBuffer();
+    }
+
     public void Close()
     {
         if (FtdiDevice.IsOpen)

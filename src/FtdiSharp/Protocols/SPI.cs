@@ -84,11 +84,6 @@ public class SPI : ProtocolBase
         Thread.Sleep(50);
     }
 
-    public void Flush()
-    {
-        FtdiDevice.FlushBuffer();
-    }
-
     /// <summary>
     /// CS pin is D3
     /// </summary>

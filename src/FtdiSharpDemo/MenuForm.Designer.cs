@@ -44,6 +44,7 @@ partial class MenuForm
             this.btnMCP3201 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnLED = new System.Windows.Forms.Button();
+            this.btnADS1115DataLogger = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +77,7 @@ partial class MenuForm
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnADS1115DataLogger);
             this.groupBox1.Controls.Add(this.lblBH1750);
             this.groupBox1.Controls.Add(this.btnADS1115);
             this.groupBox1.Controls.Add(this.btnLIS3DH);
@@ -84,7 +86,7 @@ partial class MenuForm
             this.groupBox1.Controls.Add(this.btnAddressScanner);
             this.groupBox1.Location = new System.Drawing.Point(218, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(198, 314);
+            this.groupBox1.Size = new System.Drawing.Size(198, 335);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "I2C";
@@ -93,7 +95,7 @@ partial class MenuForm
             // 
             this.lblBH1750.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBH1750.Location = new System.Drawing.Point(6, 242);
+            this.lblBH1750.Location = new System.Drawing.Point(6, 198);
             this.lblBH1750.Name = "lblBH1750";
             this.lblBH1750.Size = new System.Drawing.Size(186, 38);
             this.lblBH1750.TabIndex = 6;
@@ -105,7 +107,7 @@ partial class MenuForm
             // 
             this.btnADS1115.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnADS1115.Location = new System.Drawing.Point(6, 198);
+            this.btnADS1115.Location = new System.Drawing.Point(6, 242);
             this.btnADS1115.Name = "btnADS1115";
             this.btnADS1115.Size = new System.Drawing.Size(186, 38);
             this.btnADS1115.TabIndex = 5;
@@ -154,7 +156,7 @@ partial class MenuForm
             this.groupBox2.Controls.Add(this.btnConnectedDevices);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 314);
+            this.groupBox2.Size = new System.Drawing.Size(200, 335);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "FTDI Devices";
@@ -167,7 +169,7 @@ partial class MenuForm
             this.groupBox3.Controls.Add(this.btnMCP3201);
             this.groupBox3.Location = new System.Drawing.Point(422, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 314);
+            this.groupBox3.Size = new System.Drawing.Size(200, 335);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "SPI";
@@ -225,7 +227,7 @@ partial class MenuForm
             this.groupBox4.Controls.Add(this.btnLED);
             this.groupBox4.Location = new System.Drawing.Point(628, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 314);
+            this.groupBox4.Size = new System.Drawing.Size(200, 335);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "GPIO";
@@ -242,11 +244,23 @@ partial class MenuForm
             this.btnLED.UseVisualStyleBackColor = true;
             this.btnLED.Click += new System.EventHandler(this.btnLED_Click);
             // 
+            // btnADS1115DataLogger
+            // 
+            this.btnADS1115DataLogger.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnADS1115DataLogger.Location = new System.Drawing.Point(6, 286);
+            this.btnADS1115DataLogger.Name = "btnADS1115DataLogger";
+            this.btnADS1115DataLogger.Size = new System.Drawing.Size(186, 38);
+            this.btnADS1115DataLogger.TabIndex = 7;
+            this.btnADS1115DataLogger.Text = "ADS1115 Data Logger";
+            this.btnADS1115DataLogger.UseVisualStyleBackColor = true;
+            this.btnADS1115DataLogger.Click += new System.EventHandler(this.btnADS1115DataLogger_Click);
+            // 
             // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(847, 345);
+            this.ClientSize = new System.Drawing.Size(847, 361);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -280,4 +294,5 @@ partial class MenuForm
     private Button btnMCP3008;
     private Button btnADS1220;
     private Button btnLED;
+    private Button btnADS1115DataLogger;
 }

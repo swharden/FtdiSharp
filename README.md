@@ -2,9 +2,29 @@
 
 [![CI](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml/badge.svg)](https://github.com/swharden/FtdiSharp/actions/workflows/ci.yaml)
 
-**FtdiSharp is a simple .NET interface for FTDI USB controllers.** FtdiSharp has high-level communication managers that make it easy to exchange data using I²C, SPI, and GPIO, but it also provides low-level access to functions in FTDI's DLL for advanced users.
+**FtdiSharp is a .NET interface for FTDI USB controllers** that provides high-level tools for advanced communication protocols (I²C, SPI, and GPIO) and also supplies a copy of FTDI's official DLL wrapper to provide low-level control for advanced users.
 
-FTDI's FTD2XX source code has been refactored to break it into smaller files, improve XML documentation, and utilize modern language features. FtdiSharp targets .NET Framework 4.6.2 and .NET 6 so it can be used in .NET Framework and .NET Core environments.
+### Communicate _Directly_ With Sensors
+
+FtdiSharp aims to simplify the process of interfacing directly with sensors which communicate using I2C or SPI for FTDI chips which support these advanced protocols. **No microcontroller is required!** Connect your sensor directly to a compatible FTDI device and you can use FtdiSharp to easily control it and make readings. Pair FtdiSharp with with [ScottPlot](https://scottplot.net) to create real-time data visualization applications with only a few lines of code.
+
+![](dev/screenshots/i2c-connections.png)
+
+![](dev/screenshots/lm75a.png)
+
+### Intended Audience
+
+**Do not use FtdiSharp if your project only requires a USB serial port.** FtdiSharp is intended for applications which seek to use advanced communication protocols beyond serial UART and provide FTDI-specific actions like reading/writing chip serial numbers. If your project only requires a USB serial port, use [`System.IO.Ports`](https://learn.microsoft.com/en-us/dotnet/api/system.io.ports) which is simpler and officially supported on all operating systems.
+
+### Low-Level Driver Access
+
+**FtdiSharp provides access FTDI's FTD2XX_NET official DLL wrapper for advanced users.** FTDI's official source code has been refactored to break it into smaller files, improve XML documentation, and utilize modern language features. FtdiSharp targets .NET Framework 4.6.2 and .NET 6 so it can be used in .NET Framework and .NET Core environments.
+
+### Demo Application
+
+**This project comes with a demo app that shows how to directly interface several common sensors.** The FT232H can communicate directly with sensors using SPI and I2C, so no microcontroller is required. Unlike FTDI's official code samples (thousands of lines of spaghetti code, often in Visual Basic) the demo application in this project aims to demonstrate common I2C, SPI, and GPIO functionality with minimal complexity.
+
+![](dev/screenshots/demo.png)
 
 ## Quickstart
 
@@ -108,4 +128,8 @@ byte reading = gpio.Read();
 
 ## Additional Resources
 
-Microsoft has a [dotnet/iot repository](https://github.com/dotnet/iot) with lots of useful code and information about protocols and common devices, including [FT232H](https://github.com/dotnet/iot/tree/main/src/devices/Ft232H). I considered using this project but I found support for FT232H to be incomplete, incorrectly documented, and buggy. They have an [impressive number of devices](https://github.com/dotnet/iot/tree/main/src/devices) though, and it seems this library is being actively developed so I hope it will be more useful in the future.
+* [Adafruit FT232H Breakout Board](https://www.adafruit.com/product/2264)
+
+* Microsoft's [System.IO.Ports](https://learn.microsoft.com/en-us/dotnet/api/system.io.ports) should be used for applications which only seek to interface with a USB serial adapter.
+
+* Microsoft has a [dotnet/iot repository](https://github.com/dotnet/iot) with lots of useful code and information about protocols and common devices, including [FT232H](https://github.com/dotnet/iot/tree/main/src/devices/Ft232H). I considered using this project but I found support for FT232H to be incomplete, incorrectly documented, and buggy. They have an [impressive number of devices](https://github.com/dotnet/iot/tree/main/src/devices) though, and it seems this library is being actively developed so I hope it will be more useful in the future.

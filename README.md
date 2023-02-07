@@ -26,7 +26,7 @@ FtdiSharp aims to simplify the process of interfacing directly with sensors whic
 
 ![](https://raw.githubusercontent.com/swharden/FtdiSharp/main/dev/screenshots/demo.png)
 
-The demo app shows FtdiSharp interacts with common sensors:
+The demo shows how to use FtdiSharp to interact with common sensors:
 * [LM75A](https://www.ti.com/lit/ds/symlink/lm75a.pdf) I2C temperature sensor and thermal watchdog
 * [BMP280](https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf) I2C pressure sensor (0.02 PSI sensitivity)
 * [LIS3DH](https://www.st.com/resource/en/datasheet/cd00274221.pdf) I2C 3-axis accelerometer

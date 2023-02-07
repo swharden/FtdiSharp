@@ -26,6 +26,21 @@ FtdiSharp aims to simplify the process of interfacing directly with sensors whic
 
 ![](dev/screenshots/demo.png)
 
+The demo app shows FtdiSharp interacts with common sensors:
+* [LM75A](https://www.ti.com/lit/ds/symlink/lm75a.pdf) I2C temperature sensor and thermal watchdog
+* [BMP280](https://cdn-shop.adafruit.com/datasheets/BST-BMP280-DS001-11.pdf) I2C pressure sensor (0.02 PSI sensitivity)
+* [LIS3DH](https://www.st.com/resource/en/datasheet/cd00274221.pdf) I2C 3-axis accelerometer
+* [ADS1115](https://www.ti.com/lit/ds/symlink/ads1115.pdf) I2C 4-channel 16-bit ADC (860 samples per second)
+* [BH1750](https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf) I2C 16-bit ambient light sensor
+* [MCP3201](http://ww1.microchip.com/downloads/en/devicedoc/21290f.pdf) SPI 12-bit ADC (100k samples per second)
+* [HX710](https://image.micros.com.pl/_dane_techniczne_auto/uphx710b%20smd.pdf) SPI 21-bit ADC (40 samples per second)
+* [MCP3008](https://cdn-shop.adafruit.com/datasheets/MCP3008.pdf) SPI 4-channel 10-bit ADC (200k samples per second)
+* [ADS1220](https://www.ti.com/lit/ds/symlink/ads1220.pdf) SPI 4-channel 24-bit ADC (2k samples per second)
+
+### USB Interactions Limit Update Rate
+
+While sensors may support thousands of reads per second, limitations of the USB protocol restrict how frequently FtdiSharp can request data updates from connected devices. The strategy demonstrated on this page is best for applications which only require updates a few times per second. Applications which require high-speed repeated measurements or precise timing should not interface a FTDI controller directly to their sensor, but instead use a high-speed microcontroller to manage the interaction.
+
 ## Quickstart
 
 ```cs

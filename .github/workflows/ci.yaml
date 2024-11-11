@@ -20,7 +20,7 @@ jobs:
       - name: ✨ Set up .NET 6.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.x"
+          dotnet-version: "8.0.x"
       - name: 🚚 Restore
         working-directory: src
         run: dotnet restore

@@ -167,8 +167,8 @@ public class SPI : ProtocolBase
     {
         byte[] shiftOut = new byte[tx.Length + 3];
         shiftOut[0] = SampleOnRisingClock ? (byte)0x31 : (byte)0x34;
-        shiftOut[1] = (byte)tx.Length;
-        shiftOut[2] = (byte)(tx.Length >> 8);
+        shiftOut[1] = (byte)(tx.Length - 1);
+        shiftOut[2] = (byte)((tx.Length - 1) >> 8);
         Array.Copy(tx, 0, shiftOut, 3, tx.Length);
 
         FtdiDevice.FlushBuffer();

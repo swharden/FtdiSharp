@@ -84,10 +84,38 @@ public class SPI : ProtocolBase
         Thread.Sleep(50);
     }
 
+    public bool UseFastCsMethods { get; set; } = true;
+
     /// <summary>
     /// CS pin is D3
     /// </summary>
     public void CsHigh()
+    {
+        if (UseFastCsMethods)
+        {
+            CsFast(high: true);
+        }
+        else
+        {
+            CsHighSlow();
+        }
+    }
+    /// <summary>
+    /// CS pin is D3
+    /// </summary>
+    public void CsLow()
+    {
+        if (UseFastCsMethods)
+        {
+            CsFast(high: false);
+        }
+        else
+        {
+            CsLowSlow();
+        }
+    }
+
+    private void CsHighSlow()
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
@@ -107,7 +135,7 @@ public class SPI : ProtocolBase
     /// <summary>
     /// CS pin is D3
     /// </summary>
-    public void CsLow()
+    private void CsLowSlow()
     {
         // bit3:CS, bit2:MISO, bit1:MOSI, bit0:SCK
         byte[] bytes = new byte[]
@@ -122,6 +150,35 @@ public class SPI : ProtocolBase
 
         for (int i = 0; i < 5; i++)
             FtdiDevice.Write(bytes);
+    }
+
+    private void CsFast(bool high)
+    {
+        // see discussion in https://github.com/swharden/FtdiSharp/issues/10
+
+        byte byte1 = 0x80; // GPIO command for ADBUS 
+        byte byte2 = high ? (byte)0b00001000 : (byte)0b00000000; // value 
+        byte byte3 = 0b00001011; // direction 
+
+        byte[] bytes = new byte[]
+        {
+            byte1, byte2, byte3, // cycle 1
+            byte1, byte2, byte3, // cycle 2
+            byte1, byte2, byte3, // cycle 3
+            byte1, byte2, byte3, // cycle 4
+            byte1, byte2, byte3, // cycle 5
+        };
+
+        if (!ClockIdlesLow)
+        {
+            bytes[1] |= 0b00000001;
+            bytes[4] |= 0b00000001;
+            bytes[7] |= 0b00000001;
+            bytes[10] |= 0b00000001;
+            bytes[13] |= 0b00000001;
+        }
+
+        FtdiDevice.Write(bytes);
     }
 
     /// <summary>
